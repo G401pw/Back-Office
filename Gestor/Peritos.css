@@ -1,90 +1,121 @@
-/* styles.css */
+/* Reset básico */
+body, h1, p, ul, li, table {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
 
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
     display: flex;
-    height: 100vh;
+    background-color: #f4f4f4;
 }
 
 .sidebar {
     width: 250px;
-    background-color: #f8f8f8;
+    background: #fff;
     padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    height: 100vh;
 }
 
 .logo img {
     width: 100%;
     max-width: 150px;
+    display: block;
+    margin: 0 auto 20px;
 }
 
 nav ul {
     list-style: none;
-    padding: 0;
 }
 
 nav ul li {
-    margin: 15px 0;
+    padding: 10px 0;
+    font-size: 16px;
 }
 
 nav ul li a {
     text-decoration: none;
     color: #333;
-    font-weight: bold;
     display: flex;
     align-items: center;
+    gap: 10px;
 }
 
-nav ul li a:hover {
-    color: #007BFF;
+.active {
+    background: #e0e0e0;
+    padding: 10px;
+    border-radius: 5px;
 }
 
 .add-auditoria button {
     width: 100%;
     padding: 10px;
-    background-color: #007BFF;
-    color: white;
+    margin-top: 20px;
     border: none;
+    background: #28a745;
+    color: white;
     cursor: pointer;
-    font-size: 14px;
-}
-
-.add-auditoria button:hover {
-    background-color: #0056b3;
+    border-radius: 5px;
 }
 
 .user-info {
-    text-align: center;
+    margin-top: 30px;
     font-size: 14px;
-    color: #555;
+    text-align: center;
 }
 
 .content {
     flex: 1;
     padding: 20px;
-    background-color: #fff;
 }
 
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #f1f1f1;
+    background: white;
     padding: 15px;
-    border-radius: 5px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-header h1 {
-    margin: 0;
-    font-size: 22px;
+.table-container {
+    margin-top: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-header button {
-    background: none;
-    border: none;
-    font-size: 18px;
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #f0f0f0;
+}
+
+thead th {
+    padding: 10px;
+    text-align: left;
+}
+
+tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+tbody tr td {
+    padding: 10px;
+}
+
+tbody tr:hover {
+    background: #f9f9f9;
+}
+
+tbody td:last-child {
+    text-align: center;
     cursor: pointer;
 }
