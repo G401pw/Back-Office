@@ -1,43 +1,30 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="log-in-gestor">
-      <div class="overlap-wrapper">
-        <div class="overlap">
-          <img class="element" src="img/80575-1.png" />
-          <img class="left-background" src="img/left-background.png" />
-          <p class="porque-cuidar-do-que">Porque cuidar do que é público&nbsp;&nbsp;é cuidar de todos</p>
-          <img class="image" src="img/image-15.png" />
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EyesEverywhere - Login</title>
+    <link rel="stylesheet" href="Registar_Gestor.css">
+    <link rel="icon" href="Logo.png" type = "image/x-icon">
 
-          <!-- Botão de Login -->
-          <button class="login-button" id="loginBtn">
-            <img src="img/login-now.png" alt="Entrar" />
-          </button>
-
-          <div class="group">
-            <div class="eamil-ID">
-              <div class="overlap-group"><div class="text-wrapper">info@xyz.com</div></div>
-              <input class="email" placeholder="Email:" type="email" />
-            </div>
-            <div class="div">
-              <div class="overlap-group"><div class="text-wrapper">xxxxxxxxxx</div></div>
-              <input class="password" placeholder="Palavra-passe:" type="password" />
-            </div>
-          </div>
-
-          <!-- Botão de Login com Google -->
-          <button class="google-login-button" id="googleLoginBtn">
-            <img src="img/clip-path-group.png" alt="Entrar com Google" />
-          </button>
-
+</head>
+<body>
+    <div class="container">
+        <div class="login-box">
+            <img src="Logo.png" alt="Logo">
+            <h2>Porque cuidar do que é público é cuidar de todos</h2>
+            <form>
+                <label>Email :</label>
+                <input type="email" placeholder="info@xyz.com">
+                <label>Palavra-passe :</label>
+                <input type="password" placeholder="**********">
+                <button class="btn">Log In</button>
+            </form>
+            <button class="google-btn">
+                <img src="icon_Google.png" alt="Google"> Continue with Google
+            </button>
         </div>
-      </div>
     </div>
-
-    <script src="script.js"></script>
-  </body>
+    <div class="background"></div>
+</body>
 </html>
