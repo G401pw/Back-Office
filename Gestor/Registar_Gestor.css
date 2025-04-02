@@ -23,7 +23,7 @@ body {
   right: 0;
   width: 50%;
   height: 100%;
-  background: url('/Back-Office/Gestor/Imagens/Fundo_Direito.png') no-repeat center center;
+  background: url('/Gestor/Imagens/Fundo_Direito.png') no-repeat center center;
   background-size: cover;
   z-index: 1;
 }
