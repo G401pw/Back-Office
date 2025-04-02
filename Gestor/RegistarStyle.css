@@ -68,5 +68,5 @@ body {
 .background {
   width: 50%; /* Ocupa metade da tela */
   height: 100vh; /* Garante que cobre toda a altura */
-  background: url('Fundo_Direito.png') no-repeat center center/cover;
+  background: url('/Back-Office/Gestor/Imagens/Fundo_Direito.png') no-repeat center center/cover;
 }
