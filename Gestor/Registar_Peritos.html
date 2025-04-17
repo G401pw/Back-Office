@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EyesEverywhere</title>
+    <link rel="stylesheet" href="Registar_Peritos.css">
+    <link rel="icon" href="/Gestor/Imagens/logo2.png" type="image/x-icon">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="/Gestor/Imagens/logo2.png" alt="EyesEverywhere">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">&#x1F4C8; Geral</a></li>
+                <li><a href="#">&#x1F465; Peritos</a></li>
+                <li><a href="#">&#x1F4CB; Ocorrências</a></li>
+                <li><a href="#">&#x26A1; Novas Ocorrências</a></li>
+                <li><a href="#" class="active">&#x1F4DD; Registar Peritos</a></li>
+            </ul>
+        </nav>
+        <div class="add-auditoria">
+            <button>+ Adicionar Plano de Auditoria</button>
+        </div>
+        <div class="user-info">
+            <p>Luís Fernandes</p>
+            <p>luisfernandes@gmail.com</p>
+        </div>
+    </div>
+    <div class="content">
+        <header>
+            <h1>Registar Peritos</h1>
+            <button>...</button>
+        </header>
+        <main>
+            <div class="form-container">
+                <form>
+                    <label for="nome">Nome Completo</label>
+                    <input type="text" id="nome" name="nome" placeholder="Digite o nome completo">
+                    
+                    <label for="morada">Morada</label>
+                    <input type="text" id="morada" name="morada" placeholder="Digite a morada">
+                    
+                    <label>Data de Nascimento</label>
+                    <div class="date-fields">
+                        <select name="dia" id="dia">
+                            <option>Dia</option>
+                            <!-- Adicione opções de 1 a 31 -->
+                        </select>
+                        <select name="mes" id="mes">
+                            <option>Mês</option>
+                            <!-- Adicione opções de 1 a 12 -->
+                        </select>
+                        <select name="ano" id="ano">
+                            <option>Ano</option>
+                            <!-- Adicione opções de anos -->
+                        </select>
+                    </div>
+                    
+                    <label for="especialidade">Área/Especialidade</label>
+                    <input type="text" id="especialidade" name="especialidade" placeholder="Digite a especialidade">
+                    
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="Digite o e-mail">
+                    
+                    <label for="telefone">Telemóvel</label>
+                    <div class="phone-field">
+                        <select id="ddd" name="ddd">
+                            <option value="+351">+351 (PT)</option>
+                        </select>
+                        <input type="tel" id="telefone" name="telefone" placeholder="Digite o telemóvel">
+                    </div>
+                    
+                    <button type="submit">Confirmar</button>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
