@@ -13,7 +13,9 @@
         <div class="login-box">
             <img src="/Front-Office/imagens/logo.jpg" alt="EyesEverywhere" class="logo">
             <h2>Porque cuidar do que é público é cuidar de todos</h2>
-            <form>
+
+            <!-- Formulário de login manual -->
+            <form onsubmit="return validarLogin(event)">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" placeholder="info@xyz.com" required>
 
@@ -38,12 +40,39 @@
     </div>
 
     <script>
-        function handleCredentialResponse(response) {
-            const data = JSON.parse(atob(response.credential.split('.')[1]));
-            console.log("Usuário Logado:", data);
-            alert(`Bem-vindo, ${data.name}!`);
+        const emailAutorizado = "ljvieirafernandes@gmail.com";
+        const senhaAutorizada = "22setembro";
+
+        // Validação do formulário tradicional
+        function validarLogin(event) {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            if (email === emailAutorizado && password === senhaAutorizada) {
+                window.location.href = "Geral.html";
+            } else {
+                alert("Credenciais inválidas.");
+            }
+
+            return false;
         }
 
+        // Validação do login via Google
+        function handleCredentialResponse(response) {
+            const data = JSON.parse(atob(response.credential.split('.')[1]));
+            const emailGoogle = data.email;
+
+            if (emailGoogle === emailAutorizado) {
+                alert(`Bem-vindo, ${data.name}!`);
+                window.location.href = "Geral.html";
+            } else {
+                alert("Este email não está autorizado a fazer login.");
+            }
+        }
+
+        // Inicialização do botão Google
         window.onload = function () {
             google.accounts.id.initialize({
                 client_id: "723281601761-a8uc1h6aftjl6sn6jdbtc2h7o07no9dm.apps.googleusercontent.com",
@@ -62,3 +91,4 @@
     </script>
 </body>
 </html>
+
