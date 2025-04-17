@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geral - EyesEverywhere</title>
+  <link rel="stylesheet" href="/Back-Office/Gestor/css/Geral.css">
+  <link rel="icon" href="imagens/logo.jpg">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <img src="imagens/logo.jpg" alt="Logo" class="logo">
+      <h1>EyesEverywhere</h1>
+      <nav>
+        <ul>
+          <li class="active">🔍 Geral</li>
+          <li>👥 Pessoas</li>
+          <li>📋 Ocorrências</li>
+          <li>➕ Novas Ocorrências</li>
+          <li>📝 Registar Peritos</li>
+          <li>🆘 Suporte</li>
+          <li>⚙️ Configurações</li>
+        </ul>
+      </nav>
+      <div class="user">
+        <button>+ Adicionar Plano de Auditoria</button>
+        <p>Luís Fernandes</p>
+        <small>luisfernandes@gmail.com</small>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="filters">
+        <select><option>Timeframe: All-time</option></select>
+        <select><option>Pessoas: All</option></select>
+        <select><option>Topic: All</option></select>
+      </header>
+
+      <section class="cards">
+        <div class="card"> <h3>Utilizadores Ativos</h3><p>27/5000</p></div>
+        <div class="card"> <h3>Nº Ocorrências Resolvidas</h3><p>1435</p></div>
+        <div class="card"> <h3>Custo médio por auditoria</h3><p>150€</p></div>
+        <div class="card"> <h3>Tempo médio de resposta</h3><p>2d 3h</p></div>
+      </section>
+
+      <section class="charts">
+        <div class="chart-box">
+          <h3>Tipos de Ocorrência</h3>
+          <canvas id="tipoOcorrencia"></canvas>
+        </div>
+        <div class="chart-box">
+          <h3>Número de Ocorrências</h3>
+          <canvas id="numOcorrencias"></canvas>
+        </div>
+      </section>
+
+      <section class="bottom-section">
+        <div class="chart-box wide">
+          <h3>Dinheiro</h3>
+          <canvas id="dinheiroChart"></canvas>
+        </div>
+        <div class="mapa-box">
+          <h3>Mapa</h3>
+          <img src="imagens/mapa_mock.png" alt="Mapa de calor">
+          <div class="legenda">
+            <span class="baixa"></span> Baixa
+            <span class="moderada"></span> Moderada
+            <span class="elevada"></span> Elevada
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const tipoOcorrencia = new Chart(document.getElementById('tipoOcorrencia'), {
+      type: 'pie',
+      data: {
+        labels: ['Buracos na via pública', 'Falhas de iluminação', 'Falhas no passeio', 'Esgoto aberto', 'Outros'],
+        datasets: [{
+          data: [30, 25, 15, 10, 20],
+          backgroundColor: ['#00C49F', '#0088FE', '#FFBB28', '#FF8042', '#8884D8']
+        }]
+      }
+    });
+
+    const numOcorrencias = new Chart(document.getElementById('numOcorrencias'), {
+      type: 'bar',
+      data: {
+        labels: ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'],
+        datasets: [{
+          label: 'Ocorrências',
+          data: [12, 19, 3, 5, 2, 3, 10, 15, 13, 18, 22, 30],
+          backgroundColor: '#0088FE'
+        }]
+      }
+    });
+
+    const dinheiroChart = new Chart(document.getElementById('dinheiroChart'), {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        datasets: [
+          { label: 'Este ano', data: [10000, 15000, 12000, 25000, 22000, 28000, 30000], borderColor: '#000', fill: false },
+          { label: 'Ano Passado', data: [8000, 12000, 10000, 20000, 17000, 24000, 26000], borderColor: '#ccc', borderDash: [5, 5], fill: false }
+        ]
+      }
+    });
+  </script>
+</body>
+</html>
