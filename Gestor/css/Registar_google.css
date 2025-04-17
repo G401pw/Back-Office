@@ -89,6 +89,6 @@ input {
 /* Estilizando a imagem do lado direito */
 .image-container {
     width: 50%;
-    background: url('imagens/sunset.png') no-repeat center center;
+    background: url('/Front-Office/imagens/sunset.png') no-repeat center center;
     background-size: cover;
 }
