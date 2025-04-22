@@ -5,39 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Geral - EyesEverywhere</title>
   <link rel="stylesheet" href="/Back-Office/Gestor/css/Geral.css">
-  <link rel="icon" href="imagens/logo.jpg">
+  <link rel="icon" href="/Back-Office/Gestor/Imagens/logo2.png">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="container">
-    <aside class="sidebar">
-      <img src="imagens/logo.jpg" alt="Logo" class="logo">
-      <h1>EyesEverywhere</h1>
-      <nav>
-        <ul>
-          <li class="active">🔍 Geral</li>
-          <li>👥 Pessoas</li>
-          <li>📋 Ocorrências</li>
-          <li>➕ Novas Ocorrências</li>
-          <li>📝 Registar Peritos</li>
-          <li>🆘 Suporte</li>
-          <li>⚙️ Configurações</li>
-        </ul>
-      </nav>
-      <div class="user">
-        <button>+ Adicionar Plano de Auditoria</button>
-        <p>Luís Fernandes</p>
-        <small>luisfernandes@gmail.com</small>
-      </div>
-    </aside>
+  <div class="sidebar">
+    <div class="logo">
+      <img src="/Back-Office/Gestor/Imagens/logo2.png" alt="EyesEverywhere">
+    </div>
+    <nav>
+      <ul>
+        <li><a class="active" data-page="Geral.html">🔍 Geral</a></li>
+        <li><a data-page="Peritos.html">👥 Peritos</a></li>
+        <li><a data-page="Ocorrencias.html">📋 Ocorrências</a></li>
+        <li><a data-page="NovasOcorrencias.html">➕ Novas Ocorrências</a></li>
+        <li><a data-page="Registar_Peritos.html">📝 Registar Peritos</a></li>
+        <li><a data-page="Suporte.html">🆘 Suporte</a></li>
+        <li><a data-page="Configuracoes.html">⚙️ Configurações</a></li>
+      </ul>
+    </nav>
+    <div class="add-auditoria">
+      <button>+ Adicionar Plano de Auditoria</button>
+    </div>
+    <div class="user-info">
+      <p>Luís Fernandes</p>
+      <p>luisfernandes@gmail.com</p>
+    </div>
+  </div>
 
-    <main class="main">
-      <header class="filters">
-        <select><option>Timeframe: All-time</option></select>
-        <select><option>Pessoas: All</option></select>
-        <select><option>Topic: All</option></select>
-      </header>
+  <div class="content">
+    <header class="filters">
+      <select><option>Timeframe: All-time</option></select>
+      <select><option>Pessoas: All</option></select>
+      <select><option>Tópico: All</option></select>
+    </header>
 
+    <main>
       <section class="cards">
         <div class="card"> <h3>Utilizadores Ativos</h3><p>27/5000</p></div>
         <div class="card"> <h3>Nº Ocorrências Resolvidas</h3><p>1435</p></div>
@@ -73,6 +76,7 @@
       </section>
     </main>
   </div>
+  
 
   <script>
     const tipoOcorrencia = new Chart(document.getElementById('tipoOcorrencia'), {
@@ -109,5 +113,9 @@
       }
     });
   </script>
+<script src="/Back-Office/Gestor/navegacao.js"></script>
+<script>
+  configurarNavegacaoSidebar();
+</script>
 </body>
 </html>

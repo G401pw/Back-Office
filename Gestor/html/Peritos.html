@@ -1,116 +1,116 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EyesEverywhere</title>
-    <link rel="stylesheet" href="/Back-Office/Gestor/css/Peritos.css">
-    <link rel="icon" href="/Back-Office/Gestor/Imagens/logo2.png" type = "image/x-icon">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Peritos - EyesEverywhere</title>
+  <link rel="stylesheet" href="/Back-Office/Gestor/css/Peritos.css" />
+  <link rel="icon" href="/Back-Office/Gestor/Imagens/logo2.png" type="image/x-icon" />
 </head>
 <body>
-    <div class="sidebar">
-        <div class="logo">
-            <!-- Coloca aqui a imagem do logo -->
-            <img src="/Back-Office/Gestor/Imagens/logo2.png" alt="EyesEverywhere">
-        </div>
-        <nav>
-            <ul>
-                <li><a href="/Back-Office/Gestor/Imagens/geral.png">&#x1F4C8; Geral</a></li>
-                <li><a href="/Back-Office/Gestor/Imagens/Peritos.png">&#x1F465; Peritos</a></li>
-                <li><a href="/Back-Office/Gestor/Imagens/Ocorrencias.png">&#x1F4CB; Ocorrências</a></li>
-                <li><a href="/Back-Office/Gestor/Imagens/Novas_ocorr.png">&#x26A1; Novas Ocorrências</a></li>
-                <li><a href="/Back-Office/Gestor/Imagens/Resgistar_perito.png">&#x1F4DD; Registar Peritos</a></li>
-            </ul>
-        </nav>
-        <div class="add-auditoria">
-            <button>+ Adicionar Plano de Auditoria</button>
-        </div>
-        <div class="user-info">
-            <!-- Coloca aqui a imagem do utilizador, se necessário -->
-            <p>Luís Fernandes</p>
-            <p>luisfernandes@gmail.com</p>
-        </div>
+  <div class="sidebar">
+    <div class="logo">
+      <img src="/Back-Office/Gestor/Imagens/logo2.png" alt="EyesEverywhere" />
     </div>
-    <div class="content">
-        <header>
-            <h1>Peritos</h1>
-            <button>...</button>
-        </header>
-        <section class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Número</th>
-                        <th>Nome</th>
-                        <th>Especialista</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>01</td>
-                        <td>João Ribeiro</td>
-                        <td>Engenheiro Civil</td>
-                        <td>&#x21B7;</td>
-                    </tr>
-                    <tr>
-                        <td>02</td>
-                        <td>Paulo Gomes</td>
-                        <td>Manutenção Rodoviária</td>
-                        <td>&#x21B7;</td>
-                    </tr>
-                    <tr>
-                        <td>03</td>
-                        <td>Ana Pereira</td>
-                        <td>Bombeira</td>
-                        <td>&#x21B7;</td>
-                    </tr>
-                    <tr>
-                        <td>04</td>
-                        <td>Luís Vieira</td>
-                        <td>Bombeiro</td>
-                        <td>&#x21B7;</td>
-                    </tr>
-                    <tr>
-                        <td>05</td>
-                        <td>Ricardo Foz</td>
-                        <td>Eletricista</td>
-                        <td>&#x21B7;</td>
-                    </tr>
-                    <tr>
-                        <td>06</td>
-                        <td>Cristina Lourenço</td>
-                        <td>Engenheira Civil</td>
-                        <td>&#x21B7;</td>
-                    </tr>
-                    <tr>
-                        <td>07</td>
-                        <td>Paula Freitas</td>
-                        <td>Técnica de Saneamento</td>
-                        <td>&#x21B7;</td>
-                    </tr>
-                    <tr>
-                        <td>08</td>
-                        <td>Luísa Oliveira</td>
-                        <td>Engenheira Sanitária</td>
-                        <td>&#x21B7;</td>
-                    </tr>
-                    <tr>
-                        <td>09</td>
-                        <td>Paulo Galinheiro</td>
-                        <td>Calceteiro</td>
-                        <td>&#x21B7;</td>
-                    </tr>
-                    <tr>
-                        <td>10</td>
-                        <td>Marcelo Sousa</td>
-                        <td>Canalizador</td>
-                        <td>&#x21B7;</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+    <nav>
+      <ul>
+        <li><a data-page="Geral.html">🔍 Geral</a></li>
+        <li><a class="active" data-page="Peritos.html">👥 Peritos</a></li>
+        <li><a data-page="Ocorrencias.html">📋 Ocorrências</a></li>
+        <li><a data-page="NovasOcorrencias.html">➕ Novas Ocorrências</a></li>
+        <li><a data-page="Registar_Peritos.html">📝 Registar Peritos</a></li>
+        <li><a data-page="Suporte.html">🆘 Suporte</a></li>
+        <li><a data-page="Configuracoes.html">⚙️ Configurações</a></li>
+      </ul>
+    </nav>
+    <div class="add-auditoria">
+      <button>+ Adicionar Plano de Auditoria</button>
+    </div>
+    <div class="user-info">
+      <p>Luís Fernandes</p>
+      <p>luisfernandes@gmail.com</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <header>
+      <h1>Peritos</h1>
+      <button>⋮</button>
+    </header>
+
+    <main>
+      <section class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nome</th>
+              <th>Especialidade</th>
+              <th>Data de Nascimento</th>
+              <th>Email</th>
+              <th>Telemóvel</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-peritos">
+            <!-- Peritos serão inseridos aqui -->
+          </tbody>
+        </table>
+      </section>
     </main>
+  </div>
+
+  <script src="/Back-Office/Gestor/navegacao.js"></script>
+  <script>
+    configurarNavegacaoSidebar();
+
+    const tbody = document.getElementById("tabela-peritos");
+    let peritos = JSON.parse(localStorage.getItem("peritos")) || [];
+
+    function renderPeritos() {
+      tbody.innerHTML = "";
+      peritos.forEach((perito, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${perito.nome}</td>
+          <td>${perito.especialidade}</td>
+          <td>${perito.dataNascimento}</td>
+          <td>${perito.email}</td>
+          <td>${perito.telefone}</td>
+          <td>
+            <button onclick="editarPerito(${index})">✏️</button>
+            <button onclick="removerPerito(${index})">🗑️</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function removerPerito(index) {
+      if (confirm("Tem a certeza que deseja remover este perito?")) {
+        peritos.splice(index, 1);
+        localStorage.setItem("peritos", JSON.stringify(peritos));
+        renderPeritos();
+      }
+    }
+
+    function editarPerito(index) {
+      const peritoAtual = peritos[index];
+      const nome = prompt("Nome:", peritoAtual.nome);
+      const especialidade = prompt("Especialidade:", peritoAtual.especialidade);
+      const dataNascimento = prompt("Data de Nascimento:", peritoAtual.dataNascimento);
+      const email = prompt("Email:", peritoAtual.email);
+      const telefone = prompt("Telemóvel:", peritoAtual.telefone);
+
+      if (nome && especialidade && dataNascimento && email && telefone) {
+        peritos[index] = { nome, especialidade, dataNascimento, email, telefone };
+        localStorage.setItem("peritos", JSON.stringify(peritos));
+        renderPeritos();
+      }
+    }
+
+    renderPeritos();
+  </script>
 </body>
 </html>
-     

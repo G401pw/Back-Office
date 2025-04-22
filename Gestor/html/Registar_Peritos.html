@@ -1,82 +1,107 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EyesEverywhere</title>
-    <link rel="stylesheet" href="/Gestor/css/Registar_Peritos.css">
-    <link rel="icon" href="/Back-Office/Gestor/Imagens/logo2.png" type="image/x-icon">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registar Peritos</title>
+  <link rel="stylesheet" href="/Back-Office/Gestor/css/Registar_Peritos.css" />
+  <link rel="icon" href="/Back-Office/Gestor/Imagens/logo2.png" type="image/x-icon" />
 </head>
 <body>
-    <div class="sidebar">
-        <div class="logo">
-            <img src="/Back-Office/Gestor/Imagens/logo2.png" alt="EyesEverywhere">
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#">&#x1F4C8; Geral</a></li>
-                <li><a href="#">&#x1F465; Peritos</a></li>
-                <li><a href="#">&#x1F4CB; Ocorrências</a></li>
-                <li><a href="#">&#x26A1; Novas Ocorrências</a></li>
-                <li><a href="#" class="active">&#x1F4DD; Registar Peritos</a></li>
-            </ul>
-        </nav>
-        <div class="add-auditoria">
-            <button>+ Adicionar Plano de Auditoria</button>
-        </div>
-        <div class="user-info">
-            <p>Luís Fernandes</p>
-            <p>luisfernandes@gmail.com</p>
-        </div>
+  <div class="sidebar">
+    <div class="logo">
+      <img src="/Back-Office/Gestor/Imagens/logo2.png" alt="EyesEverywhere" />
     </div>
-    <div class="content">
-        <header>
-            <h1>Registar Peritos</h1>
-            <button>...</button>
-        </header>
-        <main>
-            <div class="form-container">
-                <form>
-                    <label for="nome">Nome Completo</label>
-                    <input type="text" id="nome" name="nome" placeholder="Digite o nome completo">
-                    
-                    <label for="morada">Morada</label>
-                    <input type="text" id="morada" name="morada" placeholder="Digite a morada">
-                    
-                    <label>Data de Nascimento</label>
-                    <div class="date-fields">
-                        <select name="dia" id="dia">
-                            <option>Dia</option>
-                            <!-- Adicione opções de 1 a 31 -->
-                        </select>
-                        <select name="mes" id="mes">
-                            <option>Mês</option>
-                            <!-- Adicione opções de 1 a 12 -->
-                        </select>
-                        <select name="ano" id="ano">
-                            <option>Ano</option>
-                            <!-- Adicione opções de anos -->
-                        </select>
-                    </div>
-                    
-                    <label for="especialidade">Área/Especialidade</label>
-                    <input type="text" id="especialidade" name="especialidade" placeholder="Digite a especialidade">
-                    
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" name="email" placeholder="Digite o e-mail">
-                    
-                    <label for="telefone">Telemóvel</label>
-                    <div class="phone-field">
-                        <select id="ddd" name="ddd">
-                            <option value="+351">+351 (PT)</option>
-                        </select>
-                        <input type="tel" id="telefone" name="telefone" placeholder="Digite o telemóvel">
-                    </div>
-                    
-                    <button type="submit">Confirmar</button>
-                </form>
-            </div>
-        </main>
+    <nav>
+      <ul>
+        <li><a data-page="Geral.html">🔍 Geral</a></li>
+        <li><a data-page="Peritos.html">👥 Peritos</a></li>
+        <li><a data-page="Ocorrencias.html">📋 Ocorrências</a></li>
+        <li><a data-page="NovasOcorrencias.html">➕ Novas Ocorrências</a></li>
+        <li><a class="active" data-page="Registar_Peritos.html">📝 Registar Peritos</a></li>
+        <li><a data-page="Suporte.html">🆘 Suporte</a></li>
+        <li><a data-page="Configuracoes.html">⚙️ Configurações</a></li>
+      </ul>
+    </nav>
+    <div class="add-auditoria">
+      <button>+ Adicionar Plano de Auditoria</button>
     </div>
+    <div class="user-info">
+      <p>Luís Fernandes</p>
+      <p>luisfernandes@gmail.com</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <header>
+      <h1>Registar Peritos</h1>
+    </header>
+
+    <form id="formPerito" class="form-registo">
+      <input type="text" id="nome" placeholder="Nome Completo" required />
+      <input type="text" id="morada" placeholder="Morada" required />
+      <div class="data-nascimento">
+        <select id="dia"><option value="">Dia</option></select>
+        <select id="mes"><option value="">Mês</option></select>
+        <select id="ano"><option value="">Ano</option></select>
+      </div>
+      <input type="text" id="especialidade" placeholder="Área/Especialidade" required />
+      <input type="email" id="email" placeholder="E-mail" required />
+      <input type="tel" id="telefone" placeholder="Telemóvel" required />
+      <button type="submit">Confirmar</button>
+    </form>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/Back-Office/Gestor/navegacao.js"></script>
+  <script>
+    configurarNavegacaoSidebar();
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Preencher selects de data
+      const dias = document.getElementById('dia');
+      const meses = document.getElementById('mes');
+      const anos = document.getElementById('ano');
+
+      for (let i = 1; i <= 31; i++) {
+        dias.innerHTML += `<option value="${i}">${i}</option>`;
+      }
+
+      const nomesMeses = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+      ];
+      nomesMeses.forEach((m, i) => {
+        meses.innerHTML += `<option value="${i + 1}">${m}</option>`;
+      });
+
+      const anoAtual = new Date().getFullYear();
+      for (let i = anoAtual; i >= 1900; i--) {
+        anos.innerHTML += `<option value="${i}">${i}</option>`;
+      }
+
+      // Submissão do formulário
+      document.getElementById("formPerito").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const perito = {
+          nome: document.getElementById("nome").value,
+          morada: document.getElementById("morada").value,
+          dataNascimento: `${document.getElementById("dia").value}/${document.getElementById("mes").value}/${document.getElementById("ano").value}`,
+          especialidade: document.getElementById("especialidade").value,
+          email: document.getElementById("email").value,
+          telefone: document.getElementById("telefone").value,
+        };
+
+        let peritos = JSON.parse(localStorage.getItem("peritos")) || [];
+        peritos.push(perito);
+        localStorage.setItem("peritos", JSON.stringify(peritos));
+
+        alert("Perito registado com sucesso!");
+        window.location.href = "Peritos.html";
+      });
+    });
+  </script>
 </body>
 </html>
+
