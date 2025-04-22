@@ -40,8 +40,8 @@
     </div>
 
     <script>
-        const emailAutorizado = "ljvieirafernandes@gmail.com";
-        const senhaAutorizada = "22setembro";
+        const emailAutorizado = ["ljvieirafernandes@gmail.com", "edunas04@gmail.com"];
+        const senhaAutorizada = "1234567890";
 
         // Validação do formulário tradicional
         function validarLogin(event) {
@@ -64,7 +64,7 @@
             const data = JSON.parse(atob(response.credential.split('.')[1]));
             const emailGoogle = data.email;
 
-            if (emailGoogle === emailAutorizado) {
+            if (emailAutorizado.includes(emailGoogle)) {
                 alert(`Bem-vindo, ${data.name}!`);
                 window.location.href = "Geral.html";
             } else {
