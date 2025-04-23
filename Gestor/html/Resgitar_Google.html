@@ -50,7 +50,7 @@
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
 
-            if (email === emailAutorizado && password === senhaAutorizada) {
+            if (emailAutorizado.includes(email) && password === senhaAutorizada) {
                 window.location.href = "Geral.html";
             } else {
                 alert("Credenciais inválidas.");
