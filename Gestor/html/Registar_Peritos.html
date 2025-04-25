@@ -6,6 +6,38 @@
   <title>Registar Peritos</title>
   <link rel="stylesheet" href="/Back-Office/Gestor/css/Registar_Peritos.css" />
   <link rel="icon" href="/Back-Office/Gestor/Imagens/logo.png" type="image/x-icon" />
+  <style>
+    /* Estilos para o modal de sucesso */
+    .modal {
+      display: none; /* Inicialmente escondido */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      width: 300px;
+    }
+    .modal button {
+      background-color: #2563eb;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .modal button:hover {
+      background-color: #1e40af;
+    }
+  </style>
 </head>
 <body>
   <div class="sidebar">
@@ -18,7 +50,7 @@
         <li><a data-page="NovasOcorrencias.html" href="NovasOcorrencias.html">➕ Novas Ocorrências</a></li>
         <li><a data-page="Peritos.html" href="Peritos.html">👥 Peritos</a></li>
         <li><a class="active" data-page="Registar_Peritos.html" href="Registar_Peritos.html">📝 Registar Peritos</a></li>
-        <li><a data-page = "Geral.html" href="Geral.html">🔍 Estatisticas</a></li>
+        <li><a data-page="Geral.html" href="Geral.html">🔍 Estatísticas</a></li>
       </ul>
     </nav>
     <div class="add-auditoria">
@@ -50,9 +82,15 @@
     </form>
   </div>
 
-  <!-- Scripts -->
-  <script>
+  <!-- Modal de sucesso -->
+  <div id="successModal" class="modal">
+    <div class="modal-content">
+      <h3>Perito registado com sucesso!</h3>
+      <button id="closeModalBtn">OK</button>
+    </div>
+  </div>
 
+  <script>
     document.addEventListener("DOMContentLoaded", () => {
       // Preencher selects de data
       const dias = document.getElementById('dia');
@@ -93,7 +131,12 @@
         peritos.push(perito);
         localStorage.setItem("peritos", JSON.stringify(peritos));
 
-        alert("Perito registado com sucesso!");
+        // Exibir modal de sucesso
+        document.getElementById("successModal").style.display = "flex";
+      });
+
+      // Fechar o modal e redirecionar para a página de peritos
+      document.getElementById("closeModalBtn").addEventListener("click", () => {
         window.location.href = "Peritos.html";
       });
     });

@@ -63,10 +63,16 @@
         function handleCredentialResponse(response) {
             const data = JSON.parse(atob(response.credential.split('.')[1]));
             const emailGoogle = data.email;
+            const nomeGoogle = data.name;
 
             if (emailAutorizado.includes(emailGoogle)) {
                 alert(`Bem-vindo, ${data.name}!`);
-                window.location.href = "Ocorrencias.html";
+
+                // Armazenando nome e email no localStorage
+                localStorage.setItem("userName", nomeGoogle);
+                localStorage.setItem("userEmail", emailGoogle);
+
+                window.location.href = "Ocorrencias.html";  // Ou a página desejada
             } else {
                 alert("Este email não está autorizado a fazer login.");
             }
@@ -91,4 +97,3 @@
     </script>
 </body>
 </html>
-

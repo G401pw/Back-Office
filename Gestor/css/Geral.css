@@ -135,82 +135,62 @@ header button {
     cursor: pointer;
 }
 
-/* Formulário */
-.form-container {
-    background-color: white;
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    max-width: 750px;
-    margin: auto;
-}
-
-.form-container label {
-    font-size: 14px;
-    font-weight: 500;
-    margin-top: 20px;
-    color: #333;
-    display: block;
-}
-
-.form-container input,
-.form-container select {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    margin-top: 5px;
-    font-size: 14px;
-    transition: border-color 0.3s ease;
-}
-
-.form-container input:focus,
-.form-container select:focus {
-    border-color: #2563eb;
-    outline: none;
-}
-
-.date-fields {
+/* Seção de Gráficos */
+.charts {
     display: flex;
-    gap: 12px;
-    margin-top: 5px;
-    margin-bottom: 20px;
+    gap: 20px;
+    justify-content: space-between;
 }
 
-.date-fields select {
+.chart-box {
     flex: 1;
-}
-
-.phone-field {
-    display: flex;
-    gap: 12px;
-    margin-top: 5px;
-    margin-bottom: 30px;
-}
-
-.phone-field select {
-    width: 90px;
     background-color: white;
-    cursor: pointer;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.phone-field input {
-    flex: 1;
-}
-
-.form-container button[type="submit"] {
-    background-color: #2563eb;
-    color: #fff;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 30px;
-    transition: background 0.3s ease;
+.chart-box canvas {
     width: 100%;
+    height: 300px;
 }
 
-.form-container button[type="submit"]:hover {
-    background-color: #1e40af;
+/* Footer ou seções que não serão exibidas no momento */
+.bottom-section {
+    display: none;
+}
+
+.mapa-box {
+    display: none;
+}
+
+.mapa-box img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.legenda {
+    font-size: 14px;
+    color: #444;
+    margin-top: 10px;
+}
+
+.baixa, .moderada, .elevada {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    border-radius: 50%;
+}
+
+.baixa {
+    background-color: #00C49F;
+}
+
+.moderada {
+    background-color: #FFBB28;
+}
+
+.elevada {
+    background-color: #FF8042;
 }
