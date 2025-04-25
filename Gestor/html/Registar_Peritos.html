@@ -37,6 +37,18 @@
     .modal button:hover {
       background-color: #1e40af;
     }
+
+    /* Estilos para a exibição do nome e email do usuário */
+    .user-info {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      color: white;
+    }
+    .user-info p {
+      margin: 0;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
@@ -56,9 +68,10 @@
     <div class="add-auditoria">
       <button>+ Adicionar Plano de Auditoria</button>
     </div>
+    <!-- Informações de login -->
     <div class="user-info">
-      <p>Luís Fernandes</p>
-      <p>luisfernandes@gmail.com</p>
+      <p>{{ userName }}</p>
+      <p>{{ userEmail }}</p>
     </div>
   </div>
 
@@ -139,8 +152,15 @@
       document.getElementById("closeModalBtn").addEventListener("click", () => {
         window.location.href = "Peritos.html";
       });
+
+      // Carregar as informações de login
+      const userName = localStorage.getItem("userName") || "Usuário não logado";
+      const userEmail = localStorage.getItem("userEmail") || "Sem e-mail";
+
+      // Atualizar a interface com as informações de login
+      document.querySelector('.user-info p:nth-child(1)').textContent = userName;
+      document.querySelector('.user-info p:nth-child(2)').textContent = userEmail;
     });
   </script>
 </body>
 </html>
-
