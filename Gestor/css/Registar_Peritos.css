@@ -12,7 +12,7 @@ body {
     height: 100vh;
 }
 
-/* Sidebar */
+/* Sidebar igual à base desejada */
 .sidebar {
     width: 250px;
     height: 100vh;
@@ -20,7 +20,7 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between;
     border-radius: 0 20px 20px 0;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     position: fixed;
@@ -42,7 +42,6 @@ body {
 nav ul {
     list-style: none;
     padding: 0;
-    margin-bottom: 20px;
 }
 
 nav ul li {
@@ -67,7 +66,6 @@ nav ul li a.active {
     font-weight: bold;
 }
 
-/* Botão "Adicionar Plano de Auditoria" mais organizado */
 .add-auditoria {
     margin-top: 20px;
     padding: 15px 0;
@@ -89,23 +87,18 @@ nav ul li a.active {
     background-color: #f0f0f0;
 }
 
-/* Informações de login do usuário na parte inferior */
 .user-info {
-    position: absolute;
-    bottom: 10px;
-    left: 20px;
-    color: #000000;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+    text-align: left;
+    font-size: 14px;
+    color: #555;
 }
 
 .user-info p:first-child {
     font-weight: bold;
     color: #000;
     margin-bottom: 5px;
-}
-
-.user-info p {
-    margin: 0;
-    font-size: 14px;
 }
 
 /* Conteúdo principal */
