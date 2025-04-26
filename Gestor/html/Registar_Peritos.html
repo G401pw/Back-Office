@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Registar Peritos</title>
   <link rel="stylesheet" href="/Back-Office/Gestor/css/Registar_Peritos.css" />
   <link rel="icon" href="/Back-Office/Gestor/Imagens/logo.png" type="image/x-icon" />
@@ -57,8 +57,8 @@
       <button>+ Adicionar Plano de Auditoria</button>
     </div>
     <div class="user-info">
-      <p>Luís Fernandes</p>
-      <p>luisfernandes@gmail.com</p>
+      <p id="user-name">Usuário não logado</p>
+      <p id="user-email">Sem e-mail</p>
     </div>
   </div>
 
@@ -91,7 +91,20 @@
   </div>
 
   <script>
+    // Função para atualizar as informações do usuário
+    function atualizarUsuario() {
+      const nome = localStorage.getItem("userName") || "Usuário não logado";
+      const email = localStorage.getItem("userEmail") || "Sem e-mail";
+      
+      // Preenche as informações do usuário
+      document.getElementById("user-name").innerText = nome;
+      document.getElementById("user-email").innerText = email;
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
+      // Atualiza as informações do usuário
+      atualizarUsuario();
+
       // Preencher selects de data
       const dias = document.getElementById('dia');
       const meses = document.getElementById('mes');
@@ -143,4 +156,3 @@
   </script>
 </body>
 </html>
-

@@ -14,20 +14,36 @@
     </div>
     <nav>
       <ul>
-        <li><a class="active" data-page="Ocorrencias.html" href ="Ocorrencias.html">📋 Ocorrências</a></li>
-        <li><a data-page="NovasOcorrencias.html" href = "NovasOcorrencias.html">➕ Novas Ocorrências</a></li>
+        <li><a class="active" data-page="Ocorrencias.html" href="Ocorrencias.html">📋 Ocorrências</a></li>
+        <li><a data-page="NovasOcorrencias.html" href="NovasOcorrencias.html">➕ Novas Ocorrências</a></li>
         <li><a data-page="Peritos.html" href="Peritos.html">👥 Peritos</a></li>
         <li><a data-page="Registar_Peritos.html" href="Registar_Peritos.html">📝 Registar Peritos</a></li>
-        <li><a data-page="Geral.html" href="Geral.html">🔍 Estatisticas</a></li>
+        <li><a data-page="Geral.html" href="Geral.html">🔍 Estatísticas</a></li>
       </ul>
     </nav>
     <div class="add-auditoria">
       <button>+ Adicionar Plano de Auditoria</button>
     </div>
     <div class="user-info">
-      <p>Luís Fernandes</p>
-      <p>luisfernandes@gmail.com</p>
+      <!-- Informações do usuário -->
+      <p id="user-name">Usuário não logado</p>
+      <p id="user-email">Sem e-mail</p>
     </div>
   </div>
-</body>
 
+  <script>
+    // Função para atualizar as informações do usuário
+    function atualizarUsuario() {
+      const nome = localStorage.getItem("userName") || "Usuário não logado";
+      const email = localStorage.getItem("userEmail") || "Sem e-mail";
+      
+      // Preenche as informações do usuário
+      document.getElementById("user-name").innerText = nome;
+      document.getElementById("user-email").innerText = email;
+    }
+
+    // Chama a função para atualizar as informações do usuário quando a página é carregada
+    document.addEventListener("DOMContentLoaded", atualizarUsuario);
+  </script>
+</body>
+</html>
