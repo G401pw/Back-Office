@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Plano de Auditoria</title>
+  <link rel="stylesheet" href="/Back-Office/Gestor/css/PlanoAuditoria.css">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">
+      <img src="/Back-Office/Gestor/Imagens/logo.png" alt="EyesEverywhere" />
+    </div>
+    <nav>
+      <ul>
+        <li><a data-page="Ocorrencias.html" href="Ocorrencias.html">📋 Ocorrências</a></li>
+        <li><a data-page="NovasOcorrencias.html" href="NovasOcorrencias.html">➕ Novas Ocorrências</a></li>
+        <li><a data-page="Peritos.html" href="Peritos.html">👥 Peritos</a></li>
+        <li><a data-page="Registar_Peritos.html" href="Registar_Peritos.html">📝 Registar Peritos</a></li>
+        <li><a data-page="Geral.html" href="Geral.html">🔍 Estatísticas</a></li>
+      </ul>
+    </nav>
+    <div class="add-auditoria">
+      <a href="PlanoAuditoria.html">
+        <button>+ Adicionar Plano de Auditoria</button>
+      </a>
+    </div>
+    <div class="user-info">
+      <p>Usuário não logado</p>
+      <p>Sem e-mail</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <header>
+      <h1>Plano de Auditoria</h1>
+      <p>Preencha o plano com as informações necessárias</p>
+    </header>
+
+    <form action="#" method="POST" class="form-auditoria">
+      <section class="detalhes-auditoria">
+        <h2>Detalhes da Auditoria</h2>
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" name="nome" required>
+
+        <label for="tipo">Tipo de Ocorrência</label>
+        <input type="text" id="tipo" name="tipo" required>
+
+        <label for="origem">Origem</label>
+        <input type="text" id="origem" name="origem" required>
+      </section>
+
+      <section class="localizacao">
+        <h2>Localização</h2>
+        <label for="morada">Morada</label>
+        <input type="text" id="morada" name="morada" required>
+
+        <label for="localidade">Localidade</label>
+        <input type="text" id="localidade" name="localidade" required>
+
+        <label for="codigo-postal">Código Postal</label>
+        <input type="text" id="codigo-postal" name="codigo-postal" required>
+      </section>
+
+      <section class="data-hora">
+        <h2>Dia e Hora</h2>
+        <label for="data">Data</label>
+        <input type="date" id="data" name="data" required>
+
+        <label for="hora-inicio">Início</label>
+        <input type="time" id="hora-inicio" name="hora-inicio" required>
+
+        <label for="hora-fim">Fim</label>
+        <input type="time" id="hora-fim" name="hora-fim" required>
+      </section>
+
+      <section class="equipe-materiais">
+        <h2>Equipe e Materiais</h2>
+        <label for="qtd-peritos">Selecione qtd. Peritos</label>
+        <input type="number" id="qtd-peritos" name="qtd-peritos" required>
+
+        <div class="peritos">
+          <label for="nome1">Nome 1</label>
+          <input type="text" id="nome1" name="nome1" required>
+
+          <label for="nome2">Nome 2</label>
+          <input type="text" id="nome2" name="nome2" required>
+        </div>
+
+        <label for="materiais">Materiais</label>
+        <textarea id="materiais" name="materiais" required></textarea>
+
+        <label for="equipamento">Equipamento</label>
+        <textarea id="equipamento" name="equipamento" required></textarea>
+
+        <label for="info-extra">Informações extras</label>
+        <textarea id="info-extra" name="info-extra"></textarea>
+      </section>
+
+      <button type="submit" class="btn-confirmar">Confirmar</button>
+    </form>
+  </div>
+</body>
+</html>
