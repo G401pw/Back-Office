@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Geral - EyesEverywhere</title>
+  <title>Estatísticas - EyesEverywhere</title>
   <link rel="stylesheet" href="/Back-Office/Gestor/css/Geral.css" />
   <link rel="icon" href="/Back-Office/Gestor/Imagens/logo.png" />
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
@@ -39,22 +39,18 @@
       </header>
 
       <main>
-        <section class="cards">
-          <div class="card">
-            <h3>Utilizadores Ativos</h3>
-            <p>{{ usuariosAtivos }}/5000</p>
+        <section class="stats-summary">
+          <div class="stat-box visitas">
+            <h3>Visitas ao Site Hoje</h3>
+            <p>{{ visitasHoje }}</p>
           </div>
-          <div class="card">
-            <h3>Nº Ocorrências Resolvidas</h3>
-            <p>{{ numeroOcorrencias }}</p>
+          <div class="stat-box peritos">
+            <h3>Peritos Disponíveis</h3>
+            <p>{{ peritosDisponiveis }}</p>
           </div>
-          <div class="card">
-            <h3>Custo médio por auditoria</h3>
-            <p>150€</p>
-          </div>
-          <div class="card">
-            <h3>Tempo médio de resposta</h3>
-            <p>{{ tempoMedioResposta }}</p>
+          <div class="stat-box ocorrencias">
+            <h3>Ocorrências em Ação</h3>
+            <p>{{ ocorrenciasEmAcao }}</p>
           </div>
         </section>
 
@@ -65,14 +61,7 @@
           </div>
           <div class="chart-box">
             <h3>Ocorrências Resolvidas por Mês</h3>
-            <canvas id="ocorrenciasMensaisChart"></canvas>
-          </div>
-        </section>
-
-        <section class="bottom-section">
-          <div class="chart-box wide">
-            <h3>Dinheiro</h3>
-            <canvas id="dinheiroChart"></canvas>
+            <canvas id="numOcorrencias"></canvas>
           </div>
         </section>
       </main>
@@ -83,9 +72,9 @@
     new Vue({
       el: '#app',
       data: {
-        usuariosAtivos: 27,
-        numeroOcorrencias: 1435,
-        tempoMedioResposta: '2d 3h',
+        visitasHoje: 0,
+        peritosDisponiveis: 15, // Exemplo de número de peritos
+        ocorrenciasEmAcao: 5, // Exemplo de número de ocorrências em ação
         peritos: JSON.parse(localStorage.getItem("peritos")) || [],
         userName: localStorage.getItem("userName") || "Usuário não logado",
         userEmail: localStorage.getItem("userEmail") || "Sem e-mail"
@@ -104,11 +93,16 @@
         }
       },
       mounted() {
-        this.renderChart();
-        this.renderOcorrenciasMensaisChart();
+        this.renderCharts();
+        this.atualizarContadorVisitas();
       },
       methods: {
-        renderChart() {
+        renderCharts() {
+          this.renderEspecialidadesChart();
+          this.renderOcorrenciasChart();
+        },
+
+        renderEspecialidadesChart() {
           const especialidadesData = this.especialidades;
           const labels = Object.keys(especialidadesData);
           const data = Object.values(especialidadesData);
@@ -126,25 +120,29 @@
           });
         },
 
-        renderOcorrenciasMensaisChart() {
-          const ctx = document.getElementById('ocorrenciasMensaisChart').getContext('2d');
+        renderOcorrenciasChart() {
+          const ctx = document.getElementById('numOcorrencias').getContext('2d');
           new Chart(ctx, {
             type: 'bar',
             data: {
               labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
               datasets: [{
                 label: 'Ocorrências Resolvidas',
-                data: [12, 19, 3, 5, 2, 3, 10, 15, 13, 18, 22, 30],
+                data: [5, 15, 10, 6, 3, 4, 7, 12, 8, 14, 18, 30],
                 backgroundColor: '#0088FE'
               }]
             }
           });
         },
 
-        addPerito(perito) {
-          this.peritos.push(perito);
-          localStorage.setItem("peritos", JSON.stringify(this.peritos));
-          this.renderChart(); // Re-renderize o gráfico após adicionar um novo perito
+        atualizarContadorVisitas() {
+          let visitas = localStorage.getItem("contadorVisitas");
+          if (!visitas) {
+            visitas = 0;
+          }
+          visitas++;
+          localStorage.setItem("contadorVisitas", visitas);
+          this.visitasHoje = visitas;
         }
       }
     });
