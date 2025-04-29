@@ -100,3 +100,83 @@ nav ul li a.active {
     color: #000;
     margin-bottom: 5px;
 }
+
+/* Conteúdo Principal */
+.content {
+    margin-left: 250px;
+    padding: 30px;
+    width: calc(100% - 250px);
+    background-color: #f5f6fa;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 22px;
+    color: #333;
+}
+
+/* Estilo das Ocorrências */
+.ocorrencias {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ocorrencia {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ocorrencia-id {
+    font-weight: bold;
+    color: #333;
+}
+
+.ocorrencia-data, .ocorrencia-titulo, .ocorrencia-local {
+    font-size: 14px;
+    color: #666;
+}
+
+.ocorrencia-status {
+    background-color: #f44336;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.pendente {
+    background-color: #ffeb3b;
+    color: #333;
+}
+
+.detalhes-btn {
+    background-color: #0088fe;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.detalhes-btn:hover {
+    background-color: #0066cc;
+}

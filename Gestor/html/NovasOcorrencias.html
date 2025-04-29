@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Peritos - EyesEverywhere</title>
+  <title>Novas Ocorrências - EyesEverywhere</title>
   <link rel="stylesheet" href="/Back-Office/Gestor/css/NovasOcorrencias.css" />
   <link rel="icon" href="/Back-Office/Gestor/Imagens/logo.png" type="image/x-icon" />
 </head>
@@ -14,11 +14,11 @@
     </div>
     <nav>
       <ul>
-        <li><a data-page="Ocorrencias.html" href ="Ocorrencias.html">📋 Ocorrências</a></li>
-        <li><a class="active" data-page="NovasOcorrencias.html" href = "NovasOcorrencias.html">➕ Novas Ocorrências</a></li>
+        <li><a data-page="Ocorrencias.html" href="Ocorrencias.html">📋 Ocorrências</a></li>
+        <li><a class="active" data-page="NovasOcorrencias.html" href="NovasOcorrencias.html">➕ Novas Ocorrências</a></li>
         <li><a data-page="Peritos.html" href="Peritos.html">👥 Peritos</a></li>
         <li><a data-page="Registar_Peritos.html" href="Registar_Peritos.html">📝 Registar Peritos</a></li>
-        <li><a data-page="Geral.html" href="Geral.html">🔍 Estatisticas</a></li>
+        <li><a data-page="Geral.html" href="Geral.html">🔍 Estatísticas</a></li>
       </ul>
     </nav>
     <div class="add-auditoria">
@@ -27,11 +27,54 @@
       </a>
     </div>
     <div class="user-info">
-      <!-- Informações do utilizador -->
       <p id="user-name">Utilizador não logado</p>
       <p id="user-email">Sem e-mail</p>
     </div>
   </div>
+
+  <div class="content">
+    <header>
+      <h1>Ocorrências</h1>
+    </header>
+
+    <main>
+      <section class="ocorrencias">
+        <div class="ocorrencia">
+          <p class="ocorrencia-id">01</p>
+          <p class="ocorrencia-data">Jan 9, 2025</p>
+          <p class="ocorrencia-titulo">Buracos na Via Pública</p>
+          <p class="ocorrencia-local">Setúbal, Av. Luísa Todi</p>
+          <span class="ocorrencia-status pendente">Pendente</span>
+          <button class="detalhes-btn">Ver Detalhes</button>
+        </div>
+        <div class="ocorrencia">
+          <p class="ocorrencia-id">02</p>
+          <p class="ocorrencia-data">Jan 22, 2025</p>
+          <p class="ocorrencia-titulo">Fuga de água</p>
+          <p class="ocorrencia-local">Guimarães, Largo do Toural</p>
+          <span class="ocorrencia-status pendente">Pendente</span>
+          <button class="detalhes-btn">Ver Detalhes</button>
+        </div>
+        <div class="ocorrencia">
+          <p class="ocorrencia-id">03</p>
+          <p class="ocorrencia-data">Feb 17, 2025</p>
+          <p class="ocorrencia-titulo">Árvore caída</p>
+          <p class="ocorrencia-local">Aveiro, Cais dos Botirões</p>
+          <span class="ocorrencia-status pendente">Pendente</span>
+          <button class="detalhes-btn">Ver Detalhes</button>
+        </div>
+        <div class="ocorrencia">
+          <p class="ocorrencia-id">04</p>
+          <p class="ocorrencia-data">Mar 3, 2025</p>
+          <p class="ocorrencia-titulo">Calçada irregular</p>
+          <p class="ocorrencia-local">Leiria, Rua Direita</p>
+          <span class="ocorrencia-status pendente">Pendente</span>
+          <button class="detalhes-btn">Ver Detalhes</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
   <script>
     // Função para atualizar as informações do utilizador
     function atualizarUtilizador() {
@@ -47,4 +90,4 @@
     document.addEventListener("DOMContentLoaded", atualizarUtilizador);
   </script>
 </body>
-
+</html>
