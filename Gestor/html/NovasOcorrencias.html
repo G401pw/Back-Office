@@ -38,39 +38,8 @@
     </header>
 
     <main>
-      <section class="ocorrencias">
-        <div class="ocorrencia">
-          <p class="ocorrencia-id">01</p>
-          <p class="ocorrencia-data">Jan 9, 2025</p>
-          <p class="ocorrencia-titulo">Buracos na Via Pública</p>
-          <p class="ocorrencia-local">Setúbal, Av. Luísa Todi</p>
-          <span class="ocorrencia-status pendente">Pendente</span>
-          <button class="detalhes-btn">Ver Detalhes</button>
-        </div>
-        <div class="ocorrencia">
-          <p class="ocorrencia-id">02</p>
-          <p class="ocorrencia-data">Jan 22, 2025</p>
-          <p class="ocorrencia-titulo">Fuga de água</p>
-          <p class="ocorrencia-local">Guimarães, Largo do Toural</p>
-          <span class="ocorrencia-status pendente">Pendente</span>
-          <button class="detalhes-btn">Ver Detalhes</button>
-        </div>
-        <div class="ocorrencia">
-          <p class="ocorrencia-id">03</p>
-          <p class="ocorrencia-data">Feb 17, 2025</p>
-          <p class="ocorrencia-titulo">Árvore caída</p>
-          <p class="ocorrencia-local">Aveiro, Cais dos Botirões</p>
-          <span class="ocorrencia-status pendente">Pendente</span>
-          <button class="detalhes-btn">Ver Detalhes</button>
-        </div>
-        <div class="ocorrencia">
-          <p class="ocorrencia-id">04</p>
-          <p class="ocorrencia-data">Mar 3, 2025</p>
-          <p class="ocorrencia-titulo">Calçada irregular</p>
-          <p class="ocorrencia-local">Leiria, Rua Direita</p>
-          <span class="ocorrencia-status pendente">Pendente</span>
-          <button class="detalhes-btn">Ver Detalhes</button>
-        </div>
+      <section class="ocorrencias" id="ocorrencias-lista">
+        <!-- Aqui as ocorrências vão ser carregadas dinamicamente -->
       </section>
     </main>
   </div>
@@ -86,8 +55,33 @@
       document.getElementById("user-email").innerText = email;
     }
 
-    // Chama a função para atualizar as informações do utilizador quando a página é carregada
-    document.addEventListener("DOMContentLoaded", atualizarUtilizador);
+    // Função para carregar as ocorrências armazenadas e exibir na página
+    function carregarOcorrencias() {
+      const listaOcorrencias = document.getElementById("ocorrencias-lista");
+      const ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
+      
+      ocorrencias.forEach(ocorrencia => {
+        const ocorrenciaDiv = document.createElement("div");
+        ocorrenciaDiv.classList.add("ocorrencia");
+
+        ocorrenciaDiv.innerHTML = `
+          <p class="ocorrencia-id">${ocorrencia.tipo}</p>
+          <p class="ocorrencia-data">${ocorrencia.data}</p>
+          <p class="ocorrencia-titulo">${ocorrencia.morada}</p>
+          <p class="ocorrencia-local">${ocorrencia.cidade}</p>
+          <span class="ocorrencia-status pendente">Pendente</span>
+          <button class="detalhes-btn">Ver Detalhes</button>
+        `;
+        
+        listaOcorrencias.appendChild(ocorrenciaDiv);
+      });
+    }
+
+    // Chama a função para atualizar as informações do utilizador e carregar as ocorrências
+    document.addEventListener("DOMContentLoaded", function() {
+      atualizarUtilizador();
+      carregarOcorrencias();
+    });
   </script>
 </body>
 </html>
