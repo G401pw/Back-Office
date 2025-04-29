@@ -56,12 +56,11 @@
           <td>
             <!-- Dropdown para selecionar o estado -->
             <div class="estado-container">
-              <button class="estado-btn dropdown">Selecionar opção</button>
-              <div class="dropdown-options">
-                <button class="estado-opt em-progresso">Em progresso</button>
-                <button class="estado-opt concluido">Concluído</button>
-                <button class="estado-opt pendente">Em espera</button>
-              </div>
+                <select class="estado-select">
+                  <option value="em-progresso">Em progresso</option>
+                  <option value="concluido" >Concluído</option>
+                  <option value="pendente">Em espera</option>
+                </select>
             </div>        
           </td>
         </tr>
@@ -73,12 +72,11 @@
           <td>
             <!-- Dropdown para selecionar o estado -->
             <div class="estado-container">
-              <button class="estado-btn dropdown">Selecionar opção</button>
-              <div class="dropdown-options">
-                <button class="estado-opt em-progresso">Em progresso</button>
-                <button class="estado-opt concluido">Concluído</button>
-                <button class="estado-opt pendente">Em espera</button>
-              </div>
+              <select class="estado-select">
+                <option value="em-progresso">Em progresso</option>
+                <option value="concluido" >Concluído</option>
+                <option value="pendente">Em espera</option>
+              </select>
             </div>
           </td>
         </tr>
@@ -109,6 +107,7 @@
         dropdown.querySelector('.dropdown-options').classList.remove('show');
       });
     });
+    
   </script>
 </body>
 </html>
