@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhe da Ocorrência - EyesEverywhere</title>
+    <link rel="stylesheet" href="/Back-Office/Gestor/css/DetalheOcorrencia.css">
+    <link rel="icon" href="/Back-Office/Gestor/Imagens/logo.png" type="image/x-icon" />
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="/Back-Office/Gestor/Imagens/logo.png" alt="EyesEverywhere" />
+        </div>
+        <nav>
+            <ul>
+                <li><a data-page="Ocorrencias.html" href="Ocorrencias.html">📋 Ocorrências</a></li>
+                <li><a data-page="NovasOcorrencias.html" href="NovasOcorrencias.html">➕ Novas Ocorrências</a></li>
+                <li><a data-page="Peritos.html" href="Peritos.html">👥 Peritos</a></li>
+                <li><a data-page="Registar_Peritos.html" href="Registar_Peritos.html">📝 Registar Peritos</a></li>
+                <li><a data-page="Geral.html" href="Geral.html">🔍 Estatísticas</a></li>
+            </ul>
+        </nav>
+        <div class="user-info">
+            <p id="user-name">Utilizador não logado</p>
+            <p id="user-email">Sem e-mail</p>
+        </div>
+    </div>
+
+    <div class="content">
+        <header>
+            <h1>Detalhe da Ocorrência</h1>
+        </header>
+
+        <section class="ocorrencia-detalhada">
+            <div class="ocorrencia-info">
+                <h3>Informações da Ocorrência</h3>
+                <p><strong>Tipo:</strong> <span id="tipo-ocorrencia"></span></p>
+                <p><strong>Morada:</strong> <span id="morada-ocorrencia"></span></p>
+                <p><strong>Cidade:</strong> <span id="cidade-ocorrencia"></span></p>
+                <p><strong>Código Postal:</strong> <span id="codigo-postal-ocorrencia"></span></p>
+                <p><strong>Data:</strong> <span id="data-ocorrencia"></span></p>
+                <p><strong>Hora:</strong> <span id="hora-ocorrencia"></span></p>
+                <p><strong>Informações Extras:</strong> <span id="informacoes-ocorrencia"></span></p>
+            </div>
+
+            <div class="user-info">
+                <h3>Informações do Utilizador</h3>
+                <p><strong>Nome:</strong> <span id="user-name-ocorrencia"></span></p>
+                <p><strong>Email:</strong> <span id="user-email-ocorrencia"></span></p>
+                <p><strong>Telefone:</strong> <span id="user-telefone-ocorrencia"></span></p>
+            </div>
+
+            <div class="acao">
+                <h3>Estado da Ocorrência</h3>
+                <button id="aceitar-btn" class="btn btn-success">Aceitar</button>
+                <button id="rejeitar-btn" class="btn btn-danger">Rejeitar</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Função para carregar os dados da ocorrência e do utilizador
+        function carregarDetalhes() {
+            const ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
+            const ocorrenciaID = localStorage.getItem("ocorrenciaID");
+            
+            const ocorrencia = ocorrencias.find(ocorrencia => ocorrencia.id === ocorrenciaID);
+
+            if (ocorrencia) {
+                document.getElementById("tipo-ocorrencia").innerText = ocorrencia.tipo;
+                document.getElementById("morada-ocorrencia").innerText = ocorrencia.morada;
+                document.getElementById("cidade-ocorrencia").innerText = ocorrencia.cidade;
+                document.getElementById("codigo-postal-ocorrencia").innerText = ocorrencia.codigoPostal || 'Não especificado';
+                document.getElementById("data-ocorrencia").innerText = ocorrencia.data;
+                document.getElementById("hora-ocorrencia").innerText = ocorrencia.hora;
+                document.getElementById("informacoes-ocorrencia").innerText = ocorrencia.informacoes;
+                
+                const userName = localStorage.getItem("userName");
+                const userEmail = localStorage.getItem("userEmail");
+                const userTelefone = localStorage.getItem("userTelefone");
+
+                document.getElementById("user-name-ocorrencia").innerText = userName || "Desconhecido";
+                document.getElementById("user-email-ocorrencia").innerText = userEmail || "Não disponível";
+                document.getElementById("user-telefone-ocorrencia").innerText = userTelefone || "Não disponível";
+            } else {
+                alert("Ocorrência não encontrada.");
+            }
+        }
+
+        // Lógica dos botões de Aceitar e Rejeitar
+        document.getElementById("aceitar-btn").addEventListener("click", function() {
+            alert("Ocorrência aceita!");
+            // Aqui você pode implementar a lógica para aceitar a ocorrência e atualizar o status
+        });
+
+        document.getElementById("rejeitar-btn").addEventListener("click", function() {
+            alert("Ocorrência rejeitada!");
+            // Aqui você pode implementar a lógica para rejeitar a ocorrência e atualizar o status
+        });
+
+        // Carrega os detalhes ao carregar a página
+        window.onload = carregarDetalhes;
+    </script>
+</body>
+</html>

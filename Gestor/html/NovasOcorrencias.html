@@ -71,7 +71,18 @@
           <p class="ocorrencia-local">${ocorrencia.cidade}</p>
           <span class="ocorrencia-status pendente">Pendente</span>
           <button class="detalhes-btn">Ver Detalhes</button>
+          
         `;
+
+          // Adiciona a lógica ao botão "Ver Detalhes"
+          const detalhesBtn = ocorrenciaDiv.querySelector(".detalhes-btn");
+          detalhesBtn.addEventListener("click", function() {
+            // Salva o ID da ocorrência no localStorage
+            localStorage.setItem("ocorrenciaID", ocorrencia.id);
+
+          // Redireciona para a página de detalhes
+          window.location.href = "DetalheOcorrencia.html";
+        });
         
         listaOcorrencias.appendChild(ocorrenciaDiv);
       });
