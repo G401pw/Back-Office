@@ -27,25 +27,25 @@
     </a>
     </div>
     <div class="user-info">
-      <!-- Informações do usuário -->
-      <p id="user-name">Usuário não logado</p>
+      <!-- Informações do utilizador -->
+      <p id="user-name">utilizador não logado</p>
       <p id="user-email">Sem e-mail</p>
     </div>
   </div>
 
   <script>
-    // Função para atualizar as informações do usuário
-    function atualizarUsuario() {
-      const nome = localStorage.getItem("userName") || "Usuário não logado";
+    // Função para atualizar as informações do utilizador
+    function atualizarUtilizador() {
+      const nome = localStorage.getItem("userName") || "Utilizador não logado";
       const email = localStorage.getItem("userEmail") || "Sem e-mail";
       
-      // Preenche as informações do usuário
+      // Preenche as informações do utilizador
       document.getElementById("user-name").innerText = nome;
       document.getElementById("user-email").innerText = email;
     }
 
-    // Chama a função para atualizar as informações do usuário quando a página é carregada
-    document.addEventListener("DOMContentLoaded", atualizarUsuario);
+    // Chama a função para atualizar as informações do utilizador quando a página é carregada
+    document.addEventListener("DOMContentLoaded", atualizarUtilizador);
   </script>
 </body>
 </html>

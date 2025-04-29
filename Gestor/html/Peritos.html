@@ -27,7 +27,7 @@
     </a>
     </div>
     <div class="user-info">
-      <!-- Exibe o nome e email do usuário, armazenados no localStorage -->
+      <!-- Exibe o nome e email do utilizador, armazenados no localStorage -->
       <p id="user-name"></p>
       <p id="user-email"></p>
     </div>
@@ -108,18 +108,18 @@
       }
     }
 
-    // Função para atualizar as informações do usuário
-    function atualizarUsuario() {
-      const nome = localStorage.getItem("userName") || "Usuário não logado";
+    // Função para atualizar as informações do utilizador
+    function atualizarUtilizador() {
+      const nome = localStorage.getItem("userName") || "Utilizador não logado";
       const email = localStorage.getItem("userEmail") || "Sem e-mail";
       
-      // Preenche as informações do usuário
+      // Preenche as informações do utilizador
       document.getElementById("user-name").innerText = nome;
       document.getElementById("user-email").innerText = email;
     }
 
-    // Chama a função para atualizar as informações do usuário
-    atualizarUsuario();
+    // Chama a função para atualizar as informações do utilizador
+    atualizarUtilizador();
 
     renderPeritos();
   </script>
