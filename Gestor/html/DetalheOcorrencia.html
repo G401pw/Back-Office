@@ -112,15 +112,24 @@
       }
     });
 
+    // Função para remover a ocorrência da lista de "Novas Ocorrências"
+    function removerOcorrencia(id) {
+      let ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
+      ocorrencias = ocorrencias.filter(ocorrencia => ocorrencia.id !== id); // Filtra a ocorrência para removê-la
+      localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias)); // Atualiza o localStorage
+    }
+
     // Lógica dos botões de Aceitar e Rejeitar
     document.getElementById("aceitar-btn").addEventListener("click", function() {
-      alert("Ocorrência aceita!");
-      // Aqui você pode implementar a lógica para aceitar a ocorrência e atualizar o status
+      // Redireciona para a página de adicionar plano de auditoria
+      window.location.href = "/Back-Office/Gestor/html/PlanoAuditoria.html";
     });
 
     document.getElementById("rejeitar-btn").addEventListener("click", function() {
+      const ocorrenciaID = localStorage.getItem("ocorrenciaID");
+      removerOcorrencia(Number(ocorrenciaID)); // Remove a ocorrência do localStorage
       alert("Ocorrência rejeitada!");
-      // Aqui você pode implementar a lógica para rejeitar a ocorrência e atualizar o status
+      window.location.href = "NovasOcorrencias.html"; // Redireciona para a página de novas ocorrências
     });
 
     // Carrega os detalhes e informações do utilizador ao carregar a página

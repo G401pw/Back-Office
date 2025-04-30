@@ -77,7 +77,9 @@
       <section class="equipe-materiais">
         <h2>Equipe e Materiais</h2>
         <label for="qtd-peritos">Selecione qtd. Peritos</label>
-        <input type="number" id="qtd-peritos" name="qtd-peritos" required>
+        <select id="qtd-peritos" name="qtd-peritos" required>
+          <!-- Os peritos serão carregados aqui -->
+        </select>
 
         <div class="peritos">
           <label for="nome1">Nome 1</label>
@@ -112,8 +114,49 @@
       document.getElementById("user-email").innerText = email;
     }
 
-    // Chama a função para atualizar as informações do utilizador quando a página é carregada
-    document.addEventListener("DOMContentLoaded", atualizarUtilizador);
+    // Função para carregar os dados da ocorrência e preencher no formulário
+    function carregarDetalhesOcorrencia() {
+      const ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
+      const ocorrenciaID = localStorage.getItem("ocorrenciaID");
+
+      const ocorrencia = ocorrencias.find(ocorrencia => ocorrencia.id == ocorrenciaID);
+
+      if (ocorrencia) {
+        // Preenche os campos do formulário com os dados da ocorrência
+        document.getElementById("tipo").value = ocorrencia.tipo;
+        document.getElementById("morada").value = ocorrencia.morada;
+        document.getElementById("localidade").value = ocorrencia.cidade;
+        document.getElementById("codigo-postal").value = ocorrencia.codigoPostal || '';
+        document.getElementById("data").value = ocorrencia.data;
+        document.getElementById("hora-inicio").value = ocorrencia.hora;
+        document.getElementById("hora-fim").value = ocorrencia.hora; // Ou qualquer outra lógica para definir o fim
+      } else {
+        alert("Ocorrência não encontrada.");
+      }
+    }
+
+    // Função para carregar a lista de peritos
+    function carregarPeritos() {
+      const peritos = JSON.parse(localStorage.getItem("peritos")) || [];
+      const peritosSelect = document.getElementById("qtd-peritos");
+
+      // Limpa as opções existentes
+      peritosSelect.innerHTML = '';
+
+      peritos.forEach(perito => {
+        const option = document.createElement("option");
+        option.value = perito.id;  // Assume-se que cada perito tem um ID
+        option.textContent = perito.nome;  // Nome do perito
+        peritosSelect.appendChild(option);
+      });
+    }
+
+    // Chama as funções para carregar os dados ao carregar a página
+    document.addEventListener("DOMContentLoaded", function() {
+      atualizarUtilizador();
+      carregarDetalhesOcorrencia();
+      carregarPeritos();
+    });
   </script>
 </body>
 </html>
