@@ -10,9 +10,10 @@ body {
     font-family: 'Segoe UI', sans-serif;
     background-color: #f5f6fa;
     height: 100vh;
+    margin: 0;
 }
 
-/* Sidebar igual à base desejada */
+/* Sidebar */
 .sidebar {
     width: 250px;
     height: 100vh;
@@ -28,6 +29,7 @@ body {
     left: 0;
 }
 
+/* Logotipo */
 .logo {
     text-align: center;
     margin-bottom: 30px;
@@ -39,6 +41,7 @@ body {
     margin-bottom: 10px;
 }
 
+/* Navegação */
 nav ul {
     list-style: none;
     padding: 0;
@@ -66,27 +69,7 @@ nav ul li a.active {
     font-weight: bold;
 }
 
-.add-auditoria {
-    margin-top: 20px;
-    padding: 15px 0;
-}
-
-.add-auditoria button {
-    width: 100%;
-    padding: 10px;
-    background-color: #fff;
-    border: 2px solid #aaa;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.add-auditoria button:hover {
-    background-color: #f0f0f0;
-}
-
+/* Seção de usuário */
 .user-info {
     padding-top: 20px;
     border-top: 1px solid #e0e0e0;
@@ -99,4 +82,183 @@ nav ul li a.active {
     font-weight: bold;
     color: #000;
     margin-bottom: 5px;
+}
+
+/* Conteúdo principal */
+.content {
+    margin-left: 250px;
+    padding: 30px;
+    width: calc(100% - 250px);
+    background-color: #f5f6fa;
+    overflow: hidden;
+}
+
+/* Cabeçalho do conteúdo */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 22px;
+    color: #333;
+}
+
+header button {
+    background: none;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Tabelas */
+.table-container {
+    margin-top: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #f0f0f0;
+}
+
+thead th {
+    padding: 10px;
+    text-align: left;
+}
+
+tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+tbody tr td {
+    padding: 10px;
+}
+
+tbody tr:hover {
+    background: #f9f9f9;
+}
+
+tbody td:last-child {
+    text-align: center;
+    cursor: pointer;
+}
+
+/* Estilo para o botão de dropdown (selecionar opção) */
+.estado-container {
+    position: relative;
+    display: inline-block;
+    width: fit-content;
+    margin-left: -90px;
+    
+}
+
+.estado-btn {
+    padding: 12px 24px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    background-color: #fff;
+    width: 100%;
+    text-align: center;
+    color: #333;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-transform: capitalize;
+}
+
+/* Efeito ao passar o mouse */
+.estado-btn:hover {
+    background-color: #e2e8ff;
+    border-color: #3182ce;
+    transform: translateY(-2px); /* Leve elevação ao passar o mouse */
+}
+
+/* Botão "Selecionar opção" */
+.estado-btn.dropdown {
+    background-color: #f4f4f4;
+    border-color: #ccc;
+    color: #666;
+    margin-left: 0px;
+}
+
+.estado-btn.dropdown:hover {
+    background-color: #e2e8ff;
+    border-color: #3182ce;
+}
+
+/* Opções dentro do dropdown */
+.estado-container .dropdown-options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    z-index: 1000;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 5px 0;
+}
+
+/* Exibir as opções de estado quando o dropdown for aberto */
+.estado-container .dropdown-options.show {
+    display: block;
+}
+
+/* Estilo para as opções dentro do dropdown */
+.estado-container .dropdown-options button {
+    padding: 12px 24px;
+    border: none;
+    width: 100%;
+    background-color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    color: #333;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Efeito ao passar o mouse nas opções do dropdown */
+.estado-container .dropdown-options button:hover {
+    background-color: #e2e8ff;
+    color: #3182ce;
+    transform: translateY(-2px);  /* Elevação ao passar o mouse */
+}
+
+.estado-select{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0px;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    padding: 12px 24px;
+    border: 2px solid #ddd;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    color: #333;
 }
