@@ -54,7 +54,7 @@
       </ul>
     </nav>
     <div class="add-auditoria">
-      <a href="/Back-Office/Gestor/html/PlanoAuditoria.html">
+      <a href="PlanoAuditoria.html">
       <button>+ Adicionar Plano de Auditoria</button>
     </a>
     </div>
@@ -140,6 +140,7 @@
           especialidade: document.getElementById("especialidade").value,
           email: document.getElementById("email").value,
           telefone: document.getElementById("telefone").value,
+          estado: "desocupado" // Estado inicial como desocupado
         };
 
         let peritos = JSON.parse(localStorage.getItem("peritos")) || [];

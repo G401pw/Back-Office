@@ -37,7 +37,7 @@
       <p>Preencha o plano com as informações necessárias</p>
     </header>
 
-    <form action="#" method="POST" class="form-auditoria">
+    <form id="form-auditoria" class="form-auditoria">
       <section class="detalhes-auditoria">
         <h2>Detalhes da Auditoria</h2>
         <label for="nome">Nome</label>
@@ -78,16 +78,13 @@
         <h2>Equipe e Materiais</h2>
         <label for="qtd-peritos">Selecione qtd. Peritos</label>
         <select id="qtd-peritos" name="qtd-peritos" required>
-          <!-- Os peritos serão carregados aqui -->
+          <option value="1">1 Perito</option>
+          <option value="2">2 Peritos</option>
+          <option value="3">3 Peritos</option>
         </select>
 
-        <div class="peritos">
-          <label for="nome1">Nome 1</label>
-          <input type="text" id="nome1" name="nome1" required>
-
-          <label for="nome2">Nome 2</label>
-          <input type="text" id="nome2" name="nome2" required>
-        </div>
+        <!-- Div para os campos de peritos -->
+        <div id="peritos-container"></div>
 
         <label for="materiais">Materiais</label>
         <textarea id="materiais" name="materiais" required></textarea>
@@ -135,21 +132,80 @@
       }
     }
 
-    // Função para carregar a lista de peritos
+    // Função para carregar a lista de peritos (somente desocupados)
     function carregarPeritos() {
       const peritos = JSON.parse(localStorage.getItem("peritos")) || [];
       const peritosSelect = document.getElementById("qtd-peritos");
 
       // Limpa as opções existentes
-      peritosSelect.innerHTML = '';
+      const peritosContainer = document.getElementById("peritos-container");
+      peritosContainer.innerHTML = '';
 
-      peritos.forEach(perito => {
-        const option = document.createElement("option");
-        option.value = perito.id;  // Assume-se que cada perito tem um ID
-        option.textContent = perito.nome;  // Nome do perito
-        peritosSelect.appendChild(option);
+      peritosSelect.addEventListener("change", function() {
+        const qtdPeritos = peritosSelect.value;
+        peritosContainer.innerHTML = ''; // Limpa os campos de peritos
+
+        // Cria os campos para os peritos de acordo com a quantidade selecionada
+        const selectedPeritos = [];
+
+        for (let i = 0; i < qtdPeritos; i++) {
+          const peritoLabel = document.createElement("label");
+          peritoLabel.textContent = `Perito ${i + 1}`;
+          const peritoSelect = document.createElement("select");
+          peritoSelect.name = `perito-${i + 1}`;
+
+          // Cria as opções para os peritos desocupados
+          peritos.forEach(perito => {
+            if (perito.estado === "desocupado" && !selectedPeritos.includes(perito.id)) {
+              const option = document.createElement("option");
+              option.value = perito.id;  // Atribui o ID do perito como valor
+              option.textContent = perito.nome;  // Nome do perito
+              peritoSelect.appendChild(option);
+            }
+          });
+
+          // Adiciona o evento de seleção
+          peritoSelect.addEventListener("change", function() {
+            const selectedPeritoId = peritoSelect.value;
+            if (!selectedPeritos.includes(selectedPeritoId)) {
+              selectedPeritos.push(selectedPeritoId); // Adiciona o perito à lista de selecionados
+            }
+            // Atualiza a lista de peritos removendo os selecionados
+            carregarPeritos();
+          });
+
+          const peritoDiv = document.createElement("div");
+          peritoDiv.appendChild(peritoLabel);
+          peritoDiv.appendChild(peritoSelect);
+          peritosContainer.appendChild(peritoDiv);
+        }
       });
     }
+
+    // Submissão do formulário de auditoria
+    document.getElementById("form-auditoria").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const peritosSelecionados = [];
+      const selectedPeritosElements = document.querySelectorAll("#peritos-container select");
+
+      selectedPeritosElements.forEach(select => {
+        const peritoId = select.value;
+        peritosSelecionados.push(peritoId);
+        // Marcar os peritos selecionados como ocupados
+        let peritos = JSON.parse(localStorage.getItem("peritos")) || [];
+        peritos = peritos.map(perito => {
+          if (perito.id === peritoId) {
+            perito.estado = "ocupado"; // Marca como ocupado
+          }
+          return perito;
+        });
+        localStorage.setItem("peritos", JSON.stringify(peritos));
+      });
+
+      alert("Plano de Auditoria confirmado com sucesso!");
+      window.location.href = "ocorrencias.html"; // Redireciona para a página de ocorrências
+    });
 
     // Chama as funções para carregar os dados ao carregar a página
     document.addEventListener("DOMContentLoaded", function() {

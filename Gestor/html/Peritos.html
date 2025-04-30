@@ -15,7 +15,7 @@
     <nav>
       <ul>
         <li><a data-page="Ocorrencias.html" href="Ocorrencias.html">📋 Ocorrências</a></li>
-        <li><a data-page="NovasOcorrencias.html"href="NovasOcorrencias.html">➕ Novas Ocorrências</a></li>
+        <li><a data-page="NovasOcorrencias.html" href="NovasOcorrencias.html">➕ Novas Ocorrências</a></li>
         <li><a class="active" data-page="Peritos.html" href="Peritos.html">👥 Peritos</a></li>
         <li><a data-page="Registar_Peritos.html" href="Registar_Peritos.html">📝 Registar Peritos</a></li>
         <li><a data-page="Geral.html" href="Geral.html">🔍 Estatísticas</a></li>
@@ -27,7 +27,6 @@
     </a>
     </div>
     <div class="user-info">
-      <!-- Exibe o nome e email do utilizador, armazenados no localStorage -->
       <p id="user-name"></p>
       <p id="user-email"></p>
     </div>
@@ -50,6 +49,7 @@
               <th>Data de Nascimento</th>
               <th>Email</th>
               <th>Telemóvel</th>
+              <th>Estado</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -65,6 +65,7 @@
     const tbody = document.getElementById("tabela-peritos");
     let peritos = JSON.parse(localStorage.getItem("peritos")) || [];
 
+    // Função para renderizar a tabela de peritos
     function renderPeritos() {
       tbody.innerHTML = "";
       peritos.forEach((perito, index) => {
@@ -76,23 +77,19 @@
           <td>${perito.dataNascimento}</td>
           <td>${perito.email}</td>
           <td>${perito.telefone}</td>
+          <td>${perito.estado}</td> <!-- Exibe o estado -->
           <td>
             <button onclick="editarPerito(${index})">✏️</button>
             <button onclick="removerPerito(${index})">🗑️</button>
+            <button onclick="ocuparPerito(${index})" ${perito.estado === "ocupado" ? "disabled" : ""}>Ocupar</button>
+            <button onclick="desocuparPerito(${index})" ${perito.estado === "desocupado" ? "disabled" : ""}>Desocupar</button>
           </td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    function removerPerito(index) {
-      if (confirm("Tem a certeza que deseja remover este perito?")) {
-        peritos.splice(index, 1);
-        localStorage.setItem("peritos", JSON.stringify(peritos));
-        renderPeritos();
-      }
-    }
-
+    // Função para editar um perito
     function editarPerito(index) {
       const peritoAtual = peritos[index];
       const nome = prompt("Nome:", peritoAtual.nome);
@@ -102,10 +99,33 @@
       const telefone = prompt("Telemóvel:", peritoAtual.telefone);
 
       if (nome && especialidade && dataNascimento && email && telefone) {
-        peritos[index] = { nome, especialidade, dataNascimento, email, telefone };
+        peritos[index] = { nome, especialidade, dataNascimento, email, telefone, estado: peritoAtual.estado };
         localStorage.setItem("peritos", JSON.stringify(peritos));
         renderPeritos();
       }
+    }
+
+    // Função para remover um perito
+    function removerPerito(index) {
+      if (confirm("Tem a certeza que deseja remover este perito?")) {
+        peritos.splice(index, 1);
+        localStorage.setItem("peritos", JSON.stringify(peritos));
+        renderPeritos();
+      }
+    }
+
+    // Função para ocupar um perito (marcar como ocupado)
+    function ocuparPerito(index) {
+      peritos[index].estado = "ocupado";  // Marca o perito como ocupado
+      localStorage.setItem("peritos", JSON.stringify(peritos));
+      renderPeritos();  // Atualiza a tabela para refletir a mudança
+    }
+
+    // Função para desocupar um perito (marcar como desocupado)
+    function desocuparPerito(index) {
+      peritos[index].estado = "desocupado";  // Marca o perito como desocupado
+      localStorage.setItem("peritos", JSON.stringify(peritos));
+      renderPeritos();  // Atualiza a tabela para refletir a mudança
     }
 
     // Função para atualizar as informações do utilizador
@@ -121,6 +141,7 @@
     // Chama a função para atualizar as informações do utilizador
     atualizarUtilizador();
 
+    // Renderiza a tabela de peritos ao carregar a página
     renderPeritos();
   </script>
 </body>
