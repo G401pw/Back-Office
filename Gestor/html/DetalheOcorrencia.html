@@ -65,11 +65,12 @@
   </div>
 
   <script>
-    // Função para carregar as informações do utilizador
+    // Função para atualizar as informações do utilizador
     function atualizarUtilizador() {
       const nome = localStorage.getItem("userName") || "Utilizador não logado";
       const email = localStorage.getItem("userEmail") || "Sem e-mail";
       
+      // Preenche as informações do utilizador na sidebar
       document.getElementById("user-name").innerText = nome;
       document.getElementById("user-email").innerText = email;
     }
@@ -79,7 +80,8 @@
       const ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
       const ocorrenciaID = localStorage.getItem("ocorrenciaID");
 
-      const ocorrencia = ocorrencias.find(ocorrencia => ocorrencia.id === ocorrenciaID);
+      // Procura pela ocorrência que corresponde ao ID
+      const ocorrencia = ocorrencias.find(ocorrencia => ocorrencia.id == ocorrenciaID);
 
       if (ocorrencia) {
         document.getElementById("tipo-ocorrencia").innerText = ocorrencia.tipo;

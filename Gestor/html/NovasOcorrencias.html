@@ -21,7 +21,7 @@
         <li><a data-page="Geral.html" href="Geral.html">🔍 Estatísticas</a></li>
       </ul>
     </nav>
-    <div class="add-auditoria">
+    <div class="add-auditoria"> 
       <a href="/Back-Office/Gestor/html/PlanoAuditoria.html">
         <button>+ Adicionar Plano de Auditoria</button>
       </a>
@@ -34,12 +34,12 @@
 
   <div class="content">
     <header>
-      <h1>Ocorrências</h1>
+      <h1>Novas Ocorrências</h1>
     </header>
 
     <main>
       <section class="ocorrencias" id="ocorrencias-lista">
-        <!-- Aqui as ocorrências vão ser carregadas dinamicamente -->
+        <!-- As ocorrências serão carregadas aqui dinamicamente -->
       </section>
     </main>
   </div>
@@ -50,20 +50,22 @@
       const nome = localStorage.getItem("userName") || "Utilizador não logado";
       const email = localStorage.getItem("userEmail") || "Sem e-mail";
       
-      // Preenche as informações do utilizador
+      // Preenche as informações do utilizador na sidebar
       document.getElementById("user-name").innerText = nome;
       document.getElementById("user-email").innerText = email;
     }
 
     // Função para carregar as ocorrências armazenadas e exibir na página
+    // Função para carregar as ocorrências armazenadas e exibir na página
     function carregarOcorrencias() {
       const listaOcorrencias = document.getElementById("ocorrencias-lista");
       const ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
-      
+
       ocorrencias.forEach(ocorrencia => {
         const ocorrenciaDiv = document.createElement("div");
         ocorrenciaDiv.classList.add("ocorrencia");
 
+        // Preencher com dados da ocorrência
         ocorrenciaDiv.innerHTML = `
           <p class="ocorrencia-id">${ocorrencia.tipo}</p>
           <p class="ocorrencia-data">${ocorrencia.data}</p>
@@ -71,27 +73,35 @@
           <p class="ocorrencia-local">${ocorrencia.cidade}</p>
           <span class="ocorrencia-status pendente">Pendente</span>
           <button class="detalhes-btn">Ver Detalhes</button>
-          
         `;
 
-          // Adiciona a lógica ao botão "Ver Detalhes"
-          const detalhesBtn = ocorrenciaDiv.querySelector(".detalhes-btn");
-          detalhesBtn.addEventListener("click", function() {
-            // Salva o ID da ocorrência no localStorage
-            localStorage.setItem("ocorrenciaID", ocorrencia.id);
+        // Adiciona a lógica ao botão "Ver Detalhes"
+        const detalhesBtn = ocorrenciaDiv.querySelector(".detalhes-btn");
+        detalhesBtn.addEventListener("click", function() {
+          // Salva o ID da ocorrência no localStorage para ser usado na página de detalhes
+          localStorage.setItem("ocorrenciaID", ocorrencia.id);
 
           // Redireciona para a página de detalhes
           window.location.href = "DetalheOcorrencia.html";
         });
-        
+
         listaOcorrencias.appendChild(ocorrenciaDiv);
       });
     }
+
 
     // Chama a função para atualizar as informações do utilizador e carregar as ocorrências
     document.addEventListener("DOMContentLoaded", function() {
       atualizarUtilizador();
       carregarOcorrencias();
+    });
+
+    // Marcar a página de Novas Ocorrências como ativa na sidebar
+    const menuItems = document.querySelectorAll("nav ul li a");
+    menuItems.forEach(item => {
+      if (item.getAttribute("href") === "NovasOcorrencias.html") {
+        item.classList.add("active");
+      }
     });
   </script>
 </body>
