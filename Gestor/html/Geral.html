@@ -138,14 +138,17 @@
         },
 
         atualizarContadorVisitas() {
-          let visitas = localStorage.getItem("contadorVisitas");
-          if (!visitas) {
-            visitas = 0;
+          const hoje = new Date().toLocaleDateString();
+          const dataGuardada = localStorage.getItem("data_visitas_index");
+
+          if (dataGuardada === hoje) {
+            this.visitasHoje = parseInt(localStorage.getItem("visitas_index_hoje")) || 0;
+          } else {
+            this.visitasHoje = 0; // se for outro dia, mostra 0
           }
-          visitas++;
-          localStorage.setItem("contadorVisitas", visitas);
-          this.visitasHoje = visitas;
         }
+
+
       }
     });
   </script>
