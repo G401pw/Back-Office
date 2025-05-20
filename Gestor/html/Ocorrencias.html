@@ -36,7 +36,12 @@
     <header>
       <h1>Ocorrências</h1>
     </header>
-
+    <label for="filtroEstado">Filtrar por estado:</label>
+    <select id="filtroEstado" onchange="filtrarTabela()">
+      <option value="todos">Todos</option>
+      <option value="concluido">Concluído</option>
+      <option value="em-progresso">Em progresso</option>
+    </select>
     <table>
       <thead>
         <tr>
@@ -107,6 +112,21 @@
         dropdown.querySelector('.dropdown-options').classList.remove('show');
       });
     });
+      function filtrarTabela() {
+    const filtro = document.getElementById('filtroEstado').value;
+    const tabela = document.querySelector('table tbody');
+    const linhas = tabela.querySelectorAll('tr');
+
+    linhas.forEach(linha => {
+      const selectEstado = linha.querySelector('.estado-select');
+      const estado = selectEstado ? selectEstado.value : '';
+      if (filtro === 'todos' || estado === filtro) {
+        linha.style.display = '';
+      } else {
+        linha.style.display = 'none';
+      }
+    });
+  }
     
   </script>
 </body>
