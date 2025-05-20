@@ -35,6 +35,13 @@
   <div class="content">
     <header>
       <h1>Novas Ocorrências</h1>
+      <!-- Filtro -->
+      <label for="filtroEstado">Filtrar por estado:</label>
+      <select id="filtroEstado">
+        <option value="todos">Todas</option>
+        <option value="novo">Novas</option>
+        <option value="pendente">Pendentes</option>
+      </select>
     </header>
 
     <main>
@@ -44,42 +51,38 @@
     </main>
   </div>
 
-  <div id="feedback-message" class="feedback-message"></div>
-
   <script>
-    // Função para atualizar as informações do utilizador
     function atualizarUtilizador() {
       const nome = localStorage.getItem("userName") || "Utilizador não logado";
       const email = localStorage.getItem("userEmail") || "Sem e-mail";
-      
-      // Preenche as informações do utilizador na sidebar
       document.getElementById("user-name").innerText = nome;
       document.getElementById("user-email").innerText = email;
     }
 
-        // Função para carregar as ocorrências armazenadas e exibir na página
-        // Função para carregar as ocorrências armazenadas e exibir na página
-    function carregarOcorrencias() {
+    function carregarOcorrencias(filtro = "todos") {
       const listaOcorrencias = document.getElementById("ocorrencias-lista");
+      listaOcorrencias.innerHTML = ""; // Limpa lista antes de renderizar
       const ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
 
       ocorrencias.forEach(ocorrencia => {
-        const ocorrenciaDiv = document.createElement("div");
-        ocorrenciaDiv.classList.add("ocorrencia");
+        // Determinar o estado atual da ocorrência
+        let estadoClasse = "inicio";  // Padrão "novo"
+        let estadoTexto = "Novo";
+        let estadoCor = "green";
 
-        // Definir a cor e o texto do estado
-        let estadoClasse = "inicio";  // Padrão é "Início"
-        let estadoTexto = "Início";  // Padrão é "Início"
-        let estadoCor = "green";     // Padrão é verde
-
-        // Se a ocorrência já foi enviada para mais informações, ela fica como "Pendente"
         if (ocorrencia.estado === "Pendente") {
           estadoClasse = "pendente";
           estadoTexto = "Pendente";
-          estadoCor = "yellow";  // Amarelo
+          estadoCor = "yellow";
         }
 
-        // Preencher com dados da ocorrência
+        // Aplicar filtro
+        if (filtro === "novo" && estadoTexto !== "Novo") return;
+        if (filtro === "pendente" && estadoTexto !== "Pendente") return;
+
+        // Criar o elemento
+        const ocorrenciaDiv = document.createElement("div");
+        ocorrenciaDiv.classList.add("ocorrencia");
         ocorrenciaDiv.innerHTML = `
           <p class="ocorrencia-id">${ocorrencia.tipo}</p>
           <p class="ocorrencia-data">${ocorrencia.data}</p>
@@ -89,13 +92,10 @@
           <button class="detalhes-btn">Ver Detalhes</button>
         `;
 
-        // Adiciona a lógica ao botão "Ver Detalhes"
+        // Botão Ver Detalhes
         const detalhesBtn = ocorrenciaDiv.querySelector(".detalhes-btn");
         detalhesBtn.addEventListener("click", function() {
-          // Salva o ID da ocorrência no localStorage para ser usado na página de detalhes
           localStorage.setItem("ocorrenciaID", ocorrencia.id);
-
-          // Redireciona para a página de detalhes
           window.location.href = "DetalheOcorrencia.html";
         });
 
@@ -103,14 +103,17 @@
       });
     }
 
+    // Quando mudar o filtro, atualizar a lista
+    document.getElementById("filtroEstado").addEventListener("change", function() {
+      carregarOcorrencias(this.value);
+    });
 
-    // Chama a função para atualizar as informações do utilizador e carregar as ocorrências
     document.addEventListener("DOMContentLoaded", function() {
       atualizarUtilizador();
       carregarOcorrencias();
     });
 
-    // Marcar a página de Novas Ocorrências como ativa na sidebar
+    // Sidebar active link
     const menuItems = document.querySelectorAll("nav ul li a");
     menuItems.forEach(item => {
       if (item.getAttribute("href") === "NovasOcorrencias.html") {

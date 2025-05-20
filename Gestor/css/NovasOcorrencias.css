@@ -180,3 +180,65 @@ header h1 {
 .detalhes-btn:hover {
     background-color: #0066cc;
 }
+
+/* === Início do CSS para o filtro de estado === */
+
+header {
+  position: relative; /* para permitir posicionamento absoluto */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f9f9f9;
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 22px;
+  color: #333;
+  flex: 1;
+}
+
+/* Estilizar label e select para ficar juntos e alinhados */
+
+header > label[for="filtroEstado"] {
+  margin-right: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  /* posiciona para mais à esquerda */
+  margin-left: auto; /* empurra para a direita, mas menos que o select */
+}
+
+header > select#filtroEstado {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  outline: none;
+  /* fixa no canto direito */
+  margin-left: 5px;
+}
+
+/* Responsividade - em ecrãs pequenos, o filtro desce para abaixo do título */
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-bottom: 50px;
+  }
+  header > label[for="filtroEstado"],
+  header > select#filtroEstado {
+    margin-left: 0;
+    margin-top: 8px;
+    font-size: 16px;
+  }
+}
+
