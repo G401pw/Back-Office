@@ -138,6 +138,7 @@
     // Exemplo de uso:
     // Ao clicar no botão de Aceitar
     document.getElementById("aceitar-btn").addEventListener("click", function() {
+      showFeedbackMessage("Ocorrência Aceite!", "success");
       setTimeout(function() {
         // Redireciona para a página de adicionar plano de auditoria
         window.location.href = "/Back-Office/Gestor/html/PlanoAuditoria.html"; 
