@@ -60,9 +60,20 @@
         <h3>Estado da Ocorrência</h3>
         <button id="aceitar-btn" class="btn btn-success">Aceitar</button>
         <button id="rejeitar-btn" class="btn btn-danger">Rejeitar</button>
+        <button id="mais-informacao-btn" class="btn btn-warning">Enviar para mais informação</button>
+      </div>
+
+      <!-- Novo espaço para inserir detalhes adicionais -->
+      <div id="detalhes-adicionais" style="display:none;">
+        <label for="detalhes-texto">Detalhes adicionais:</label>
+        <textarea id="detalhes-texto" class="form-control" placeholder="Escreva aqui os detalhes adicionais que precisa"></textarea>
+        <button id="confirmar-detalhes" class="btn btn-primary">Confirmar</button>
       </div>
     </section>
   </div>
+
+  <!-- Área para exibir mensagens de feedback -->
+  <div id="feedback-message" class="feedback-message"></div>
 
   <script>
     // Função para atualizar as informações do utilizador
@@ -104,6 +115,76 @@
       }
     }
 
+    // Função para exibir a mensagem personalizada no topo
+    function showFeedbackMessage(message, type = 'success') {
+      const feedbackMessage = document.getElementById('feedback-message');
+
+      // Limpa qualquer mensagem anterior
+      feedbackMessage.innerHTML = message;
+
+      // Adiciona a classe de tipo (success, error, warning)
+      feedbackMessage.classList.remove('success', 'error', 'warning');
+      feedbackMessage.classList.add(type);
+
+      // Exibe a mensagem
+      feedbackMessage.style.display = 'block';
+
+      // Oculta a mensagem após 3 segundos
+      setTimeout(() => {
+        feedbackMessage.style.display = 'none';
+      }, 3000);
+    }
+
+    // Exemplo de uso:
+    // Ao clicar no botão de Aceitar
+    document.getElementById("aceitar-btn").addEventListener("click", function() {
+      setTimeout(function() {
+        // Redireciona para a página de adicionar plano de auditoria
+        window.location.href = "/Back-Office/Gestor/html/PlanoAuditoria.html"; 
+      }, 2000); // O redirecionamento ocorre após 2 segundos
+    });
+
+    // Ao clicar no botão de Rejeitar
+    document.getElementById("rejeitar-btn").addEventListener("click", function() {
+      const ocorrenciaID = localStorage.getItem("ocorrenciaID");
+      removerOcorrencia(Number(ocorrenciaID)); // Remove a ocorrência do localStorage
+      showFeedbackMessage("Ocorrência Rejeitada!", "error");
+      setTimeout(function() {
+        window.location.href = "NovasOcorrencias.html"; // Redireciona para a página de novas ocorrências
+      }, 2000); // O redirecionamento ocorre após 2 segundos  
+    });
+
+    // Exibir o campo de detalhes adicionais ao clicar no botão "Enviar para mais informação"
+    document.getElementById("mais-informacao-btn").addEventListener("click", function() {
+      document.getElementById("detalhes-adicionais").style.display = "block";
+    });
+
+    // Confirmar os detalhes e atualizar o estado da ocorrência
+    document.getElementById("confirmar-detalhes").addEventListener("click", function() {
+      const detalhesTexto = document.getElementById("detalhes-texto").value.trim();
+
+      // Verifica se o campo de detalhes não está vazio
+      if (detalhesTexto === "") {
+        showFeedbackMessage("Por favor, insira mais informações.", "warning");
+        return;
+      }
+
+      const ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
+      const ocorrenciaID = localStorage.getItem("ocorrenciaID");
+
+      // Procura pela ocorrência e altera o estado para "Pendente"
+      const ocorrencia = ocorrencias.find(ocorrencia => ocorrencia.id == ocorrenciaID);
+      if (ocorrencia) {
+        ocorrencia.estado = "Pendente"; // Altera o estado da ocorrência para "Pendente"
+        ocorrencia.detalhesAdicionais = detalhesTexto; // Salva os detalhes adicionais
+        localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias)); // Atualiza o localStorage
+        showFeedbackMessage("Ocorrência enviada para mais informações.", "warning");
+        setTimeout(function() {
+          window.location.href = "NovasOcorrencias.html"; // Redireciona para a página de Novas Ocorrências
+        }, 2000); // O redirecionamento ocorre após 2 segundos
+      }
+    });
+
     // Marcar a página de "Novas Ocorrências" como ativa na sidebar
     const menuItems = document.querySelectorAll("nav ul li a");
     menuItems.forEach(item => {
@@ -112,27 +193,7 @@
       }
     });
 
-    // Função para remover a ocorrência da lista de "Novas Ocorrências"
-    function removerOcorrencia(id) {
-      let ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
-      ocorrencias = ocorrencias.filter(ocorrencia => ocorrencia.id !== id); // Filtra a ocorrência para removê-la
-      localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias)); // Atualiza o localStorage
-    }
-
-    // Lógica dos botões de Aceitar e Rejeitar
-    document.getElementById("aceitar-btn").addEventListener("click", function() {
-      // Redireciona para a página de adicionar plano de auditoria
-      window.location.href = "/Back-Office/Gestor/html/PlanoAuditoria.html";
-    });
-
-    document.getElementById("rejeitar-btn").addEventListener("click", function() {
-      const ocorrenciaID = localStorage.getItem("ocorrenciaID");
-      removerOcorrencia(Number(ocorrenciaID)); // Remove a ocorrência do localStorage
-      alert("Ocorrência rejeitada!");
-      window.location.href = "NovasOcorrencias.html"; // Redireciona para a página de novas ocorrências
-    });
-
-    // Carrega os detalhes e informações do utilizador ao carregar a página
+    // Carregar detalhes ao iniciar a página
     document.addEventListener("DOMContentLoaded", function() {
       atualizarUtilizador();
       carregarDetalhes();

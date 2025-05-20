@@ -100,126 +100,186 @@ nav ul li a.active {
     color: #000;
     margin-bottom: 5px;
 }
-  /* Conteúdo principal */
-  .content {
+
+/* Conteúdo principal */
+.content {
     margin-left: 250px;
     padding: 30px;
     width: calc(100% - 250px);
     background-color: #f5f6fa;
-  }
-  
-  /* Cabeçalho */
-  header {
+}
+
+/* Cabeçalho */
+header {
     background-color: #f9f9f9;
     padding: 20px 30px;
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     margin-bottom: 20px;
-  }
-  
-  header h1 {
+}
+
+header h1 {
     font-size: 24px;
     color: #333;
     margin: 0;
-  }
-  
-  /* Informações da Ocorrência */
-  .ocorrencia-detalhada {
+}
+
+/* Informações da Ocorrência */
+.ocorrencia-detalhada {
     background-color: #fff;
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
-  }
-  
-  .ocorrencia-info h3 {
+}
+
+.ocorrencia-info h3 {
     font-size: 18px;
     color: #333;
     margin-bottom: 10px;
-  }
-  
-  .ocorrencia-info p {
+}
+
+.ocorrencia-info p {
     font-size: 14px;
     color: #555;
     margin: 5px 0;
-  }
-  
-  /* Informações do Utilizador */
-  .user-info {
+}
+
+/* Informações do Utilizador */
+.user-info {
     margin-top: 30px;
-  }
-  
-  .user-info h3 {
+}
+
+.user-info h3 {
     font-size: 18px;
     color: #333;
     margin-bottom: 10px;
-  }
-  
-  .user-info p {
+}
+
+.user-info p {
     font-size: 14px;
     color: #555;
     margin: 5px 0;
-  }
-  
-  /* Botões de ação */
-  .acao {
+}
+
+/* Botões de ação */
+.acao {
     display: flex;
     gap: 20px;
     margin-top: 30px;
-  }
-  
-  .acao button {
+}
+
+.acao button {
     padding: 10px 20px;
     font-size: 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-  }
-  
-  #aceitar-btn {
+}
+
+#aceitar-btn {
     background-color: #28a745;
     color: white;
-  }
-  
-  #aceitar-btn:hover {
+}
+
+#aceitar-btn:hover {
     background-color: #218838;
-  }
-  
-  #rejeitar-btn {
+}
+
+#rejeitar-btn {
     background-color: #dc3545;
     color: white;
-  }
-  
-  #rejeitar-btn:hover {
+}
+
+#rejeitar-btn:hover {
     background-color: #c82333;
-  }
-  
-  /* Responsividade */
-  @media (max-width: 768px) {
+}
+
+/* Espaço para inserir detalhes adicionais */
+#detalhes-adicionais {
+    margin-top: 20px;
+    display: none; /* Inicialmente escondido */
+}
+
+#detalhes-adicionais textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    height: 100px;
+}
+
+#detalhes-adicionais button {
+    margin-top: 10px;
+    background-color: #2563eb;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#detalhes-adicionais button:hover {
+    background-color: #1e40af;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
     .content {
-      margin-left: 0;
-      padding: 20px;
-      width: 100%;
+        margin-left: 0;
+        padding: 20px;
+        width: 100%;
     }
-  
+
     .sidebar {
-      width: 100%;
-      height: auto;
-      position: relative;
-      border-radius: 0;
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-radius: 0;
     }
-  
+
     .ocorrencia-detalhada {
-      padding: 15px;
+        padding: 15px;
     }
-  
+
     .acao {
-      flex-direction: column;
-      align-items: flex-start;
+        flex-direction: column;
+        align-items: flex-start;
     }
-  
+
     .acao button {
-      width: 100%;
+        width: 100%;
     }
-  }
-  
+}
+
+/* Estilos para a mensagem de feedback */
+.feedback-message {
+  display: none; /* Inicialmente escondido */
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px;
+  background-color: #4CAF50; /* Verde por padrão (pode ser alterado para outros tipos de feedback) */
+  color: white;
+  border-radius: 5px;
+  font-size: 16px;
+  z-index: 1000; /* Garante que a mensagem apareça sobre o conteúdo */
+  text-align: center;
+  width: 80%;
+  max-width: 500px;
+}
+
+.feedback-message.error {
+  background-color: #f44336; /* Vermelho para erros (exemplo: Ocorrência Rejeitada) */
+}
+
+.feedback-message.warning {
+  background-color: #ff9800; /* Amarelo para advertências (exemplo: Ocorrência Pendente) */
+}
+
+.feedback-message.success {
+  background-color: #4CAF50; /* Verde para sucesso (exemplo: Ocorrência Aceita) */
+}
+

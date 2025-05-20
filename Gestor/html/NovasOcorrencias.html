@@ -44,6 +44,8 @@
     </main>
   </div>
 
+  <div id="feedback-message" class="feedback-message"></div>
+
   <script>
     // Função para atualizar as informações do utilizador
     function atualizarUtilizador() {
@@ -55,8 +57,8 @@
       document.getElementById("user-email").innerText = email;
     }
 
-    // Função para carregar as ocorrências armazenadas e exibir na página
-    // Função para carregar as ocorrências armazenadas e exibir na página
+        // Função para carregar as ocorrências armazenadas e exibir na página
+        // Função para carregar as ocorrências armazenadas e exibir na página
     function carregarOcorrencias() {
       const listaOcorrencias = document.getElementById("ocorrencias-lista");
       const ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
@@ -65,13 +67,25 @@
         const ocorrenciaDiv = document.createElement("div");
         ocorrenciaDiv.classList.add("ocorrencia");
 
+        // Definir a cor e o texto do estado
+        let estadoClasse = "inicio";  // Padrão é "Início"
+        let estadoTexto = "Início";  // Padrão é "Início"
+        let estadoCor = "green";     // Padrão é verde
+
+        // Se a ocorrência já foi enviada para mais informações, ela fica como "Pendente"
+        if (ocorrencia.estado === "Pendente") {
+          estadoClasse = "pendente";
+          estadoTexto = "Pendente";
+          estadoCor = "yellow";  // Amarelo
+        }
+
         // Preencher com dados da ocorrência
         ocorrenciaDiv.innerHTML = `
           <p class="ocorrencia-id">${ocorrencia.tipo}</p>
           <p class="ocorrencia-data">${ocorrencia.data}</p>
           <p class="ocorrencia-titulo">${ocorrencia.morada}</p>
           <p class="ocorrencia-local">${ocorrencia.cidade}</p>
-          <span class="ocorrencia-status pendente">Pendente</span>
+          <span class="ocorrencia-status ${estadoClasse}" style="background-color:${estadoCor};">${estadoTexto}</span>
           <button class="detalhes-btn">Ver Detalhes</button>
         `;
 
