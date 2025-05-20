@@ -192,3 +192,32 @@ header button {
 .form-registo button[type="submit"]:hover {
     background-color: #1e40af;
 }
+
+.feedback-message {
+  display: none; /* Inicialmente escondido */
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px;
+  background-color: #4CAF50; /* Verde por padrão (pode ser alterado para outros tipos de feedback) */
+  color: white;
+  border-radius: 5px;
+  font-size: 16px;
+  z-index: 1000; /* Garante que a mensagem apareça sobre o conteúdo */
+  text-align: center;
+  width: 80%;
+  max-width: 500px;
+}
+
+.feedback-message.error {
+  background-color: #f44336; /* Vermelho para erros (exemplo: Ocorrência Rejeitada) */
+}
+
+.feedback-message.warning {
+  background-color: #ff9800; /* Amarelo para advertências (exemplo: Ocorrência Pendente) */
+}
+
+.feedback-message.success {
+  background-color: #4CAF50; /* Verde para sucesso (exemplo: Ocorrência Aceita) */
+}
