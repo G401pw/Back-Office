@@ -75,13 +75,15 @@
       el: '#app',
       data: {
         visitasHoje: 0,
-        peritosDisponiveis: 15, // Exemplo de número de peritos
-        ocorrenciasEmAcao: 5, // Exemplo de número de ocorrências em ação
+        ocorrenciasEmAcao: 5, // Exemplo, podes alterar para buscar dados reais
         peritos: JSON.parse(localStorage.getItem("peritos")) || [],
         userName: localStorage.getItem("userName") || "Utilizador não logado",
         userEmail: localStorage.getItem("userEmail") || "Sem e-mail"
       },
       computed: {
+        peritosDisponiveis() {
+          return this.peritos.filter(perito => perito.estado === "desocupado").length;
+        },
         especialidades() {
           const contador = {};
           this.peritos.forEach(perito => {
@@ -124,13 +126,17 @@
 
         renderOcorrenciasChart() {
           const ctx = document.getElementById('numOcorrencias').getContext('2d');
+
+          const dadosArmazenados = JSON.parse(localStorage.getItem("ocorrencias_resolvidas")) || 
+            [0,0,0,0,0,0,0,0,0,0,0,0];
+
           new Chart(ctx, {
             type: 'bar',
             data: {
               labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
               datasets: [{
                 label: 'Ocorrências Resolvidas',
-                data: [5, 15, 10, 6, 3, 4, 7, 12, 8, 14, 18, 30],
+                data: dadosArmazenados,
                 backgroundColor: '#0088FE'
               }]
             }
@@ -144,11 +150,9 @@
           if (dataGuardada === hoje) {
             this.visitasHoje = parseInt(localStorage.getItem("visitas_index_hoje")) || 0;
           } else {
-            this.visitasHoje = 0; // se for outro dia, mostra 0
+            this.visitasHoje = 0;
           }
         }
-
-
       }
     });
   </script>
