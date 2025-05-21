@@ -143,14 +143,11 @@ header h1 {
     align-items: center;
 }
 
-.ocorrencia-id {
-    font-weight: bold;
-    color: #333;
-}
-
-.ocorrencia-data, .ocorrencia-titulo, .ocorrencia-local {
-    font-size: 14px;
-    color: #666;
+/* NOVO: centralizar texto e colunas com mesma largura */
+.ocorrencia p {
+    flex: 1;              /* Colunas com mesmo tamanho */
+    text-align: center;   /* Texto centralizado */
+    margin: 0 10px;       /* Espaçamento lateral */
 }
 
 .ocorrencia-status {
@@ -175,6 +172,8 @@ header h1 {
     border: none;
     cursor: pointer;
     transition: background-color 0.3s;
+    flex: 0 0 auto;       /* Botão não cresce nem encolhe */
+    margin-left: 10px;    /* Espaço do botão em relação às colunas */
 }
 
 .detalhes-btn:hover {
@@ -241,6 +240,3 @@ header > select#filtroEstado {
     font-size: 16px;
   }
 }
-
-
-
