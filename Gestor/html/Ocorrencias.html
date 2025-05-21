@@ -21,7 +21,7 @@
         <li><a data-page="Geral.html" href="Geral.html">🔍 Estatísticas</a></li>
       </ul>
     </nav>
-    <div class="add-auditoria"> 
+    <div class="add-auditoria">
       <a href="/Back-Office/Gestor/html/PlanoAuditoria.html">
         <button>+ Adicionar Plano de Auditoria</button>
       </a>
@@ -35,62 +35,87 @@
   <div class="content">
     <header>
       <h1>Ocorrências</h1>
+      <div style="display:flex; gap: 20px; align-items: center;">
+        <label for="filtroEstado">Filtrar por estado:</label>
+        <select id="filtroEstado">
+          <option value="todos">Todos</option>
+          <option value="concluido">Concluído</option>
+          <option value="em-progresso">Em progresso</option>
+        </select>
+
+        <label for="ordenarPor">Ordenar por:</label>
+        <select id="ordenarPor">
+          <option value="data">Data</option>
+          <option value="gravidade">Gravidade</option>
+        </select>
+      </div>
     </header>
 
-    <div class="filtro-container">
-      <label for="filtroEstado">Filtrar por estado:</label>
-      <select id="filtroEstado">
-        <option value="todos">Todos</option>
-        <option value="concluido">Concluído</option>
-        <option value="em-progresso">Em progresso</option>
-        <option value="pendente">Em espera</option>
-      </select>
-    </div>
-
-    <table id="tabela-auditorias">
-      <thead>
-        <tr>
-          <th>Número</th>
-          <th>Data</th>
-          <th>Problema</th>
-          <th>Localização</th>
-          <th>Estado</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Linhas serão carregadas dinamicamente -->
-      </tbody>
-    </table>
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Gravidade</th>
+            <th>Problema</th>
+            <th>Localização</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-ocorrencias">
+          <!-- Linhas de ocorrências vão ser carregadas aqui via JS -->
+        </tbody>
+      </table>
+    </main>
   </div>
 
   <script>
-    // Atualiza a info do utilizador na sidebar
     function atualizarUtilizador() {
       const nome = localStorage.getItem("userName") || "Utilizador não logado";
       const email = localStorage.getItem("userEmail") || "Sem e-mail";
-      document.getElementById("user-name").textContent = nome;
-      document.getElementById("user-email").textContent = email;
+      document.getElementById("user-name").innerText = nome;
+      document.getElementById("user-email").innerText = email;
     }
 
-    // Carregar auditorias do localStorage e mostrar na tabela
-    function carregarAuditorias() {
+    function carregarOcorrencias(filtro = "todos", ordenarPor = "data") {
+      const tbody = document.getElementById("tabela-ocorrencias");
+      tbody.innerHTML = ""; // Limpa as linhas atuais
       const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
-      const tbody = document.querySelector("#tabela-auditorias tbody");
-      tbody.innerHTML = "";
 
-      auditorias.forEach((auditoria, index) => {
+      // Filtrar
+      let filtradas = auditorias.filter(auditoria => {
+        if (filtro === "todos") return true;
+        return auditoria.estado === filtro;
+      });
+
+      // Ordenar
+      if (ordenarPor === "data") {
+        filtradas.sort((a, b) => new Date(a.data) - new Date(b.data));
+      } else if (ordenarPor === "gravidade") {
+        // Assumindo gravidade como número, maior primeiro (mais grave)
+        filtradas.sort((a, b) => {
+          const gravA = Number(a.gravidade) || 0;
+          const gravB = Number(b.gravidade) || 0;
+          return gravB - gravA;
+        });
+      }
+
+      filtradas.forEach((auditoria, index) => {
+        let estado = auditoria.estado || "";
+
+        const gravidade = auditoria.gravidade || "N/A";
+
         const tr = document.createElement("tr");
 
         tr.innerHTML = `
           <td>${index + 1}</td>
-          <td>${new Date(auditoria.data).toLocaleDateString()}</td>
-          <td>${auditoria.problema}</td>
-          <td>${auditoria.morada}, ${auditoria.localidade}</td>
+          <td>${gravidade}</td>
+          <td>${auditoria.problema || ""}</td>
+          <td>${auditoria.localizacao || ""}</td>
           <td>
             <select class="estado-select" data-index="${index}">
-              <option value="em-progresso" ${auditoria.estado === "em-progresso" ? "selected" : ""}>Em progresso</option>
-              <option value="concluido" ${auditoria.estado === "concluido" ? "selected" : ""}>Concluído</option>
-              <option value="pendente" ${auditoria.estado === "pendente" ? "selected" : ""}>Em espera</option>
+              <option value="em-progresso" ${estado === "em-progresso" ? "selected" : ""}>Em progresso</option>
+              <option value="concluido" ${estado === "concluido" ? "selected" : ""}>Concluído</option>
             </select>
           </td>
         `;
@@ -98,42 +123,30 @@
         tbody.appendChild(tr);
       });
 
-      // Adicionar listener a cada select para atualizar estado
+      // Atualiza event listeners para os selects do estado
       document.querySelectorAll(".estado-select").forEach(select => {
         select.addEventListener("change", function() {
-          const idx = this.dataset.index;
-          const novoEstado = this.value;
-          let auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
-          auditorias[idx].estado = novoEstado;
+          const idx = this.getAttribute("data-index");
+          const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
+          auditorias[idx].estado = this.value;
           localStorage.setItem("auditorias", JSON.stringify(auditorias));
         });
       });
     }
 
-    // Filtrar tabela conforme estado selecionado
-    function filtrarTabela() {
-      const filtro = document.getElementById("filtroEstado").value;
-      const linhas = document.querySelectorAll("#tabela-auditorias tbody tr");
-      linhas.forEach(linha => {
-        const selectEstado = linha.querySelector(".estado-select");
-        const estado = selectEstado ? selectEstado.value : "";
-        if (filtro === "todos" || estado === filtro) {
-          linha.style.display = "";
-        } else {
-          linha.style.display = "none";
-        }
-      });
-    }
+    document.getElementById("filtroEstado").addEventListener("change", function() {
+      const ordenarPor = document.getElementById("ordenarPor").value;
+      carregarOcorrencias(this.value, ordenarPor);
+    });
 
-    // Inicializar a página
-    document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("ordenarPor").addEventListener("change", function() {
+      const filtroEstado = document.getElementById("filtroEstado").value;
+      carregarOcorrencias(filtroEstado, this.value);
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
       atualizarUtilizador();
-      carregarAuditorias();
-      filtrarTabela();
-
-      document.getElementById("filtroEstado").addEventListener("change", () => {
-        filtrarTabela();
-      });
+      carregarOcorrencias();
     });
   </script>
 </body>

@@ -12,7 +12,7 @@ body {
     height: 100vh;
 }
 
-/* Sidebar */
+/* Sidebar igual à base desejada */
 .sidebar {
     width: 250px;
     height: 100vh;
@@ -101,7 +101,7 @@ nav ul li a.active {
     margin-bottom: 5px;
 }
 
-/* Conteúdo principal */
+/* Conteúdo Principal */
 .content {
     margin-left: 250px;
     padding: 30px;
@@ -109,8 +109,8 @@ nav ul li a.active {
     background-color: #f5f6fa;
 }
 
+/* Header */
 header {
-    position: relative; /* Para filtro absoluto */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -119,6 +119,7 @@ header {
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     margin-bottom: 20px;
+    position: relative;
 }
 
 header h1 {
@@ -128,14 +129,14 @@ header h1 {
     flex: 1;
 }
 
-/* Estilo filtro */
+/* Estilizar label e select para ficar juntos e alinhados */
 header > label[for="filtroEstado"] {
     margin-right: 10px;
     font-size: 14px;
     font-weight: 500;
     color: #333;
     white-space: nowrap;
-    margin-left: auto; /* Ajusta para a esquerda do select */
+    margin-left: auto; /* empurra para a direita, menos que o select */
 }
 
 header > select#filtroEstado {
@@ -150,7 +151,7 @@ header > select#filtroEstado {
     margin-left: 5px;
 }
 
-/* Responsividade filtro */
+/* Responsividade para filtro */
 @media (max-width: 600px) {
     header {
         flex-direction: column;
@@ -170,25 +171,26 @@ table {
     width: 100%;
     border-collapse: collapse;
     background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    border-radius: 10px;
     overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 thead {
     background-color: #0088FE;
     color: white;
-    font-weight: 600;
 }
 
 thead th {
     padding: 12px 15px;
     text-align: left;
+    font-weight: 600;
+    font-size: 14px;
 }
 
 tbody tr {
     border-bottom: 1px solid #ddd;
-    transition: background-color 0.2s;
+    transition: background-color 0.3s;
 }
 
 tbody tr:hover {
@@ -197,12 +199,11 @@ tbody tr:hover {
 
 tbody td {
     padding: 12px 15px;
-    vertical-align: middle;
     font-size: 14px;
-    color: #333;
+    color: #444;
 }
 
-/* Select dentro da tabela para estado */
+/* Select do estado dentro da tabela */
 .estado-select {
     padding: 6px 10px;
     border-radius: 5px;
@@ -210,54 +211,9 @@ tbody td {
     font-size: 14px;
     cursor: pointer;
     background-color: #fff;
-    transition: border-color 0.3s;
+    transition: background-color 0.3s;
 }
 
 .estado-select:hover {
-    border-color: #0088FE;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-    .content {
-        margin-left: 0;
-        padding: 20px;
-        width: 100%;
-    }
-    table, thead, tbody, th, td, tr {
-        display: block;
-    }
-    thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-    }
-    tbody tr {
-        margin-bottom: 15px;
-        border-bottom: 2px solid #0088FE;
-        padding: 15px;
-        border-radius: 10px;
-    }
-    tbody td {
-        padding-left: 50%;
-        position: relative;
-        text-align: left;
-        font-size: 13px;
-        border: none;
-        border-bottom: 1px solid #ddd;
-    }
-    tbody td::before {
-        position: absolute;
-        top: 12px;
-        left: 15px;
-        width: 45%;
-        white-space: nowrap;
-        font-weight: 600;
-        color: #0088FE;
-        content: attr(data-label);
-    }
-    .estado-select {
-        width: 100%;
-        margin-top: 8px;
-    }
+    background-color: #e8f0fe;
 }

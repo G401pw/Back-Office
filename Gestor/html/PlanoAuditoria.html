@@ -97,26 +97,40 @@
         <textarea id="info-extra" name="info-extra"></textarea>
       </section>
 
+      <!-- Gravidade -->
+      <section class="gravidade-section" style="margin-top: 20px; margin-bottom: 20px;">
+        <label>Gravidade da Ocorrência:</label>
+        <div id="gravidade-container" style="display: flex; gap: 10px; margin-top: 8px;">
+          <div class="gravidade-bola" data-valor="1" title="Gravidade 1" style="width: 24px; height: 24px; border-radius: 50%; background-color: #ddd; cursor: pointer;"></div>
+          <div class="gravidade-bola" data-valor="2" title="Gravidade 2" style="width: 24px; height: 24px; border-radius: 50%; background-color: #ddd; cursor: pointer;"></div>
+          <div class="gravidade-bola" data-valor="3" title="Gravidade 3" style="width: 24px; height: 24px; border-radius: 50%; background-color: #ddd; cursor: pointer;"></div>
+          <div class="gravidade-bola" data-valor="4" title="Gravidade 4" style="width: 24px; height: 24px; border-radius: 50%; background-color: #ddd; cursor: pointer;"></div>
+          <div class="gravidade-bola" data-valor="5" title="Gravidade 5" style="width: 24px; height: 24px; border-radius: 50%; background-color: #ddd; cursor: pointer;"></div>
+        </div>
+        <input type="hidden" id="gravidade-selecionada" value="1" />
+      </section>
+
       <button type="submit" class="btn-confirmar">Confirmar</button>
     </form>
   </div>
 
-  <!-- Feedback message container -->
   <div id="feedback-message" class="feedback-message"></div>
 
   <script>
+    // Função para atualizar as informações do utilizador
     function atualizarUtilizador() {
       const nome = localStorage.getItem("userName") || "Utilizador não logado";
       const email = localStorage.getItem("userEmail") || "Sem e-mail";
       document.getElementById("user-name").innerText = nome;
       document.getElementById("user-email").innerText = email;
     }
-
+  
+    // Função para carregar os dados da ocorrência e preencher no formulário
     function carregarDetalhesOcorrencia() {
       const ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
       const ocorrenciaID = localStorage.getItem("ocorrenciaID");
       const ocorrencia = ocorrencias.find(ocorrencia => ocorrencia.id == ocorrenciaID);
-
+  
       if (ocorrencia) {
         document.getElementById("tipo").value = ocorrencia.tipo;
         document.getElementById("morada").value = ocorrencia.morada;
@@ -124,12 +138,11 @@
         document.getElementById("codigo-postal").value = ocorrencia.codigoPostal || '';
         document.getElementById("data").value = ocorrencia.data;
         document.getElementById("hora-inicio").value = ocorrencia.hora;
-        document.getElementById("hora-fim").value = ocorrencia.hora;
-      } else {
-        alert("Ocorrência não encontrada.");
+        document.getElementById("hora-fim").value = ocorrencia.hora; // Ou outra lógica para fim
       }
     }
-
+  
+    // Função para carregar a lista de peritos (somente desocupados)
     function carregarPeritos() {
       const peritos = JSON.parse(localStorage.getItem("peritos")) || [];
       const peritosSelect = document.getElementById("qtd-peritos");
@@ -150,7 +163,7 @@
           peritos.forEach((perito, idx) => {
             if (perito.estado === "desocupado" && !selectedPeritos.includes(idx.toString())) {
               const option = document.createElement("option");
-              option.value = idx;
+              option.value = idx; // usar índice como id, se perito.id não existir
               option.textContent = perito.nome;
               peritoSelect.appendChild(option);
             }
@@ -158,13 +171,11 @@
 
           peritoSelect.addEventListener("change", function() {
             const valorSelecionado = peritoSelect.value;
-
-            // Remove valor anterior
+            // Remove o valor anterior do selectedPeritos (se existir)
             selectedPeritos = selectedPeritos.filter(id => id !== valorSelecionado);
-
-            // Adiciona o novo
+            // Adiciona o novo valor selecionado
             selectedPeritos.push(valorSelecionado);
-
+            // Atualiza as opções dos outros selects para impedir duplicados
             atualizarOpcoesSelecionadas(peritosContainer, selectedPeritos);
           });
 
@@ -189,30 +200,45 @@
       }
     }
 
-    function removerOcorrencia(id) {
-      let ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
-      ocorrencias = ocorrencias.filter(ocorrencia => ocorrencia.id != id);
-      localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias));
+    // Seleção da gravidade
+    const bolas = document.querySelectorAll(".gravidade-bola");
+    const inputGravidade = document.getElementById("gravidade-selecionada");
+
+    function atualizarVisualGravidade(valorSelecionado) {
+      bolas.forEach(bola => {
+        const valor = bola.getAttribute("data-valor");
+        if (parseInt(valor) <= valorSelecionado) {
+          bola.style.backgroundColor = "#0088FE"; // Cor azul para selecionado
+        } else {
+          bola.style.backgroundColor = "#ddd"; // Cinzento para não selecionado
+        }
+      });
     }
 
-    function showFeedbackMessage(message, type = 'success') {
-      const feedbackMessage = document.getElementById('feedback-message');
-      feedbackMessage.innerHTML = message;
-      feedbackMessage.className = 'feedback-message ' + type;
-      feedbackMessage.style.display = 'block';
-      setTimeout(() => {
-        feedbackMessage.style.display = 'none';
-      }, 2000);
-    }
+    bolas.forEach(bola => {
+      bola.addEventListener("click", () => {
+        const valor = parseInt(bola.getAttribute("data-valor"));
+        inputGravidade.value = valor;
+        atualizarVisualGravidade(valor);
+      });
+    });
 
+    // Inicializa com gravidade 1 selecionada
+    atualizarVisualGravidade(1);
+
+    // Submissão do formulário de auditoria
     document.getElementById("form-auditoria").addEventListener("submit", function(e) {
       e.preventDefault();
 
       const peritosSelecionados = [];
-      document.querySelectorAll("#peritos-container select").forEach(select => {
-        peritosSelecionados.push(select.value);
+      const selectedPeritosElements = document.querySelectorAll("#peritos-container select");
+
+      selectedPeritosElements.forEach(select => {
+        const peritoId = select.value;
+        peritosSelecionados.push(peritoId);
       });
 
+      // Marca os peritos selecionados como ocupados
       let peritos = JSON.parse(localStorage.getItem("peritos")) || [];
       peritos = peritos.map((perito, idx) => {
         if (peritosSelecionados.includes(idx.toString())) {
@@ -222,12 +248,13 @@
       });
       localStorage.setItem("peritos", JSON.stringify(peritos));
 
+      // Obtem os dados do formulário para criar a ocorrência
       const nome = document.getElementById("nome").value;
       const tipo = document.getElementById("tipo").value;
       const origem = document.getElementById("origem").value;
-      const morada = document.getElementById("morada").value;
-      const localidade = document.getElementById("localidade").value;
+      const localizacao = document.getElementById("localidade").value;
       const codigo_postal = document.getElementById("codigo-postal").value;
+      const morada = document.getElementById("morada").value;
       const data = document.getElementById("data").value;
       const hora_inicio = document.getElementById("hora-inicio").value;
       const hora_fim = document.getElementById("hora-fim").value;
@@ -235,39 +262,51 @@
       const equipamento = document.getElementById("equipamento").value;
       const info_extra = document.getElementById("info-extra").value;
       const estado = "em-progresso";
+      const gravidade = inputGravidade.value;
 
+      // Cria a nova auditoria
       const novaAuditoria = {
         id: Date.now(),
-        nome,
+        nome: nome,
         problema: tipo,
-        origem,
-        morada,
-        localidade,
-        codigo_postal,
-        data,
-        hora_inicio,
-        hora_fim,
-        materiais,
-        equipamento,
-        info_extra,
+        origem: origem,
+        morada: morada,
+        codigo_postal: codigo_postal,
+        hora_inicio: hora_inicio,
+        hora_fim: hora_fim,
+        materiais: materiais,
+        equipamento: equipamento,
+        info_extra: info_extra,
         peritos: peritosSelecionados,
-        estado
+        estado: estado,
+        localizacao: localizacao,
+        data: data,
+        gravidade: gravidade
       };
 
-      let auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
+      // Atualiza o array de ocorrências no localStorage
+      const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
       auditorias.push(novaAuditoria);
       localStorage.setItem("auditorias", JSON.stringify(auditorias));
 
+      // Remove a ocorrência aprovada da lista de ocorrências pendentes
+      let ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
       const ocorrenciaID = localStorage.getItem("ocorrenciaID");
-      removerOcorrencia(ocorrenciaID);
+      ocorrencias = ocorrencias.filter(ocorrencia => ocorrencia.id != ocorrenciaID);
+      localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias));
 
-      showFeedbackMessage("Plano de Auditoria confirmado com sucesso!", "success");
+      // Mostrar mensagem de sucesso e redirecionar
+      const feedbackMessage = document.getElementById('feedback-message');
+      feedbackMessage.innerHTML = "Plano de Auditoria confirmado com sucesso!";
+      feedbackMessage.classList.add("success");
+      feedbackMessage.style.display = "block";
 
       setTimeout(() => {
-        window.location.href = "ocorrencias.html";
+        window.location.href = "Ocorrencias.html"; // Redireciona para Ocorrências
       }, 2000);
     });
 
+    // Ao carregar a página
     document.addEventListener("DOMContentLoaded", function() {
       atualizarUtilizador();
       carregarDetalhesOcorrencia();
