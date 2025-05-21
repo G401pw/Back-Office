@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="/Back-Office/Gestor/css/Peritos.css" />
   <link rel="icon" href="/Back-Office/Gestor/Imagens/logo.png" type="image/x-icon" />
 </head>
+
 <body>
   <div class="sidebar">
     <div class="logo">
@@ -23,8 +25,8 @@
     </nav>
     <div class="add-auditoria">
       <a href="/Back-Office/Gestor/html/PlanoAuditoria.html">
-      <button>+ Adicionar Plano de Auditoria</button>
-    </a>
+        <button>+ Adicionar Plano de Auditoria</button>
+      </a>
     </div>
     <div class="user-info">
       <p id="user-name"></p>
@@ -35,7 +37,20 @@
   <div class="content">
     <header>
       <h1>Peritos</h1>
-      <button>⋮</button>
+      <div style="display:flex; gap: 20px; align-items: center;">
+        <label for="filtroEspecialidade">Filtrar por especialidade:</label>
+        <select id="filtroEspecialidade">
+          <option value="todos">Todas</option>
+          <!-- Especialidades serão inseridas dinamicamente -->
+        </select>
+
+        <label for="ordenarPor">Ordenar por:</label>
+        <select id="ordenarPor">
+          <option value="id">Padrão</option>
+          <option value="estado">Estado</option>
+          <option value="nome">Nome</option>
+        </select>
+      </div>
     </header>
 
     <main>
@@ -60,27 +75,27 @@
       </section>
     </main>
   </div>
-  
-  
-    <!-- Modal para editar perito -->
-    <div id="editModal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <h3>Editar Perito</h3>
-    <form id="editForm">
-      <label>Nome:<input type="text" id="edit-nome" required></label><br>
-      <label>Especialidade:<input type="text" id="edit-especialidade" required></label><br>
-      <label>Data Nascimento:<input type="text" id="edit-dataNascimento" required></label><br>
-      <label>Email:<input type="email" id="edit-email" required></label><br>
-      <label>Telemóvel:<input type="tel" id="edit-telefone" required></label><br>
-      <button type="submit">Salvar</button>
-      <button type="button" id="cancelEdit">Cancelar</button>
-    </form>
+
+
+  <!-- Modal para editar perito -->
+  <div id="editModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <h3>Editar Perito</h3>
+      <form id="editForm">
+        <label>Nome:<input type="text" id="edit-nome" required></label><br>
+        <label>Especialidade:<input type="text" id="edit-especialidade" required></label><br>
+        <label>Data Nascimento:<input type="text" id="edit-dataNascimento" required></label><br>
+        <label>Email:<input type="email" id="edit-email" required></label><br>
+        <label>Telemóvel:<input type="tel" id="edit-telefone" required></label><br>
+        <button type="submit">Salvar</button>
+        <button type="button" id="cancelEdit">Cancelar</button>
+      </form>
+    </div>
   </div>
-</div>
 
   <!-- Área para exibir mensagens de feedback -->
   <div id="feedback-message" class="feedback-message"></div>
-  
+
   <script>
     const tbody = document.getElementById("tabela-peritos");
     const feedbackMessage = document.getElementById('feedback-message');
@@ -88,117 +103,171 @@
 
     // Função para renderizar a tabela de peritos
     function renderPeritos() {
+      const filtroEspecialidade = document.getElementById('filtroEspecialidade').value;
+      const ordenarPor = document.getElementById('ordenarPor').value;
+
+      // Filtrar
+      let filtrados = peritos.filter(perito => {
+        if (filtroEspecialidade === 'todos') return true;
+        return perito.especialidade === filtroEspecialidade;
+      });
+
+      // Ordenar
+      if (ordenarPor === 'estado') {
+        filtrados.sort((a, b) => {
+          if (a.estado === b.estado) return 0;
+          return a.estado === 'ocupado' ? -1 : 1; // ocupados primeiro
+        });
+      } else if (ordenarPor === 'nome') {
+        filtrados.sort((a, b) => a.nome.localeCompare(b.nome));
+      } else {
+        // padrão, mantém a ordem do array (id implícito)
+      }
+
       tbody.innerHTML = "";
-      peritos.forEach((perito, index) => {
+      filtrados.forEach((perito, index) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${index + 1}</td>
-          <td>${perito.nome}</td>
-          <td>${perito.especialidade}</td>
-          <td>${perito.dataNascimento}</td>
-          <td>${perito.email}</td>
-          <td>${perito.telefone}</td>
-          <td>${perito.estado}</td> <!-- Exibe o estado -->
-          <td>
-            <button onclick="editarPerito(${index})">✏️</button>
-            <button onclick="confirmarRemoverPerito(${index})">🗑️</button>
-            <button onclick="ocuparPerito(${index})" ${perito.estado === "ocupado" ? "disabled" : ""}>Ocupar</button>
-            <button onclick="desocuparPerito(${index})" ${perito.estado === "desocupado" ? "disabled" : ""}>Desocupar</button>
-          </td>
-        `;
+      <td>${index + 1}</td>
+      <td>${perito.nome}</td>
+      <td>${perito.especialidade}</td>
+      <td>${perito.dataNascimento}</td>
+      <td>${perito.email}</td>
+      <td>${perito.telefone}</td>
+      <td>${perito.estado}</td>
+      <td>
+        <button onclick="editarPerito(${index})">✏️</button>
+        <button onclick="confirmarRemoverPerito(${index})">🗑️</button>
+        <button onclick="ocuparPerito(${index})" ${perito.estado === "ocupado" ? "disabled" : ""}>Ocupar</button>
+        <button onclick="desocuparPerito(${index})" ${perito.estado === "desocupado" ? "disabled" : ""}>Desocupar</button>
+      </td>
+    `;
         tbody.appendChild(tr);
       });
     }
 
+    document.getElementById('filtroEspecialidade').addEventListener('change', () => {
+      const filtro = document.getElementById('filtroEspecialidade').value;
+      const ordenar = document.getElementById('ordenarPor').value;
+      renderPeritos(filtro, ordenar);
+    });
+
+    document.getElementById('ordenarPor').addEventListener('change', () => {
+      const filtro = document.getElementById('filtroEspecialidade').value;
+      const ordenar = document.getElementById('ordenarPor').value;
+      renderPeritos(filtro, ordenar);
+    });
+
+    // Listener para o filtro de especialidade
+    function popularFiltroEspecialidade() {
+      const filtro = document.getElementById('filtroEspecialidade');
+      filtro.innerHTML = '<option value="todos">Todas</option>'; // resetar
+
+      const especialidades = [...new Set(peritos.map(p => p.especialidade))]; // Distintas
+      especialidades.forEach(espec => {
+        const option = document.createElement('option');
+        option.value = espec;
+        option.textContent = espec;
+        filtro.appendChild(option);
+      });
+    }
+
+    // Chama a função para popular o filtro de especialidade
+    document.addEventListener('DOMContentLoaded', () => {
+      atualizarUtilizador();
+      popularFiltroEspecialidade();
+      renderPeritos();
+    });
+
     // Função para editar um perito
-  let editIndex = null;  // variável para guardar o índice do perito que está sendo editado
-  function editarPerito(index) {
-  editIndex = index;
-  const perito = peritos[index];
+    let editIndex = null;  // variável para guardar o índice do perito que está sendo editado
+    function editarPerito(index) {
+      editIndex = index;
+      const perito = peritos[index];
 
-  // Preenche os campos do modal com os dados do perito
-  document.getElementById('edit-nome').value = perito.nome;
-  document.getElementById('edit-especialidade').value = perito.especialidade;
-  document.getElementById('edit-dataNascimento').value = perito.dataNascimento;
-  document.getElementById('edit-email').value = perito.email;
-  document.getElementById('edit-telefone').value = perito.telefone;
+      // Preenche os campos do modal com os dados do perito
+      document.getElementById('edit-nome').value = perito.nome;
+      document.getElementById('edit-especialidade').value = perito.especialidade;
+      document.getElementById('edit-dataNascimento').value = perito.dataNascimento;
+      document.getElementById('edit-email').value = perito.email;
+      document.getElementById('edit-telefone').value = perito.telefone;
 
-  // Mostra o modal
-  document.getElementById('editModal').style.display = 'flex';
-}
+      // Mostra o modal
+      document.getElementById('editModal').style.display = 'flex';
+    }
 
-function showFeedbackMessage(message, type = 'success') {
-    feedbackMessage.innerHTML = message;
-    feedbackMessage.className = 'feedback-message ' + type;
-    feedbackMessage.style.display = 'flex';
+    function showFeedbackMessage(message, type = 'success') {
+      feedbackMessage.innerHTML = message;
+      feedbackMessage.className = 'feedback-message ' + type;
+      feedbackMessage.style.display = 'flex';
 
       setTimeout(() => {
-      feedbackMessage.style.display = 'none';
+        feedbackMessage.style.display = 'none';
       }, 3000);
-  }
+    }
 
-// Listener para salvar as alterações quando o formulário for submetido
-document.getElementById('editForm').addEventListener('submit', function(e) {
-  e.preventDefault();
+    // Listener para salvar as alterações quando o formulário for submetido
+    document.getElementById('editForm').addEventListener('submit', function (e) {
+      e.preventDefault();
 
-  const nome = document.getElementById('edit-nome').value.trim();
-  const especialidade = document.getElementById('edit-especialidade').value.trim();
-  const dataNascimento = document.getElementById('edit-dataNascimento').value.trim();
-  const email = document.getElementById('edit-email').value.trim();
-  const telefone = document.getElementById('edit-telefone').value.trim();
+      const nome = document.getElementById('edit-nome').value.trim();
+      const especialidade = document.getElementById('edit-especialidade').value.trim();
+      const dataNascimento = document.getElementById('edit-dataNascimento').value.trim();
+      const email = document.getElementById('edit-email').value.trim();
+      const telefone = document.getElementById('edit-telefone').value.trim();
 
-  if(nome && especialidade && dataNascimento && email && telefone) {
-    peritos[editIndex] = {
-      nome,
-      especialidade,
-      dataNascimento,
-      email,
-      telefone,
-      estado: peritos[editIndex].estado
-    };
+      if (nome && especialidade && dataNascimento && email && telefone) {
+        peritos[editIndex] = {
+          nome,
+          especialidade,
+          dataNascimento,
+          email,
+          telefone,
+          estado: peritos[editIndex].estado
+        };
 
-    localStorage.setItem('peritos', JSON.stringify(peritos));
-    renderPeritos();
-    showFeedbackMessage('Perito atualizado com sucesso.', 'success');
-    fecharModal();
-  }
-});
+        localStorage.setItem('peritos', JSON.stringify(peritos));
+        renderPeritos();
+        showFeedbackMessage('Perito atualizado com sucesso.', 'success');
+        fecharModal();
+      }
+    });
 
-// Listener para botão Cancelar fechar modal sem salvar
-document.getElementById('cancelEdit').addEventListener('click', fecharModal);
+    // Listener para botão Cancelar fechar modal sem salvar
+    document.getElementById('cancelEdit').addEventListener('click', fecharModal);
 
-// Função para fechar o modal
-function fecharModal() {
-  document.getElementById('editModal').style.display = 'none';
-  editIndex = null;
-}
+    // Função para fechar o modal
+    function fecharModal() {
+      document.getElementById('editModal').style.display = 'none';
+      editIndex = null;
+    }
 
     // Função para remover um perito
-function confirmarRemoverPerito(index) {
-  feedbackMessage.innerHTML = `
+    function confirmarRemoverPerito(index) {
+      feedbackMessage.innerHTML = `
     Pretende remover este perito?
     <button id="btnSim">Sim</button>
     <button id="btnCancelar">Cancelar</button>
   `;
-  feedbackMessage.className = 'feedback-message warning'; // define amarelo
-  feedbackMessage.style.display = 'flex';
+      feedbackMessage.className = 'feedback-message warning'; // define amarelo
+      feedbackMessage.style.display = 'flex';
 
-  document.getElementById('btnSim').onclick = () => {
-    peritos.splice(index, 1);
-    localStorage.setItem("peritos", JSON.stringify(peritos));
-    renderPeritos();
-    showFeedbackMessage('Perito removido com sucesso.', 'success');
+      document.getElementById('btnSim').onclick = () => {
+        peritos.splice(index, 1);
+        localStorage.setItem("peritos", JSON.stringify(peritos));
+        renderPeritos();
+        showFeedbackMessage('Perito removido com sucesso.', 'success');
 
 
-    setTimeout(() => {
-      feedbackMessage.style.display = 'none';
-    }, 3000);
-  };
+        setTimeout(() => {
+          feedbackMessage.style.display = 'none';
+        }, 3000);
+      };
 
-  document.getElementById('btnCancelar').onclick = () => {
-    feedbackMessage.style.display = 'none';
-  };
-}
+      document.getElementById('btnCancelar').onclick = () => {
+        feedbackMessage.style.display = 'none';
+      };
+    }
 
 
     // Função para ocupar um perito (marcar como ocupado)
@@ -219,7 +288,7 @@ function confirmarRemoverPerito(index) {
     function atualizarUtilizador() {
       const nome = localStorage.getItem("userName") || "Utilizador não logado";
       const email = localStorage.getItem("userEmail") || "Sem e-mail";
-      
+
       // Preenche as informações do utilizador
       document.getElementById("user-name").innerText = nome;
       document.getElementById("user-email").innerText = email;
@@ -232,4 +301,5 @@ function confirmarRemoverPerito(index) {
     renderPeritos();
   </script>
 </body>
+
 </html>
