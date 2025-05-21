@@ -118,7 +118,23 @@
               labels: labels,
               datasets: [{
                 data: data,
-                backgroundColor: ['#00C49F', '#FFBB28', '#0088FE', '#FF8042']
+                backgroundColor: [
+                  '#00C49F', // verde água
+                  '#FFBB28', // amarelo quente
+                  '#0088FE', // azul forte
+                  '#FF8042', // laranja forte
+                  '#FF6384', // rosa vivo
+                  '#36A2EB', // azul claro
+                  '#FFCE56', // amarelo claro
+                  '#4BC0C0', // turquesa claro
+                  '#9966FF', // roxo
+                  '#FF9F40', // laranja suave
+                  '#C9CBCF', // cinzento claro
+                  '#7E57C2', // violeta
+                  '#26A69A', // verde-azulado
+                  '#D4E157', // verde-limão claro
+                ]
+
               }]
             }
           });
@@ -127,7 +143,7 @@
         renderOcorrenciasChart() {
           const ctx = document.getElementById('numOcorrencias').getContext('2d');
 
-          const dadosArmazenados = JSON.parse(localStorage.getItem("ocorrencias_resolvidas")) || 
+          const dadosArmazenados = JSON.parse(localStorage.getItem("ocorrencias_Resolvidas")) || 
             [0,0,0,0,0,0,0,0,0,0,0,0];
 
           new Chart(ctx, {

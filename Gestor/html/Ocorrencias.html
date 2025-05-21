@@ -77,62 +77,83 @@
       document.getElementById("user-email").innerText = email;
     }
 
-    function carregarOcorrencias(filtro = "todos", ordenarPor = "data") {
-      const tbody = document.getElementById("tabela-ocorrencias");
-      tbody.innerHTML = ""; // Limpa as linhas atuais
-      const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
+ function carregarOcorrencias(filtro = "todos", ordenarPor = "data") {
+  const tbody = document.getElementById("tabela-ocorrencias");
+  tbody.innerHTML = ""; // Limpa as linhas atuais
+  const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
 
-      // Filtrar
-      let filtradas = auditorias.filter(auditoria => {
-        if (filtro === "todos") return true;
-        return auditoria.estado === filtro;
-      });
+  // Filtrar
+  let filtradas = auditorias.filter(auditoria => {
+    if (filtro === "todos") return true;
+    return auditoria.estado === filtro;
+  });
 
-      // Ordenar
-      if (ordenarPor === "data") {
-        filtradas.sort((a, b) => new Date(a.data) - new Date(b.data));
-      } else if (ordenarPor === "gravidade") {
-        // Assumindo gravidade como número, maior primeiro (mais grave)
-        filtradas.sort((a, b) => {
-          const gravA = Number(a.gravidade) || 0;
-          const gravB = Number(b.gravidade) || 0;
-          return gravB - gravA;
-        });
-      }
+  // Ordenar
+  if (ordenarPor === "data") {
+    filtradas.sort((a, b) => new Date(a.data) - new Date(b.data));
+  } else if (ordenarPor === "gravidade") {
+    filtradas.sort((a, b) => {
+      const gravA = Number(a.gravidade) || 0;
+      const gravB = Number(b.gravidade) || 0;
+      return gravB - gravA;
+    });
+  }
 
-      filtradas.forEach((auditoria, index) => {
-        let estado = auditoria.estado || "";
+  filtradas.forEach((auditoria, index) => {
+    let estado = auditoria.estado || "em-progresso";
+    const gravidade = auditoria.gravidade || "N/A";
 
-        const gravidade = auditoria.gravidade || "N/A";
+    const horaConclusao = auditoria.horaConclusao ? ` às ${auditoria.horaConclusao}` : '';
 
-        const tr = document.createElement("tr");
+    const tr = document.createElement("tr");
 
-        tr.innerHTML = `
-          <td>${index + 1}</td>
-          <td>${gravidade}</td>
-          <td>${auditoria.problema || ""}</td>
-          <td>${auditoria.localizacao || ""}</td>
-          <td>
-            <select class="estado-select" data-index="${index}">
-              <option value="em-progresso" ${estado === "em-progresso" ? "selected" : ""}>Em progresso</option>
-              <option value="concluido" ${estado === "concluido" ? "selected" : ""}>Concluído</option>
-            </select>
-          </td>
-        `;
+    tr.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${gravidade}</td>
+      <td>${auditoria.problema || ""}</td>
+      <td>${auditoria.localizacao || ""}</td>
+      <td class="estado-coluna" data-index="${index}">
+        <span class="estado-texto">${estado === 'concluido' ? 'Concluído' + horaConclusao : 'Em progresso'}</span>
+        ${estado === 'concluido' 
+          ? `<button class="btn-estado" disabled title="Já concluído">✔</button>`
+          : `<button class="btn-estado" title="Marcar como concluído">Concluir</button>`
+        }
+      </td>
+    `;
 
-        tbody.appendChild(tr);
-      });
+    tbody.appendChild(tr);
+  });
 
-      // Atualiza event listeners para os selects do estado
-      document.querySelectorAll(".estado-select").forEach(select => {
-        select.addEventListener("change", function() {
-          const idx = this.getAttribute("data-index");
-          const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
-          auditorias[idx].estado = this.value;
+ // Adicionar event listener aos botões "Concluir"
+  document.querySelectorAll(".btn-estado").forEach(button => {
+    if (!button.disabled) {
+      button.addEventListener("click", function() {
+        const tdEstado = this.closest(".estado-coluna");
+        const idx = tdEstado.getAttribute("data-index");
+        const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
+
+        if (auditorias[idx].estado !== "concluido") {
+          auditorias[idx].estado = "concluido";
+
+          const agora = new Date();
+          const horas = agora.getHours().toString().padStart(2, '0');
+          const minutos = agora.getMinutes().toString().padStart(2, '0');
+          auditorias[idx].horaConclusao = `${horas}h:${minutos}m`;
+
           localStorage.setItem("auditorias", JSON.stringify(auditorias));
-        });
+
+          // Recarrega a tabela para atualizar a visualização
+          carregarOcorrencias(
+            document.getElementById("filtroEstado").value,
+            document.getElementById("ordenarPor").value
+          );
+        }
       });
     }
+  });
+}
+
+
 
     document.getElementById("filtroEstado").addEventListener("change", function() {
       const ordenarPor = document.getElementById("ordenarPor").value;
