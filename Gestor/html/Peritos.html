@@ -60,7 +60,10 @@
       </section>
     </main>
   </div>
-
+  
+  <!-- Área para exibir mensagens de feedback -->
+  <div id="feedback-message" class="feedback-message"></div>
+  
   <script>
     const tbody = document.getElementById("tabela-peritos");
     let peritos = JSON.parse(localStorage.getItem("peritos")) || [];
@@ -80,7 +83,7 @@
           <td>${perito.estado}</td> <!-- Exibe o estado -->
           <td>
             <button onclick="editarPerito(${index})">✏️</button>
-            <button onclick="removerPerito(${index})">🗑️</button>
+            <button onclick="confirmarRemoverPerito(${index})">🗑️</button>
             <button onclick="ocuparPerito(${index})" ${perito.estado === "ocupado" ? "disabled" : ""}>Ocupar</button>
             <button onclick="desocuparPerito(${index})" ${perito.estado === "desocupado" ? "disabled" : ""}>Desocupar</button>
           </td>
@@ -106,13 +109,34 @@
     }
 
     // Função para remover um perito
-    function removerPerito(index) {
-      if (confirm("Tem a certeza que deseja remover este perito?")) {
-        peritos.splice(index, 1);
-        localStorage.setItem("peritos", JSON.stringify(peritos));
-        renderPeritos();
-      }
-    }
+    const feedbackMessage = document.getElementById('feedback-message');
+
+function confirmarRemoverPerito(index) {
+  feedbackMessage.innerHTML = `
+    Pretende remover este perito?
+    <button id="btnSim">Sim</button>
+    <button id="btnCancelar">Cancelar</button>
+  `;
+  feedbackMessage.style.display = 'flex';
+
+  document.getElementById('btnSim').onclick = () => {
+    peritos.splice(index, 1);
+    localStorage.setItem("peritos", JSON.stringify(peritos));
+    renderPeritos();
+    feedbackMessage.innerHTML = 'Perito removido com sucesso.';
+    feedbackMessage.className = 'feedback-message success';
+    feedbackMessage.style.display = 'flex';
+
+    setTimeout(() => {
+      feedbackMessage.style.display = 'none';
+    }, 3000);
+  };
+
+  document.getElementById('btnCancelar').onclick = () => {
+    feedbackMessage.style.display = 'none';
+  };
+}
+
 
     // Função para ocupar um perito (marcar como ocupado)
     function ocuparPerito(index) {
