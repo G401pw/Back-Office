@@ -36,13 +36,18 @@
     <header>
       <h1>Ocorrências</h1>
     </header>
-    <label for="filtroEstado">Filtrar por estado:</label>
-    <select id="filtroEstado" onchange="filtrarTabela()">
-      <option value="todos">Todos</option>
-      <option value="concluido">Concluído</option>
-      <option value="em-progresso">Em progresso</option>
-    </select>
-    <table>
+
+    <div class="filtro-container">
+      <label for="filtroEstado">Filtrar por estado:</label>
+      <select id="filtroEstado">
+        <option value="todos">Todos</option>
+        <option value="concluido">Concluído</option>
+        <option value="em-progresso">Em progresso</option>
+        <option value="pendente">Em espera</option>
+      </select>
+    </div>
+
+    <table id="tabela-auditorias">
       <thead>
         <tr>
           <th>Número</th>
@@ -53,81 +58,83 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>01</td>
-          <td>Jun 24, 2025</td>
-          <td>Buraco na via pública</td>
-          <td>P. R. Santa Catarina</td>
-          <td>
-            <!-- Dropdown para selecionar o estado -->
-            <div class="estado-container">
-                <select class="estado-select">
-                  <option value="em-progresso">Em progresso</option>
-                  <option value="concluido" >Concluído</option>
-                  <option value="pendente">Em espera</option>
-                </select>
-            </div>        
-          </td>
-        </tr>
-        <tr>
-          <td>02</td>
-          <td>Mar 10, 2025</td>
-          <td>Poste Inclinado</td>
-          <td>Braga, R. de São Geraldo</td>
-          <td>
-            <!-- Dropdown para selecionar o estado -->
-            <div class="estado-container">
-              <select class="estado-select">
-                <option value="em-progresso">Em progresso</option>
-                <option value="concluido" >Concluído</option>
-                <option value="pendente">Em espera</option>
-              </select>
-            </div>
-          </td>
-        </tr>
-        <!-- Adicionar mais linhas conforme necessário -->
+        <!-- Linhas serão carregadas dinamicamente -->
       </tbody>
     </table>
   </div>
 
   <script>
-    // Função para abrir o dropdown de estados
-    document.querySelectorAll('.estado-btn.dropdown').forEach(button => {
-      button.addEventListener('click', function() {
-        const dropdown = this.nextElementSibling; // A div com as opções
-        dropdown.classList.toggle('show'); // Alterna a visibilidade das opções
+    // Atualiza a info do utilizador na sidebar
+    function atualizarUtilizador() {
+      const nome = localStorage.getItem("userName") || "Utilizador não logado";
+      const email = localStorage.getItem("userEmail") || "Sem e-mail";
+      document.getElementById("user-name").textContent = nome;
+      document.getElementById("user-email").textContent = email;
+    }
+
+    // Carregar auditorias do localStorage e mostrar na tabela
+    function carregarAuditorias() {
+      const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
+      const tbody = document.querySelector("#tabela-auditorias tbody");
+      tbody.innerHTML = "";
+
+      auditorias.forEach((auditoria, index) => {
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${new Date(auditoria.data).toLocaleDateString()}</td>
+          <td>${auditoria.problema}</td>
+          <td>${auditoria.morada}, ${auditoria.localidade}</td>
+          <td>
+            <select class="estado-select" data-index="${index}">
+              <option value="em-progresso" ${auditoria.estado === "em-progresso" ? "selected" : ""}>Em progresso</option>
+              <option value="concluido" ${auditoria.estado === "concluido" ? "selected" : ""}>Concluído</option>
+              <option value="pendente" ${auditoria.estado === "pendente" ? "selected" : ""}>Em espera</option>
+            </select>
+          </td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+
+      // Adicionar listener a cada select para atualizar estado
+      document.querySelectorAll(".estado-select").forEach(select => {
+        select.addEventListener("change", function() {
+          const idx = this.dataset.index;
+          const novoEstado = this.value;
+          let auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
+          auditorias[idx].estado = novoEstado;
+          localStorage.setItem("auditorias", JSON.stringify(auditorias));
+        });
+      });
+    }
+
+    // Filtrar tabela conforme estado selecionado
+    function filtrarTabela() {
+      const filtro = document.getElementById("filtroEstado").value;
+      const linhas = document.querySelectorAll("#tabela-auditorias tbody tr");
+      linhas.forEach(linha => {
+        const selectEstado = linha.querySelector(".estado-select");
+        const estado = selectEstado ? selectEstado.value : "";
+        if (filtro === "todos" || estado === filtro) {
+          linha.style.display = "";
+        } else {
+          linha.style.display = "none";
+        }
+      });
+    }
+
+    // Inicializar a página
+    document.addEventListener("DOMContentLoaded", () => {
+      atualizarUtilizador();
+      carregarAuditorias();
+      filtrarTabela();
+
+      document.getElementById("filtroEstado").addEventListener("change", () => {
+        filtrarTabela();
       });
     });
-
-    // Função para selecionar a opção do dropdown
-    document.querySelectorAll('.estado-opt').forEach(button => {
-      button.addEventListener('click', function() {
-        const dropdown = this.closest('.estado-container');
-        const dropdownButton = dropdown.querySelector('.dropdown');
-        
-        // Altera o texto do botão principal para a opção selecionada
-        dropdownButton.textContent = this.textContent;
-        
-        // Fecha o dropdown
-        dropdown.querySelector('.dropdown-options').classList.remove('show');
-      });
-    });
-      function filtrarTabela() {
-    const filtro = document.getElementById('filtroEstado').value;
-    const tabela = document.querySelector('table tbody');
-    const linhas = tabela.querySelectorAll('tr');
-
-    linhas.forEach(linha => {
-      const selectEstado = linha.querySelector('.estado-select');
-      const estado = selectEstado ? selectEstado.value : '';
-      if (filtro === 'todos' || estado === filtro) {
-        linha.style.display = '';
-      } else {
-        linha.style.display = 'none';
-      }
-    });
-  }
-    
   </script>
 </body>
 </html>

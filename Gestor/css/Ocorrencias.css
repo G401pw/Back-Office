@@ -12,7 +12,7 @@ body {
     height: 100vh;
 }
 
-/* Sidebar igual à base desejada */
+/* Sidebar */
 .sidebar {
     width: 250px;
     height: 100vh;
@@ -101,22 +101,20 @@ nav ul li a.active {
     margin-bottom: 5px;
 }
 
-
 /* Conteúdo principal */
 .content {
     margin-left: 250px;
     padding: 30px;
     width: calc(100% - 250px);
     background-color: #f5f6fa;
-    overflow: hidden;
 }
 
-/* Cabeçalho do conteúdo */
 header {
+    position: relative; /* Para filtro absoluto */
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #ffffff;
+    background-color: #f9f9f9;
     padding: 20px 30px;
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -127,165 +125,139 @@ header h1 {
     margin: 0;
     font-size: 22px;
     color: #333;
+    flex: 1;
 }
 
-header button {
-    background: none;
+/* Estilo filtro */
+header > label[for="filtroEstado"] {
+    margin-right: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    white-space: nowrap;
+    margin-left: auto; /* Ajusta para a esquerda do select */
+}
+
+header > select#filtroEstado {
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 5px;
     border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 6px 10px;
-    font-size: 18px;
+    background-color: #fff;
     cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    outline: none;
+    margin-left: 5px;
 }
 
-/* Tabelas */
-.table-container {
-    margin-top: 20px;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+/* Responsividade filtro */
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-bottom: 50px;
+    }
+    header > label[for="filtroEstado"],
+    header > select#filtroEstado {
+        margin-left: 0;
+        margin-top: 8px;
+        font-size: 16px;
+    }
 }
 
+/* Tabela */
 table {
     width: 100%;
     border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
 }
 
 thead {
-    background: #f0f0f0;
+    background-color: #0088FE;
+    color: white;
+    font-weight: 600;
 }
 
 thead th {
-    padding: 10px;
+    padding: 12px 15px;
     text-align: left;
 }
 
 tbody tr {
     border-bottom: 1px solid #ddd;
-}
-
-tbody tr td {
-    padding: 10px;
+    transition: background-color 0.2s;
 }
 
 tbody tr:hover {
-    background: #f9f9f9;
+    background-color: #f1faff;
 }
 
-tbody td:last-child {
-    text-align: center;
-    cursor: pointer;
-}
-
-/* Estilo para o botão de dropdown (selecionar opção) */
-.estado-container {
-    position: relative;
-    display: inline-block;
-    width: fit-content;
-    margin-left: -90px;
-    
-}
-
-.estado-btn {
-    padding: 12px 24px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    background-color: #fff;
-    width: 100%;
-    text-align: center;
-    color: #333;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-transform: capitalize;
-}
-
-/* Efeito ao passar o mouse */
-.estado-btn:hover {
-    background-color: #e2e8ff;
-    border-color: #3182ce;
-    transform: translateY(-2px); /* Leve elevação ao passar o mouse */
-}
-
-/* Botão "Selecionar opção" */
-.estado-btn.dropdown {
-    background-color: #f4f4f4;
-    border-color: #ccc;
-    color: #666;
-    margin-left: 0px;
-}
-
-.estado-btn.dropdown:hover {
-    background-color: #e2e8ff;
-    border-color: #3182ce;
-}
-
-/* Opções dentro do dropdown */
-.estado-container .dropdown-options {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    z-index: 1000;
-    width: 100%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 5px 0;
-}
-
-/* Exibir as opções de estado quando o dropdown for aberto */
-.estado-container .dropdown-options.show {
-    display: block;
-}
-
-/* Estilo para as opções dentro do dropdown */
-.estado-container .dropdown-options button {
-    padding: 12px 24px;
-    border: none;
-    width: 100%;
-    background-color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    color: #333;
-    border-radius: 8px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-/* Efeito ao passar o mouse nas opções do dropdown */
-.estado-container .dropdown-options button:hover {
-    background-color: #e2e8ff;
-    color: #3182ce;
-    transform: translateY(-2px);  /* Elevação ao passar o mouse */
-}
-
-.estado-select{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 0px;
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-    padding: 12px 24px;
-    border: 2px solid #ddd;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    transition: all 0.3s ease;
+tbody td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    font-size: 14px;
     color: #333;
 }
-.btn-concluir {
+
+/* Select dentro da tabela para estado */
+.estado-select {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
     cursor: pointer;
-    color: green;
-    font-weight: bold;
-    border: none;
-    background: none;
-    font-size: 18px;
-    margin-left: 8px;
-  }
+    background-color: #fff;
+    transition: border-color 0.3s;
+}
+
+.estado-select:hover {
+    border-color: #0088FE;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .content {
+        margin-left: 0;
+        padding: 20px;
+        width: 100%;
+    }
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    tbody tr {
+        margin-bottom: 15px;
+        border-bottom: 2px solid #0088FE;
+        padding: 15px;
+        border-radius: 10px;
+    }
+    tbody td {
+        padding-left: 50%;
+        position: relative;
+        text-align: left;
+        font-size: 13px;
+        border: none;
+        border-bottom: 1px solid #ddd;
+    }
+    tbody td::before {
+        position: absolute;
+        top: 12px;
+        left: 15px;
+        width: 45%;
+        white-space: nowrap;
+        font-weight: 600;
+        color: #0088FE;
+        content: attr(data-label);
+    }
+    .estado-select {
+        width: 100%;
+        margin-top: 8px;
+    }
+}
