@@ -101,21 +101,22 @@
     </form>
   </div>
 
+  <!-- Feedback message container -->
+  <div id="feedback-message" class="feedback-message"></div>
+
   <script>
-    // Função para atualizar as informações do utilizador
     function atualizarUtilizador() {
       const nome = localStorage.getItem("userName") || "Utilizador não logado";
       const email = localStorage.getItem("userEmail") || "Sem e-mail";
       document.getElementById("user-name").innerText = nome;
       document.getElementById("user-email").innerText = email;
     }
-  
-    // Função para carregar os dados da ocorrência e preencher no formulário
+
     function carregarDetalhesOcorrencia() {
       const ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
       const ocorrenciaID = localStorage.getItem("ocorrenciaID");
       const ocorrencia = ocorrencias.find(ocorrencia => ocorrencia.id == ocorrenciaID);
-  
+
       if (ocorrencia) {
         document.getElementById("tipo").value = ocorrencia.tipo;
         document.getElementById("morada").value = ocorrencia.morada;
@@ -123,84 +124,110 @@
         document.getElementById("codigo-postal").value = ocorrencia.codigoPostal || '';
         document.getElementById("data").value = ocorrencia.data;
         document.getElementById("hora-inicio").value = ocorrencia.hora;
-        document.getElementById("hora-fim").value = ocorrencia.hora; // Ou outra lógica para fim
+        document.getElementById("hora-fim").value = ocorrencia.hora;
       } else {
         alert("Ocorrência não encontrada.");
       }
     }
-  
-    // Função para carregar a lista de peritos (somente desocupados)
+
     function carregarPeritos() {
       const peritos = JSON.parse(localStorage.getItem("peritos")) || [];
       const peritosSelect = document.getElementById("qtd-peritos");
       const peritosContainer = document.getElementById("peritos-container");
-      peritosContainer.innerHTML = '';
-  
+      let selectedPeritos = [];
+
       peritosSelect.addEventListener("change", function() {
-        const qtdPeritos = peritosSelect.value;
+        const qtdPeritos = parseInt(peritosSelect.value, 10);
         peritosContainer.innerHTML = '';
-        const selectedPeritos = [];
-  
+        selectedPeritos = [];
+
         for (let i = 0; i < qtdPeritos; i++) {
           const peritoLabel = document.createElement("label");
           peritoLabel.textContent = `Perito ${i + 1}`;
           const peritoSelect = document.createElement("select");
           peritoSelect.name = `perito-${i + 1}`;
-  
-          peritos.forEach(perito => {
-            if (perito.estado === "desocupado" && !selectedPeritos.includes(perito.id)) {
+
+          peritos.forEach((perito, idx) => {
+            if (perito.estado === "desocupado" && !selectedPeritos.includes(idx.toString())) {
               const option = document.createElement("option");
-              option.value = perito.id;
+              option.value = idx;
               option.textContent = perito.nome;
               peritoSelect.appendChild(option);
             }
           });
-  
+
           peritoSelect.addEventListener("change", function() {
-            const selectedPeritoId = peritoSelect.value;
-            if (!selectedPeritos.includes(selectedPeritoId)) {
-              selectedPeritos.push(selectedPeritoId);
-            }
-            carregarPeritos();
+            const valorSelecionado = peritoSelect.value;
+
+            // Remove valor anterior
+            selectedPeritos = selectedPeritos.filter(id => id !== valorSelecionado);
+
+            // Adiciona o novo
+            selectedPeritos.push(valorSelecionado);
+
+            atualizarOpcoesSelecionadas(peritosContainer, selectedPeritos);
           });
-  
+
           const peritoDiv = document.createElement("div");
           peritoDiv.appendChild(peritoLabel);
           peritoDiv.appendChild(peritoSelect);
           peritosContainer.appendChild(peritoDiv);
         }
       });
+
+      function atualizarOpcoesSelecionadas(container, selecionados) {
+        const selects = container.querySelectorAll("select");
+        selects.forEach(select => {
+          const valorAtual = select.value;
+          Array.from(select.options).forEach(option => {
+            option.disabled = false;
+            if (selecionados.includes(option.value) && option.value !== valorAtual) {
+              option.disabled = true;
+            }
+          });
+        });
+      }
     }
-  
-    // Submissão do formulário de auditoria
+
+    function removerOcorrencia(id) {
+      let ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
+      ocorrencias = ocorrencias.filter(ocorrencia => ocorrencia.id != id);
+      localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias));
+    }
+
+    function showFeedbackMessage(message, type = 'success') {
+      const feedbackMessage = document.getElementById('feedback-message');
+      feedbackMessage.innerHTML = message;
+      feedbackMessage.className = 'feedback-message ' + type;
+      feedbackMessage.style.display = 'block';
+      setTimeout(() => {
+        feedbackMessage.style.display = 'none';
+      }, 2000);
+    }
+
     document.getElementById("form-auditoria").addEventListener("submit", function(e) {
       e.preventDefault();
-  
+
       const peritosSelecionados = [];
-      const selectedPeritosElements = document.querySelectorAll("#peritos-container select");
-  
-      selectedPeritosElements.forEach(select => {
-        const peritoId = select.value;
-        peritosSelecionados.push(peritoId);
+      document.querySelectorAll("#peritos-container select").forEach(select => {
+        peritosSelecionados.push(select.value);
       });
-  
-      // Marca os peritos selecionados como ocupados
+
       let peritos = JSON.parse(localStorage.getItem("peritos")) || [];
-      peritos = peritos.map(perito => {
-        if (peritosSelecionados.includes(perito.id)) {
+      peritos = peritos.map((perito, idx) => {
+        if (peritosSelecionados.includes(idx.toString())) {
           perito.estado = "ocupado";
         }
         return perito;
       });
       localStorage.setItem("peritos", JSON.stringify(peritos));
-  
-      // Obtem os dados do formulário para criar a ocorrência
+
       const nome = document.getElementById("nome").value;
       const tipo = document.getElementById("tipo").value;
       const origem = document.getElementById("origem").value;
-      const localizacao = document.getElementById("localidade").value;
-      const codigo_postal = document.getElementById("codigo-postal").value;
       const morada = document.getElementById("morada").value;
+      const localidade = document.getElementById("localidade").value;
+      const codigo_postal = document.getElementById("codigo-postal").value;
       const data = document.getElementById("data").value;
       const hora_inicio = document.getElementById("hora-inicio").value;
       const hora_fim = document.getElementById("hora-fim").value;
@@ -208,45 +235,45 @@
       const equipamento = document.getElementById("equipamento").value;
       const info_extra = document.getElementById("info-extra").value;
       const estado = "em-progresso";
-      const peritas = peritosSelecionados;
 
-  
-      // Cria a nova auditoria
       const novaAuditoria = {
         id: Date.now(),
-        nome: nome,
+        nome,
         problema: tipo,
-        origem: origem,
-        morada: morada,
-        codigo_postal: codigo_postal,
-        hora_inicio: hora_inicio,
-        hora_fim: hora_fim,
-        materiais: materiais,
-        equipamento: equipamento,
-        info_extra: info_extra,
+        origem,
+        morada,
+        localidade,
+        codigo_postal,
+        data,
+        hora_inicio,
+        hora_fim,
+        materiais,
+        equipamento,
+        info_extra,
         peritos: peritosSelecionados,
-        estado: estado,
-        localizacao: localizacao,
-        data: data,
-        peritas: peritas
+        estado
       };
-  
-      // Atualiza o array de ocorrências no localStorage
-      const auditoria = JSON.parse(localStorage.getItem("auditorias")) || [];
-      auditoria.push(novaAuditoria);
-      localStorage.setItem("auditorias", JSON.stringify(auditoria));
-  
-      alert("Plano de Auditoria confirmado com sucesso!");
-      window.location.href = "ocorrencias.html"; // Redireciona para Ocorrências
+
+      let auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
+      auditorias.push(novaAuditoria);
+      localStorage.setItem("auditorias", JSON.stringify(auditorias));
+
+      const ocorrenciaID = localStorage.getItem("ocorrenciaID");
+      removerOcorrencia(ocorrenciaID);
+
+      showFeedbackMessage("Plano de Auditoria confirmado com sucesso!", "success");
+
+      setTimeout(() => {
+        window.location.href = "ocorrencias.html";
+      }, 2000);
     });
-  
-    // Ao carregar a página
+
     document.addEventListener("DOMContentLoaded", function() {
       atualizarUtilizador();
       carregarDetalhesOcorrencia();
       carregarPeritos();
     });
   </script>
-  
+
 </body>
 </html>

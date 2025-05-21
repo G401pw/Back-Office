@@ -115,6 +115,14 @@
       }
     }
 
+    function removerOcorrencia(id) {
+      let ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
+      ocorrencias = ocorrencias.filter(ocorrencia => ocorrencia.id != id); // remove do array
+      localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias)); // atualiza o localStorage
+    }
+
+
+
     // Função para exibir a mensagem personalizada no topo
     function showFeedbackMessage(message, type = 'success') {
       const feedbackMessage = document.getElementById('feedback-message');
@@ -135,24 +143,24 @@
       }, 3000);
     }
 
-    // Exemplo de uso:
-    // Ao clicar no botão de Aceitar
+    // Evento botão Aceitar
     document.getElementById("aceitar-btn").addEventListener("click", function() {
-      showFeedbackMessage("Ocorrência Aceite!", "success");
+      const ocorrenciaID = localStorage.getItem("ocorrenciaID");
+      showFeedbackMessage("Ocorrência aceite e enviada para auditoria!", "success");
       setTimeout(function() {
-        // Redireciona para a página de adicionar plano de auditoria
-        window.location.href = "/Back-Office/Gestor/html/PlanoAuditoria.html"; 
-      }, 2000); // O redirecionamento ocorre após 2 segundos
+        window.location.href = "/Back-Office/Gestor/html/PlanoAuditoria.html";
+      }, 2000);
     });
 
-    // Ao clicar no botão de Rejeitar
+
+
     document.getElementById("rejeitar-btn").addEventListener("click", function() {
       const ocorrenciaID = localStorage.getItem("ocorrenciaID");
-      removerOcorrencia(Number(ocorrenciaID)); // Remove a ocorrência do localStorage
+      removerOcorrencia(ocorrenciaID);
       showFeedbackMessage("Ocorrência Rejeitada!", "error");
       setTimeout(function() {
-        window.location.href = "NovasOcorrencias.html"; // Redireciona para a página de novas ocorrências
-      }, 2000); // O redirecionamento ocorre após 2 segundos  
+        window.location.href = "NovasOcorrencias.html";
+      }, 2000);
     });
 
     // Exibir o campo de detalhes adicionais ao clicar no botão "Enviar para mais informação"
