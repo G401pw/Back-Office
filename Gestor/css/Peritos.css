@@ -197,18 +197,97 @@ tbody td:last-child {
   
   .feedback-message button {
     background: white;
-    color: #ff9800;
+    color: #000000;
     border: none;
     padding: 5px 12px;
     border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
   }
-  
+
   .feedback-message.success {
     background-color: #4caf50; /* Verde */
   }
   
+.feedback-message.warning {
+    background-color: #ff9800; /* amarelo */
+  }
+  
+  .feedback-message.error {
+    background-color: #f44336; /* vermelho */
+  }
+  
   .feedback-message button:hover {
     background: #e6e6e6;
+  }
+  .modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+}
+
+.modal-content form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.modal-content form input {
+  width: 100%;
+  padding: 6px;
+  margin-top: 4px;
+  box-sizing: border-box;
+}
+
+.modal-content form button {
+  margin-top: 10px;
+  margin-right: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+  }
+  
+  .modal-content form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .modal-content form input {
+    width: 100%;
+    padding: 6px;
+    margin-top: 4px;
+    box-sizing: border-box;
+  }
+  
+  .modal-content form button {
+    margin-top: 10px;
+    margin-right: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
   }
