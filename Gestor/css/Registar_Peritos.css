@@ -221,3 +221,36 @@ header button {
 .feedback-message.success {
   background-color: #4CAF50; /* Verde para sucesso (exemplo: Ocorrência Aceita) */
 }
+
+.telefone-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.prefixo-telefone {
+  position: absolute;
+  top: 45%;
+  left: 10px;
+  transform: translateY(-50%);
+  font-size: 14px;
+  pointer-events: none; /* para o clique passar para o input */
+  color: #555;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.telefone-container input[type="tel"] {
+  padding-left: 80px; /* espaço para o prefixo */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.flag-icon {
+  width: 20px;
+  height: auto;
+  vertical-align: middle;
+  margin-right: 5px;
+}

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="/Back-Office/Gestor/css/Registar_Peritos.css" />
   <link rel="icon" href="/Back-Office/Gestor/Imagens/logo.png" type="image/x-icon" />
 </head>
+
 <body>
   <div class="sidebar">
     <div class="logo">
@@ -17,7 +19,8 @@
         <li><a data-page="Ocorrencias.html" href="Ocorrencias.html">📋 Ocorrências</a></li>
         <li><a data-page="NovasOcorrencias.html" href="NovasOcorrencias.html">➕ Novas Ocorrências</a></li>
         <li><a data-page="Peritos.html" href="Peritos.html">👥 Peritos</a></li>
-        <li><a class="active" data-page="Registar_Peritos.html" href="Registar_Peritos.html">📝 Registar Peritos</a></li>
+        <li><a class="active" data-page="Registar_Peritos.html" href="Registar_Peritos.html">📝 Registar Peritos</a>
+        </li>
         <li><a data-page="Geral.html" href="Geral.html">🔍 Estatísticas</a></li>
       </ul>
     </nav>
@@ -41,13 +44,24 @@
       <input type="text" id="nome" placeholder="Nome Completo" required />
       <input type="text" id="morada" placeholder="Morada" required />
       <div class="data-nascimento">
-        <select id="dia"><option value="">Dia</option></select>
-        <select id="mes"><option value="">Mês</option></select>
-        <select id="ano"><option value="">Ano</option></select>
+        <select id="dia">
+          <option value="">Dia</option>
+        </select>
+        <select id="mes">
+          <option value="">Mês</option>
+        </select>
+        <select id="ano">
+          <option value="">Ano</option>
+        </select>
       </div>
       <input type="text" id="especialidade" placeholder="Área/Especialidade" required />
       <input type="email" id="email" placeholder="E-mail" required />
-      <input type="tel" id="telefone" placeholder="Telemóvel" required />
+      <div class="telefone-container">
+        <span class="prefixo-telefone">
+          <img src="/Back-Office/Gestor/Imagens/portugal-flag.png" alt="Portugal" class="flag-icon" /> +351
+        </span>
+        <input type="tel" id="telefone" placeholder="Telemóvel" required maxlength="9" />
+      </div>
       <button type="submit">Confirmar</button>
     </form>
   </div>
@@ -87,14 +101,19 @@
         anos.innerHTML += `<option value="${i}">${i}</option>`;
       }
 
-      document.getElementById("formPerito").addEventListener("submit", function(e) {
+      function capitalizeFirstLetter(str) {
+        if (!str) return "";
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+      }
+
+      document.getElementById("formPerito").addEventListener("submit", function (e) {
         e.preventDefault();
 
         const perito = {
           nome: document.getElementById("nome").value,
           morada: document.getElementById("morada").value,
           dataNascimento: `${document.getElementById("dia").value}/${document.getElementById("mes").value}/${document.getElementById("ano").value}`,
-          especialidade: document.getElementById("especialidade").value,
+          especialidade: capitalizeFirstLetter(document.getElementById("especialidade").value),
           email: document.getElementById("email").value,
           telefone: document.getElementById("telefone").value,
           estado: "desocupado"
@@ -117,4 +136,5 @@
     });
   </script>
 </body>
+
 </html>
