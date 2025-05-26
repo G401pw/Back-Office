@@ -235,18 +235,43 @@
     // Inicializa com gravidade 1 selecionada
     atualizarVisualGravidade(1);
 
-    // Arrays de materiais e equipamentos disponíveis (com preços)
-    const materiaisDisponiveis = [
-      { id: 'cimento', nome: 'Cimento', preco: 5.0 },
-      { id: 'areia', nome: 'Areia', preco: 3.0 },
-      { id: 'tinta', nome: 'Tinta', preco: 8.0 }
-    ];
+// Materiais disponíveis (português de Portugal)
+const materiaisDisponiveis = [
+  { id: 'cimento', nome: 'Cimento', preco: 5.00 },
+  { id: 'areia', nome: 'Areia', preco: 3.00 },
+  { id: 'tinta', nome: 'Tinta', preco: 8.00 },
+  { id: 'brita', nome: 'Brita', preco: 4.50 },
+  { id: 'tubos_pvc', nome: 'Tubos PVC', preco: 2.50 },
+  { id: 'cimento_rapido', nome: 'Cimento Rápido', preco: 6.00 },
+  { id: 'ferro', nome: 'Ferro', preco: 10.00 },
+  { id: 'areia_fina', nome: 'Areia Fina', preco: 3.50 },
+  { id: 'cimento_branco', nome: 'Cimento Branco', preco: 7.00 },
+  { id: 'cimento_colante', nome: 'Cimento Colante', preco: 9.00 },
+  { id: 'pavimento_asfaltico', nome: 'Pavimento Asfáltico', preco: 15.00 },
+  { id: 'cimento_alvenaria', nome: 'Cimento para Alvenaria', preco: 5.50 },
+  { id: 'argamassa', nome: 'Argamassa', preco: 4.00 },
+  { id: 'tijolos', nome: 'Tijolos', preco: 0.50 },
+  { id: 'revestimento', nome: 'Revestimento', preco: 12.00 }
+];
 
-    const equipamentosDisponiveis = [
-      { id: 'capacete', nome: 'Capacete', preco: 15.0 },
-      { id: 'luvas', nome: 'Luvas', preco: 4.5 },
-      { id: 'colete', nome: 'Colete', preco: 20.0 }
-    ];
+// Equipamentos disponíveis (português de Portugal)
+const equipamentosDisponiveis = [
+  { id: 'capacete', nome: 'Capacete', preco: 15.00 },
+  { id: 'luvas', nome: 'Luvas', preco: 4.50 },
+  { id: 'colete', nome: 'Colete Refletor', preco: 20.00 },
+  { id: 'andaime', nome: 'Andaime', preco: 50.00 },
+  { id: 'maquina_asfalto', nome: 'Máquina de Asfalto', preco: 200.00 },
+  { id: 'betoneira', nome: 'Betoneira', preco: 75.00 },
+  { id: 'serra_circular', nome: 'Serra Circular', preco: 60.00 },
+  { id: 'serra_metal', nome: 'Serra para Metal', preco: 55.00 },
+  { id: 'martelo', nome: 'Martelo', preco: 10.00 },
+  { id: 'nivel', nome: 'Nível de Bolha', preco: 18.00 },
+  { id: 'pa', nome: 'Pá', preco: 12.00 },
+  { id: 'rolo_compactador', nome: 'Rolo Compactador', preco: 300.00 },
+  { id: 'escavadora', nome: 'Escavadora', preco: 500.00 },
+  { id: 'cilindro', nome: 'Cilindro Compactador', preco: 350.00 },
+  { id: 'extintor', nome: 'Extintor', preco: 30.00 }
+];
 
     // Referências DOM
     const materiaisLista = document.getElementById('materiais-lista');
