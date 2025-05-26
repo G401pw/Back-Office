@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Plano de Auditoria</title>
   <link rel="stylesheet" href="/Back-Office/Gestor/css/PlanoAuditoria.css">
+  <link rel="icon" href="/Back-Office/Gestor/Imagens/logo.png" type="image/x-icon" />
 </head>
+
 <body>
   <div class="sidebar">
     <div class="logo">
@@ -70,8 +72,9 @@
         <label for="hora-inicio">Início</label>
         <input type="time" id="hora-inicio" name="hora-inicio" required>
 
-        <label for="hora-fim">Fim</label>
-        <input type="time" id="hora-fim" name="hora-fim" required>
+        <label for="tempo-previsto">Tempo Previsto (horas)</label>
+        <input type="number" id="tempo-previsto" name="tempo-previsto" min="1" step="1" placeholder="Ex: 100" required>
+
       </section>
 
       <section class="equipe-materiais">
@@ -87,11 +90,17 @@
         <!-- Div para os campos de peritos -->
         <div id="peritos-container"></div>
 
-        <label for="materiais">Materiais</label>
-        <textarea id="materiais" name="materiais" required></textarea>
+        <!-- NOVO: Lista dinâmica de Materiais -->
+        <label>Materiais</label>
+        <div id="materiais-lista"></div>
+        <button type="button" id="add-material">+ Adicionar Material</button>
+        <p>Total Materiais: <span id="total-materiais">0.00</span> €</p>
 
-        <label for="equipamento">Equipamento</label>
-        <textarea id="equipamento" name="equipamento" required></textarea>
+        <!-- NOVO: Lista dinâmica de Equipamentos -->
+        <label>Equipamentos</label>
+        <div id="equipamentos-lista"></div>
+        <button type="button" id="add-equipamento">+ Adicionar Equipamento</button>
+        <p>Total Equipamentos: <span id="total-equipamentos">0.00</span> €</p>
 
         <label for="info-extra">Informações extras</label>
         <textarea id="info-extra" name="info-extra"></textarea>
@@ -226,27 +235,202 @@
     // Inicializa com gravidade 1 selecionada
     atualizarVisualGravidade(1);
 
+    // Arrays de materiais e equipamentos disponíveis (com preços)
+    const materiaisDisponiveis = [
+      { id: 'cimento', nome: 'Cimento', preco: 5.0 },
+      { id: 'areia', nome: 'Areia', preco: 3.0 },
+      { id: 'tinta', nome: 'Tinta', preco: 8.0 }
+    ];
+
+    const equipamentosDisponiveis = [
+      { id: 'capacete', nome: 'Capacete', preco: 15.0 },
+      { id: 'luvas', nome: 'Luvas', preco: 4.5 },
+      { id: 'colete', nome: 'Colete', preco: 20.0 }
+    ];
+
+    // Referências DOM
+    const materiaisLista = document.getElementById('materiais-lista');
+    const addMaterialBtn = document.getElementById('add-material');
+    const totalMateriaisSpan = document.getElementById('total-materiais');
+
+    const equipamentosLista = document.getElementById('equipamentos-lista');
+    const addEquipamentoBtn = document.getElementById('add-equipamento');
+    const totalEquipamentosSpan = document.getElementById('total-equipamentos');
+
+    // Guardar estado
+    let materiaisSelecionados = [];
+    let equipamentosSelecionados = [];
+
+    // Função para criar item na lista (material ou equipamento)
+    function criarItem(listaDisponivel, container, arraySelecionado) {
+      // Cria um div com select e input quantidade
+      const itemDiv = document.createElement('div');
+      itemDiv.classList.add('item-lista');
+
+      // Select para escolher o item
+      const select = document.createElement('select');
+      listaDisponivel.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = `${item.nome} (€${item.preco.toFixed(2)})`;
+        select.appendChild(option);
+      });
+
+      // Input quantidade
+      const inputQtd = document.createElement('input');
+      inputQtd.type = 'number';
+      inputQtd.min = '1';
+      inputQtd.value = '1';
+
+      // Botão remover
+      const btnRemover = document.createElement('button');
+      btnRemover.type = 'button';
+      btnRemover.textContent = 'Remover';
+
+      btnRemover.addEventListener('click', () => {
+        container.removeChild(itemDiv);
+        // Atualiza array
+        const index = arraySelecionado.indexOf(itemDiv);
+        if (index > -1) arraySelecionado.splice(index, 1);
+        atualizarTotais();
+        guardarLocalStorage();
+      });
+
+      // Atualiza quantidade e item selecionado ao mudar
+      function atualizarItem() {
+        // Atualiza o objeto no array selecionado
+        const itemInfo = listaDisponivel.find(i => i.id === select.value);
+        const qtd = parseInt(inputQtd.value) || 0;
+        itemDiv.dataset.id = select.value;
+        itemDiv.dataset.qtd = qtd;
+        itemDiv.dataset.preco = itemInfo.preco;
+
+        atualizarTotais();
+        guardarLocalStorage();
+      }
+
+      select.addEventListener('change', atualizarItem);
+      inputQtd.addEventListener('input', atualizarItem);
+
+      itemDiv.appendChild(select);
+      itemDiv.appendChild(inputQtd);
+      itemDiv.appendChild(btnRemover);
+
+      container.appendChild(itemDiv);
+
+      // Guardar referência no array para controlo
+      arraySelecionado.push(itemDiv);
+
+      // Inicializa valores
+      atualizarItem();
+    }
+
+    // Função para calcular e mostrar totais
+    function atualizarTotais() {
+      let totalMateriais = 0;
+      materiaisSelecionados.forEach(div => {
+        const qtd = parseInt(div.dataset.qtd) || 0;
+        const preco = parseFloat(div.dataset.preco) || 0;
+        totalMateriais += qtd * preco;
+      });
+      totalMateriaisSpan.textContent = totalMateriais.toFixed(2);
+
+      let totalEquipamentos = 0;
+      equipamentosSelecionados.forEach(div => {
+        const qtd = parseInt(div.dataset.qtd) || 0;
+        const preco = parseFloat(div.dataset.preco) || 0;
+        totalEquipamentos += qtd * preco;
+      });
+      totalEquipamentosSpan.textContent = totalEquipamentos.toFixed(2);
+    }
+
+    // Guardar os dados em localStorage
+    function guardarLocalStorage() {
+      // Transformar os divs em objetos simples para guardar
+      const materiaisParaGuardar = materiaisSelecionados.map(div => ({
+        id: div.dataset.id,
+        quantidade: parseInt(div.dataset.qtd),
+        precoUnitario: parseFloat(div.dataset.preco)
+      }));
+
+      const equipamentosParaGuardar = equipamentosSelecionados.map(div => ({
+        id: div.dataset.id,
+        quantidade: parseInt(div.dataset.qtd),
+        precoUnitario: parseFloat(div.dataset.preco)
+      }));
+
+      localStorage.setItem('materiaisSelecionados', JSON.stringify(materiaisParaGuardar));
+      localStorage.setItem('equipamentosSelecionados', JSON.stringify(equipamentosParaGuardar));
+    }
+
+    // Carregar do localStorage ao abrir página (se existir)
+    function carregarLocalStorage() {
+      const matSalvos = JSON.parse(localStorage.getItem('materiaisSelecionados')) || [];
+      matSalvos.forEach(item => {
+        criarItem(materiaisDisponiveis, materiaisLista, materiaisSelecionados);
+        // Seleciona o valor correto e quantidade
+        const ultimo = materiaisSelecionados[materiaisSelecionados.length -1];
+        ultimo.querySelector('select').value = item.id;
+        ultimo.querySelector('input').value = item.quantidade;
+        ultimo.dataset.id = item.id;
+        ultimo.dataset.qtd = item.quantidade;
+        ultimo.dataset.preco = item.precoUnitario;
+      });
+
+      const eqpSalvos = JSON.parse(localStorage.getItem('equipamentosSelecionados')) || [];
+      eqpSalvos.forEach(item => {
+        criarItem(equipamentosDisponiveis, equipamentosLista, equipamentosSelecionados);
+        const ultimo = equipamentosSelecionados[equipamentosSelecionados.length -1];
+        ultimo.querySelector('select').value = item.id;
+        ultimo.querySelector('input').value = item.quantidade;
+        ultimo.dataset.id = item.id;
+        ultimo.dataset.qtd = item.quantidade;
+        ultimo.dataset.preco = item.precoUnitario;
+      });
+
+      atualizarTotais();
+    }
+
+    // Eventos para adicionar novos itens
+    addMaterialBtn.addEventListener('click', () => {
+      criarItem(materiaisDisponiveis, materiaisLista, materiaisSelecionados);
+    });
+
+    addEquipamentoBtn.addEventListener('click', () => {
+      criarItem(equipamentosDisponiveis, equipamentosLista, equipamentosSelecionados);
+    });
+
     // Submissão do formulário de auditoria
     document.getElementById("form-auditoria").addEventListener("submit", function(e) {
-      e.preventDefault();
+    e.preventDefault();
 
-      const peritosSelecionados = [];
-      const selectedPeritosElements = document.querySelectorAll("#peritos-container select");
+    const peritosSelecionados = [];
+    const selectedPeritosElements = document.querySelectorAll("#peritos-container select");
 
-      selectedPeritosElements.forEach(select => {
-        const peritoId = select.value;
-        peritosSelecionados.push(peritoId);
-      });
+    selectedPeritosElements.forEach(select => {
+      const peritoId = select.value;
+      peritosSelecionados.push(peritoId);
+    });
 
-      // Marca os peritos selecionados como ocupados
-      let peritos = JSON.parse(localStorage.getItem("peritos")) || [];
-      peritos = peritos.map((perito, idx) => {
-        if (peritosSelecionados.includes(idx.toString())) {
-          perito.estado = "ocupado";
-        }
-        return perito;
-      });
-      localStorage.setItem("peritos", JSON.stringify(peritos));
+    // Validação: obrigar pelo menos 1 perito
+    if (peritosSelecionados.length === 0) {
+      const feedbackMessage = document.getElementById('feedback-message');
+      feedbackMessage.innerHTML = "Por favor, selecione pelo menos um perito.";
+      feedbackMessage.className = "feedback-message error"; // classe para erro (vermelho)
+      feedbackMessage.style.display = "block";
+      return; // impede submissão
+    }
+
+    // Continua com o resto do teu código normal...
+    // Marca os peritos selecionados como ocupados
+    let peritos = JSON.parse(localStorage.getItem("peritos")) || [];
+    peritos = peritos.map((perito, idx) => {
+      if (peritosSelecionados.includes(idx.toString())) {
+        perito.estado = "ocupado";
+      }
+      return perito;
+    });
+    localStorage.setItem("peritos", JSON.stringify(peritos));
 
       // Obtem os dados do formulário para criar a ocorrência
       const nome = document.getElementById("nome").value;
@@ -257,12 +441,23 @@
       const morada = document.getElementById("morada").value;
       const data = document.getElementById("data").value;
       const hora_inicio = document.getElementById("hora-inicio").value;
-      const hora_fim = document.getElementById("hora-fim").value;
-      const materiais = document.getElementById("materiais").value;
-      const equipamento = document.getElementById("equipamento").value;
+      const tempo_previsto = document.getElementById("tempo_previsto").value;
       const info_extra = document.getElementById("info-extra").value;
       const estado = "em-progresso";
       const gravidade = inputGravidade.value;
+
+      // Dados dos materiais e equipamentos detalhados
+      const materiaisFinal = materiaisSelecionados.map(div => ({
+        id: div.dataset.id,
+        quantidade: parseInt(div.dataset.qtd),
+        precoUnitario: parseFloat(div.dataset.preco)
+      }));
+
+      const equipamentosFinal = equipamentosSelecionados.map(div => ({
+        id: div.dataset.id,
+        quantidade: parseInt(div.dataset.qtd),
+        precoUnitario: parseFloat(div.dataset.preco)
+      }));
 
       // Cria a nova auditoria
       const novaAuditoria = {
@@ -273,15 +468,17 @@
         morada: morada,
         codigo_postal: codigo_postal,
         hora_inicio: hora_inicio,
-        hora_fim: hora_fim,
-        materiais: materiais,
-        equipamento: equipamento,
+        tempo_previsto: tempo_previsto,
         info_extra: info_extra,
         peritos: peritosSelecionados,
         estado: estado,
         localizacao: localizacao,
         data: data,
-        gravidade: gravidade
+        gravidade: gravidade,
+        materiaisDetalhados: materiaisFinal,
+        equipamentosDetalhados: equipamentosFinal,
+        totalMateriais: materiaisFinal.reduce((acc, cur) => acc + cur.quantidade * cur.precoUnitario, 0),
+        totalEquipamentos: equipamentosFinal.reduce((acc, cur) => acc + cur.quantidade * cur.precoUnitario, 0)
       };
 
       // Atualiza o array de ocorrências no localStorage
@@ -311,6 +508,7 @@
       atualizarUtilizador();
       carregarDetalhesOcorrencia();
       carregarPeritos();
+      carregarLocalStorage();
     });
   </script>
 
