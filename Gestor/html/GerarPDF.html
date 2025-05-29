@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gerar PDF</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <script>
+    window.onload = function () {
+      function getQueryParam(param) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(param);
+      }
+
+      const id = getQueryParam("id");
+      if (!id) {
+        alert("ID da ocorrência não fornecido.");
+        return;
+      }
+
+      const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
+      const ocorrencia = auditorias.find(a => String(a.id) === id);
+      if (!ocorrencia) {
+        alert("Ocorrência não encontrada.");
+        return;
+      }
+
+      function gerarPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        let y = 10;
+
+        doc.text("Relatório de Auditoria", 10, y); y += 10;
+        doc.text(`ID: ${ocorrencia.id}`, 10, y); y += 10;
+        doc.text(`Nome: ${ocorrencia.nome}`, 10, y); y += 10;
+        doc.text(`Problema: ${ocorrencia.problema || "Não informado"}`, 10, y); y += 10;
+        doc.text(`Origem: ${ocorrencia.origem}`, 10, y); y += 10;
+        doc.text(`Morada: ${ocorrencia.morada}`, 10, y); y += 10;
+        doc.text(`Código-Postal: ${ocorrencia.codigo_postal || "Não informado"}`, 10, y); y += 10;
+        doc.text(`Gravidade: ${ocorrencia.gravidade}`, 10, y); y += 10;
+        doc.text(`Data: ${ocorrencia.data}`, 10, y); y += 10;
+        doc.text(`Hora Início: ${ocorrencia.hora_inicio || "Não informado"}`, 10, y); y += 10;
+        doc.text(`Tempo Previsto: ${ocorrencia.tempo_previsto || "Não informado"}`, 10, y); y += 10;
+        doc.text(`Estado: ${ocorrencia.estado}`, 10, y); y += 10;
+        doc.text(`Peritos: ${ocorrencia.peritos && ocorrencia.peritos.length > 0 ? ocorrencia.peritos.join(", ") : "Nenhum perito designado"}`, 10, y); y += 10;
+
+        doc.text("Materiais:", 10, y); y += 10;
+        if (ocorrencia.materiaisDetalhados && ocorrencia.materiaisDetalhados.length > 0) {
+          ocorrencia.materiaisDetalhados.forEach(m => {
+            doc.text(`- ${m.id} (Quantidade: ${m.quantidade})`, 15, y);
+            y += 10;
+          });
+        } else {
+          doc.text("Nenhum material.", 15, y);
+          y += 10;
+        }
+
+        doc.text("Equipamentos:", 10, y); y += 10;
+        if (ocorrencia.equipamentosDetalhados && ocorrencia.equipamentosDetalhados.length > 0) {
+          ocorrencia.equipamentosDetalhados.forEach(e => {
+            doc.text(`- ${e.id} (Quantidade: ${e.quantidade})`, 15, y);
+            y += 10;
+          });
+        } else {
+          doc.text("Nenhum equipamento.", 15, y);
+          y += 10;
+        }
+
+        // Mostrar custo total
+        const totalMateriais = ocorrencia.totalMateriais || 0;
+        const totalEquipamentos = ocorrencia.totalEquipamentos || 0;
+        const totalGeral = totalMateriais + totalEquipamentos;
+
+        y += 10;
+        doc.text(`Custo total dos Materiais: €${totalMateriais.toFixed(2)}`, 10, y);
+        y += 10;
+        doc.text(`Custo total dos Equipamentos: €${totalEquipamentos.toFixed(2)}`, 10, y);
+        y += 10;
+        doc.text(`Custo total Geral: €${totalGeral.toFixed(2)}`, 10, y);
+
+        // Faz o download automático do PDF
+        doc.save(`relatorio_${ocorrencia.id}.pdf`);
+      }
+
+      // Pergunta ao usuário se deseja baixar
+      if (confirm("Deseja fazer o download do relatório em PDF?")) {
+        gerarPDF();
+      } else {
+        // Se não quiser, não faz nada, permanece na página
+        console.log("Download cancelado pelo usuário.");
+      }
+    }
+  </script>
+</body>
+</html>
