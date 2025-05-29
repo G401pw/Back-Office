@@ -14,11 +14,11 @@
     </div>
     <nav>
       <ul>
-        <li><a data-page="Ocorrencias.html" href="Ocorrencias.html" class="active">📋 Ocorrências</a></li>
-        <li><a data-page="NovasOcorrencias.html" href="NovasOcorrencias.html">➕ Novas Ocorrências</a></li>
-        <li><a data-page="Peritos.html" href="Peritos.html">👥 Peritos</a></li>
-        <li><a data-page="Registar_Peritos.html" href="Registar_Peritos.html">📝 Registar Peritos</a></li>
-        <li><a data-page="Geral.html" href="Geral.html">🔍 Estatísticas</a></li>
+        <li><a href="Ocorrencias.html" class="active">📋 Ocorrências</a></li>
+        <li><a href="NovasOcorrencias.html">➕ Novas Ocorrências</a></li>
+        <li><a href="Peritos.html">👥 Peritos</a></li>
+        <li><a href="Registar_Peritos.html">📝 Registar Peritos</a></li>
+        <li><a href="Geral.html">🔍 Estatísticas</a></li>
       </ul>
     </nav>
     <div class="add-auditoria">
@@ -62,14 +62,31 @@
             <th>Estado</th>
           </tr>
         </thead>
-        <tbody id="tabela-ocorrencias">
-          <!-- Linhas de ocorrências vão ser carregadas aqui via JS -->
-        </tbody>
+        <tbody id="tabela-ocorrencias"></tbody>
       </table>
     </main>
   </div>
 
+  <div id="modal-tempo" class="modal">
+    <div class="modal-content">
+      <h3>Realizado no tempo esperado?</h3>
+      <p>Tempo esperado: <span id="tempo-esperado"></span></p>
+      <div id="tempo-editavel" style="display:none;">
+        <label for="tempo-real">Introduza o tempo real:</label>
+        <input type="text" id="tempo-real" placeholder="Ex: 100 (horas)" />
+        <button id="confirmar-tempo">Confirmar</button>
+      </div>
+      <div id="botoes-decidir">
+        <button id="resposta-sim">Sim</button>
+        <button id="resposta-nao">Não</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    let auditoriasGlobais = [];
+    let auditoriaAtualIndex = null;
+
     function atualizarUtilizador() {
       const nome = localStorage.getItem("userName") || "Utilizador não logado";
       const email = localStorage.getItem("userEmail") || "Sem e-mail";
@@ -77,92 +94,84 @@
       document.getElementById("user-email").innerText = email;
     }
 
- function carregarOcorrencias(filtro = "todos", ordenarPor = "data") {
-  const tbody = document.getElementById("tabela-ocorrencias");
-  tbody.innerHTML = ""; // Limpa as linhas atuais
-  const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
+    function carregarOcorrencias(filtro = "todos", ordenarPor = "data") {
+      const tbody = document.getElementById("tabela-ocorrencias");
+      tbody.innerHTML = "";
+      const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
+      auditoriasGlobais = auditorias;
 
-  // Filtrar
-  let filtradas = auditorias.filter(auditoria => {
-    if (filtro === "todos") return true;
-    return auditoria.estado === filtro;
-  });
+      let filtradas = auditorias.filter(a => filtro === "todos" || a.estado === filtro);
 
-  // Ordenar
-  if (ordenarPor === "data") {
-    filtradas.sort((a, b) => new Date(a.data) - new Date(b.data));
-  } else if (ordenarPor === "gravidade") {
-    filtradas.sort((a, b) => {
-      const gravA = Number(a.gravidade) || 0;
-      const gravB = Number(b.gravidade) || 0;
-      return gravB - gravA;
-    });
-  }
+      if (ordenarPor === "data") {
+        filtradas.sort((a, b) => new Date(a.data) - new Date(b.data));
+      } else if (ordenarPor === "gravidade") {
+        filtradas.sort((a, b) => (Number(b.gravidade) || 0) - (Number(a.gravidade) || 0));
+      }
 
-  filtradas.forEach((auditoria, index) => {
-    let estado = auditoria.estado || "em-progresso";
-    const gravidade = auditoria.gravidade || "N/A";
+      filtradas.forEach((a, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${a.gravidade || "N/A"}</td>
+          <td>${a.problema || ""}</td>
+          <td>${a.localizacao || ""}</td>
+          <td class="estado-coluna" data-index="${index}">
+            <span class="estado-texto">${a.estado === 'concluido' ? 'Concluído' : 'Em progresso'}</span>
+            ${a.estado === 'concluido' 
+              ? `<button class="btn-estado" disabled title="Já concluído">✔</button>`
+              : `<button class="btn-estado" title="Marcar como concluído">Concluir</button>`}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
 
-    const horaConclusao = auditoria.horaConclusao ? ` às ${auditoria.horaConclusao}` : '';
-
-    const tr = document.createElement("tr");
-
-    tr.innerHTML = `
-      <td>${index + 1}</td>
-      <td>${gravidade}</td>
-      <td>${auditoria.problema || ""}</td>
-      <td>${auditoria.localizacao || ""}</td>
-      <td class="estado-coluna" data-index="${index}">
-        <span class="estado-texto">${estado === 'concluido' ? 'Concluído' + horaConclusao : 'Em progresso'}</span>
-        ${estado === 'concluido' 
-          ? `<button class="btn-estado" disabled title="Já concluído">✔</button>`
-          : `<button class="btn-estado" title="Marcar como concluído">Concluir</button>`
-        }
-      </td>
-    `;
-
-    tbody.appendChild(tr);
-  });
-
- // Adicionar event listener aos botões "Concluir"
-  document.querySelectorAll(".btn-estado").forEach(button => {
-    if (!button.disabled) {
-      button.addEventListener("click", function() {
-        const tdEstado = this.closest(".estado-coluna");
-        const idx = tdEstado.getAttribute("data-index");
-        const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
-
-        if (auditorias[idx].estado !== "concluido") {
-          auditorias[idx].estado = "concluido";
-
-          const agora = new Date();
-          const horas = agora.getHours().toString().padStart(2, '0');
-          const minutos = agora.getMinutes().toString().padStart(2, '0');
-          auditorias[idx].horaConclusao = `${horas}h:${minutos}m`;
-
-          localStorage.setItem("auditorias", JSON.stringify(auditorias));
-
-          // Recarrega a tabela para atualizar a visualização
-          carregarOcorrencias(
-            document.getElementById("filtroEstado").value,
-            document.getElementById("ordenarPor").value
-          );
+      document.querySelectorAll(".btn-estado").forEach(button => {
+        if (!button.disabled) {
+          button.addEventListener("click", function () {
+            const td = this.closest(".estado-coluna");
+            const idx = td.getAttribute("data-index");
+            auditoriaAtualIndex = idx;
+            const auditoria = auditoriasGlobais[idx];
+            document.getElementById("tempo-esperado").innerText = auditoria.tempo_previsto || "Não definido";
+            document.getElementById("modal-tempo").style.display = "flex";
+            document.getElementById("tempo-editavel").style.display = "none";
+            document.getElementById("botoes-decidir").style.display = "block";
+          });
         }
       });
     }
-  });
-}
-
-
 
     document.getElementById("filtroEstado").addEventListener("change", function() {
-      const ordenarPor = document.getElementById("ordenarPor").value;
-      carregarOcorrencias(this.value, ordenarPor);
+      carregarOcorrencias(this.value, document.getElementById("ordenarPor").value);
     });
 
     document.getElementById("ordenarPor").addEventListener("change", function() {
-      const filtroEstado = document.getElementById("filtroEstado").value;
-      carregarOcorrencias(filtroEstado, this.value);
+      carregarOcorrencias(document.getElementById("filtroEstado").value, this.value);
+    });
+
+    document.getElementById("resposta-sim").addEventListener("click", function() {
+      const auditoria = auditoriasGlobais[auditoriaAtualIndex];
+      auditoria.estado = "concluido";
+      auditoria.horaConclusao = new Date().toLocaleTimeString('pt-PT', {hour: '2-digit', minute: '2-digit'});
+      localStorage.setItem("auditorias", JSON.stringify(auditoriasGlobais));
+      window.location.href = `/Back-Office/Gestor/html/GerarPDF.html?id=${auditoria.id}`;
+    });
+
+    document.getElementById("resposta-nao").addEventListener("click", function() {
+      document.getElementById("tempo-editavel").style.display = "block";
+      document.getElementById("botoes-decidir").style.display = "none";
+    });
+
+    document.getElementById("confirmar-tempo").addEventListener("click", function() {
+      const tempoReal = document.getElementById("tempo-real").value.trim();
+      if (tempoReal && auditoriaAtualIndex !== null) {
+        const auditoria = auditoriasGlobais[auditoriaAtualIndex];
+        auditoria.estado = "concluido";
+        auditoria.horaConclusao = new Date().toLocaleTimeString('pt-PT', {hour: '2-digit', minute: '2-digit'});
+        auditoria.tempoReal = tempoReal;
+        localStorage.setItem("auditorias", JSON.stringify(auditoriasGlobais));
+        window.location.href = `/Back-Office/Gestor/html/GerarPDF.html?id=${auditoria.id}`;
+      }
     });
 
     document.addEventListener("DOMContentLoaded", function() {

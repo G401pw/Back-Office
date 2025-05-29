@@ -147,66 +147,48 @@
         document.getElementById("codigo-postal").value = ocorrencia.codigoPostal || '';
         document.getElementById("data").value = ocorrencia.data;
         document.getElementById("hora-inicio").value = ocorrencia.hora;
-        document.getElementById("hora-fim").value = ocorrencia.hora; // Ou outra lógica para fim
       }
     }
-  
-    // Função para carregar a lista de peritos (somente desocupados)
+
     function carregarPeritos() {
       const peritos = JSON.parse(localStorage.getItem("peritos")) || [];
       const peritosSelect = document.getElementById("qtd-peritos");
       const peritosContainer = document.getElementById("peritos-container");
-      let selectedPeritos = [];
 
-      peritosSelect.addEventListener("change", function() {
-        const qtdPeritos = parseInt(peritosSelect.value, 10);
-        peritosContainer.innerHTML = '';
-        selectedPeritos = [];
+      peritosSelect.addEventListener("change", function () {
+        const qtdPeritos = parseInt(peritosSelect.value);
+        peritosContainer.innerHTML = "";
 
         for (let i = 0; i < qtdPeritos; i++) {
-          const peritoLabel = document.createElement("label");
-          peritoLabel.textContent = `Perito ${i + 1}`;
-          const peritoSelect = document.createElement("select");
-          peritoSelect.name = `perito-${i + 1}`;
+          const wrapper = document.createElement("div");
+          wrapper.classList.add("perito-wrapper");
+
+          const label = document.createElement("label");
+          label.textContent = `Perito ${i + 1}`;
+          wrapper.appendChild(label);
+
+          const select = document.createElement("select");
+          select.name = `perito-${i + 1}`;
+          select.required = true;
+
+          const defaultOption = document.createElement("option");
+          defaultOption.value = "";
+          defaultOption.textContent = "-- Selecionar Perito --";
+          select.appendChild(defaultOption);
 
           peritos.forEach((perito, idx) => {
-            if (perito.estado === "desocupado" && !selectedPeritos.includes(idx.toString())) {
+            if (perito.estado === "desocupado") {
               const option = document.createElement("option");
-              option.value = idx; // usar índice como id, se perito.id não existir
-              option.textContent = perito.nome;
-              peritoSelect.appendChild(option);
+              option.value = idx;
+              option.textContent = `${perito.nome} (${perito.especialidade})`;
+              select.appendChild(option);
             }
           });
 
-          peritoSelect.addEventListener("change", function() {
-            const valorSelecionado = peritoSelect.value;
-            // Remove o valor anterior do selectedPeritos (se existir)
-            selectedPeritos = selectedPeritos.filter(id => id !== valorSelecionado);
-            // Adiciona o novo valor selecionado
-            selectedPeritos.push(valorSelecionado);
-            // Atualiza as opções dos outros selects para impedir duplicados
-            atualizarOpcoesSelecionadas(peritosContainer, selectedPeritos);
-          });
-
-          const peritoDiv = document.createElement("div");
-          peritoDiv.appendChild(peritoLabel);
-          peritoDiv.appendChild(peritoSelect);
-          peritosContainer.appendChild(peritoDiv);
+          wrapper.appendChild(select);
+          peritosContainer.appendChild(wrapper);
         }
       });
-
-      function atualizarOpcoesSelecionadas(container, selecionados) {
-        const selects = container.querySelectorAll("select");
-        selects.forEach(select => {
-          const valorAtual = select.value;
-          Array.from(select.options).forEach(option => {
-            option.disabled = false;
-            if (selecionados.includes(option.value) && option.value !== valorAtual) {
-              option.disabled = true;
-            }
-          });
-        });
-      }
     }
 
     // Seleção da gravidade
@@ -431,11 +413,27 @@ const equipamentosDisponiveis = [
 
     const peritosSelecionados = [];
     const selectedPeritosElements = document.querySelectorAll("#peritos-container select");
+    const todosPeritos = JSON.parse(localStorage.getItem("peritos")) || [];
 
     selectedPeritosElements.forEach(select => {
-      const peritoId = select.value;
-      peritosSelecionados.push(peritoId);
+      const peritoIndex = parseInt(select.value);
+      const perito = todosPeritos[peritoIndex];
+
+      // Marca como ocupado
+      perito.estado = "ocupado";
+
+      // Guarda apenas os dados relevantes
+      peritosSelecionados.push({
+        nome: perito.nome,
+        especialidade: perito.especialidade,
+        email: perito.email,
+        telefone: perito.telefone
+      });
     });
+
+    // Atualiza o localStorage com o novo estado dos peritos
+    localStorage.setItem("peritos", JSON.stringify(todosPeritos));
+
 
     // Validação: obrigar pelo menos 1 perito
     if (peritosSelecionados.length === 0) {
@@ -466,7 +464,7 @@ const equipamentosDisponiveis = [
       const morada = document.getElementById("morada").value;
       const data = document.getElementById("data").value;
       const hora_inicio = document.getElementById("hora-inicio").value;
-      const tempo_previsto = document.getElementById("tempo_previsto").value;
+      const tempo_previsto = document.getElementById("tempo-previsto").value;
       const info_extra = document.getElementById("info-extra").value;
       const estado = "em-progresso";
       const gravidade = inputGravidade.value;
