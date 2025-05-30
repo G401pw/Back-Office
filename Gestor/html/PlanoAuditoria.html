@@ -42,13 +42,13 @@
     <form id="form-auditoria" class="form-auditoria">
       <section class="detalhes-auditoria">
         <h2>Detalhes da Auditoria</h2>
-        <label for="nome">Nome</label>
+        <label for="nome"> Nome <span style="color: red;" title="Este campo é obrigatório">*</span> </label>
         <input type="text" id="nome" name="nome" required>
 
-        <label for="tipo">Tipo de Ocorrência</label>
+        <label for="tipo">Tipo de Ocorrência <span style="color: red;" title="Este campo é obrigatório">*</span> </label>
         <input type="text" id="tipo" name="tipo" required>
 
-        <label for="origem">Origem</label>
+        <label for="origem">Origem  <span style="color: red;" title="Este campo é obrigatório">*</span> </label>
         <select id="origem" name="origem" required>
           <option value="">-- Selecione a origem --</option>
           <option value="Interno">Interna</option>
@@ -58,32 +58,32 @@
 
       <section class="localizacao">
         <h2>Localização</h2>
-        <label for="morada">Morada</label>
+        <label for="morada">Morada  <span style="color: red;" title="Este campo é obrigatório">*</span> </label>
         <input type="text" id="morada" name="morada" required>
 
-        <label for="localidade">Localidade</label>
+        <label for="localidade">Localidade  <span style="color: red;" title="Este campo é obrigatório">*</span> </label>
         <input type="text" id="localidade" name="localidade" required>
 
-        <label for="codigo-postal">Código Postal</label>
+        <label for="codigo-postal">Código Postal  <span style="color: red;" title="Este campo é obrigatório">*</span> </label>
         <input type="text" id="codigo-postal" name="codigo-postal" required>
       </section>
 
       <section class="data-hora">
         <h2>Dia e Hora</h2>
-        <label for="data">Data</label>
+        <label for="data">Data  <span style="color: red;" title="Este campo é obrigatório">*</span></label>
         <input type="date" id="data" name="data" required>
 
-        <label for="hora-inicio">Início</label>
+        <label for="hora-inicio">Início  <span style="color: red;" title="Este campo é obrigatório">*</span> </label>
         <input type="time" id="hora-inicio" name="hora-inicio" required>
 
-        <label for="tempo-previsto">Tempo Previsto (horas)</label>
+        <label for="tempo-previsto">Tempo Previsto (horas)  <span style="color: red;" title="Este campo é obrigatório">*</span> </label>
         <input type="number" id="tempo-previsto" name="tempo-previsto" min="1" step="1" placeholder="Ex: 100" required>
 
       </section>
 
       <section class="equipe-materiais">
         <h2>Equipe e Materiais</h2>
-        <label for="qtd-peritos">Selecione qtd. Peritos</label>
+        <label for="qtd-peritos">Selecione qtd. Peritos  <span style="color: red;" title="Este campo é obrigatório">*</span> </label>
         <select id="qtd-peritos" name="qtd-peritos" required>
           <option value="0">Selecione Qtd.</option>
           <option value="1">1 Perito</option>
