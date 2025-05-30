@@ -209,6 +209,13 @@
       atualizarUtilizador();
       carregarOcorrencias();
     });
+    
+    document.getElementById("modal-tempo").addEventListener("click", function (event) {
+  if (event.target === this) {
+    this.style.display = "none";
+    auditoriaAtualIndex = null; // Limpar referência, se necessário
+  }
+});
   </script>
 </body>
 </html>

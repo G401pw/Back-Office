@@ -134,22 +134,16 @@
 
         renderOcorrenciasChart() {
           const ctx = document.getElementById('numOcorrencias').getContext('2d');
-
-          // Inicializar um array com 12 posições a 0 (para cada mês)
           const dadosPorMes = Array(12).fill(0);
-
-          // Obter auditorias do localStorage
           const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
 
-          // Contar quantas auditorias estão concluídas por mês
           auditorias.forEach(auditoria => {
             if (auditoria.estado === "concluido" && auditoria.data) {
-              const mes = new Date(auditoria.data).getMonth(); // 0 (jan) a 11 (dez)
+              const mes = new Date(auditoria.data).getMonth();
               dadosPorMes[mes]++;
             }
           });
 
-          // Criar gráfico
           new Chart(ctx, {
             type: 'bar',
             data: {
@@ -162,7 +156,17 @@
             }
           });
         },
-        
+
+        atualizarContadorVisitas() {
+          const hoje = new Date().toLocaleDateString();
+          const dataGuardada = localStorage.getItem("data_visitas_index");
+
+          if (dataGuardada === hoje) {
+            this.visitasHoje = parseInt(localStorage.getItem("visitas_index_hoje")) || 0;
+          } else {
+            this.visitasHoje = 0;
+          }
+        }
       }
     });
   </script>
