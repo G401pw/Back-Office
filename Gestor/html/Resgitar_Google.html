@@ -51,7 +51,7 @@
             const password = document.getElementById("password").value;
 
             if (emailAutorizado.includes(email) && password === senhaAutorizada) {
-                window.location.href = "Ocorrencias.html";
+                window.location.href = "index.html";
             } else {
                 alert("Credenciais inválidas.");
             }
@@ -72,7 +72,7 @@
                 localStorage.setItem("userName", nomeGoogle);
                 localStorage.setItem("userEmail", emailGoogle);
 
-                window.location.href = "Ocorrencias.html";  // Ou a página desejada
+                window.location.href = "index.html";  // Ou a página desejada
             } else {
                 alert("Este email não está autorizado a fazer login.");
             }
