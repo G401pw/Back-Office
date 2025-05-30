@@ -106,49 +106,51 @@
         filtradas.sort((a, b) => new Date(a.data) - new Date(b.data));
       } else if (ordenarPor === "gravidade") {
         filtradas.sort((a, b) => (Number(b.gravidade) || 0) - (Number(a.gravidade) || 0));
-      }
-
-      filtradas.forEach((a, index) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${index + 1}</td>
-          <td>${a.gravidade || "N/A"}</td>
-          <td>${a.problema || ""}</td>
-          <td>${a.localizacao || ""}</td>
-          <td class="estado-coluna" data-index="${index}">
-            <span class="estado-texto">${a.estado === 'concluido' ? 'Concluído' : 'Em progresso'}</span>
-            ${
-              a.estado === 'concluido'
-              ? `<button class="btn-verpdf" data-id="${a.id}" title="Ver PDF">📄 Ver PDF</button>`
-              : `<button class="btn-estado" title="Marcar como concluído">Concluir</button>`
-            }
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      setTimeout(() => {
-        document.querySelectorAll(".btn-estado").forEach(button => {
-          button.addEventListener("click", function () {
-            const td = this.closest(".estado-coluna");
-            const idx = td.getAttribute("data-index");
-            auditoriaAtualIndex = idx;
-            const auditoria = auditoriasGlobais[idx];
-            document.getElementById("tempo-esperado").innerText = auditoria.tempo_previsto || "Não definido";
-            document.getElementById("modal-tempo").style.display = "flex";
-            document.getElementById("tempo-editavel").style.display = "none";
-            document.getElementById("botoes-decidir").style.display = "block";
-          });
-        });
-
-        document.querySelectorAll(".btn-verpdf").forEach(button => {
-          button.addEventListener("click", function () {
-            const id = this.getAttribute("data-id");
-            window.location.href = `/Back-Office/Gestor/html/GerarPDF.html?id=${id}`;
-          });
-        });
-      }, 0);
     }
+
+    filtradas.forEach((a, index) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${a.gravidade || "N/A"}</td>
+        <td>${a.problema || ""}</td>
+        <td>${a.localizacao || ""}</td>
+        <td class="estado-coluna" data-index="${index}">
+          <span class="estado-texto ${a.estado === 'concluido' ? 'concluido' : ''}">
+          ${a.estado === 'concluido' ? 'Concluído' : 'Em progresso'}
+            </span>
+          ${
+          a.estado === 'concluido'
+          ? `<button class="btn-verpdf" data-id="${a.id}" title="Ver PDF">📄 Ver PDF</button>`
+          : `<button class="btn-estado" title="Marcar como concluído">Concluir</button>`
+        }
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  setTimeout(() => {
+    document.querySelectorAll(".btn-estado").forEach(button => {
+      button.addEventListener("click", function () {
+        const td = this.closest(".estado-coluna");
+        const idx = td.getAttribute("data-index");
+        auditoriaAtualIndex = idx;
+        const auditoria = auditoriasGlobais[idx];
+        document.getElementById("tempo-esperado").innerText = auditoria.tempo_previsto || "Não definido";
+        document.getElementById("modal-tempo").style.display = "flex";
+        document.getElementById("tempo-editavel").style.display = "none";
+        document.getElementById("botoes-decidir").style.display = "block";
+      });
+    });
+
+    document.querySelectorAll(".btn-verpdf").forEach(button => {
+      button.addEventListener("click", function () {
+        const id = this.getAttribute("data-id");
+        window.location.href = `/Back-Office/Gestor/html/GerarPDF.html?id=${id}`;
+      });
+    });
+  }, 0);
+}
 
     document.getElementById("filtroEstado").addEventListener("change", function() {
       carregarOcorrencias(this.value, document.getElementById("ordenarPor").value);
