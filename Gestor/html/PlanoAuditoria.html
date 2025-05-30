@@ -427,8 +427,10 @@ const equipamentosDisponiveis = [
         nome: perito.nome,
         especialidade: perito.especialidade,
         email: perito.email,
-        telefone: perito.telefone
+        telefone: perito.telefone,
+        precoHora: parseFloat(perito.precoHora) || 10
       });
+
     });
 
     // Atualiza o localStorage com o novo estado dos peritos

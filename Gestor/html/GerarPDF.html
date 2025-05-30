@@ -4,8 +4,11 @@
   <meta charset="UTF-8" />
   <title>Gerar PDF</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="/Back-Office/Gestor/css/GerarPDF.css">
 </head>
 <body>
+  <div class="pdf-container" id="pdf-container"></div>
+
   <script>
     window.onload = function () {
       function getQueryParam(param) {
@@ -31,66 +34,126 @@
         const doc = new jsPDF();
         let y = 10;
 
-        doc.text("Relatório de Auditoria", 10, y); y += 10;
-        doc.text(`ID: ${ocorrencia.id}`, 10, y); y += 10;
-        doc.text(`Nome: ${ocorrencia.nome}`, 10, y); y += 10;
-        doc.text(`Problema: ${ocorrencia.problema || "Não informado"}`, 10, y); y += 10;
-        doc.text(`Origem: ${ocorrencia.origem}`, 10, y); y += 10;
-        doc.text(`Morada: ${ocorrencia.morada}`, 10, y); y += 10;
-        doc.text(`Código-Postal: ${ocorrencia.codigo_postal || "Não informado"}`, 10, y); y += 10;
-        doc.text(`Gravidade: ${ocorrencia.gravidade}`, 10, y); y += 10;
-        doc.text(`Data: ${ocorrencia.data}`, 10, y); y += 10;
-        doc.text(`Hora Início: ${ocorrencia.hora_inicio || "Não informado"}`, 10, y); y += 10;
-        doc.text(`Tempo Previsto: ${ocorrencia.tempo_previsto || "Não informado"}`, 10, y); y += 10;
-        doc.text(`Estado: ${ocorrencia.estado}`, 10, y); y += 10;
-        doc.text(`Peritos: ${ocorrencia.peritos && ocorrencia.peritos.length > 0 ? ocorrencia.peritos.join(", ") : "Nenhum perito designado"}`, 10, y); y += 10;
+        const logoUrl = "/Back-Office/Gestor/Imagens/logo.png";
+        const img = new Image();
+        img.src = logoUrl;
 
-        doc.text("Materiais:", 10, y); y += 10;
-        if (ocorrencia.materiaisDetalhados && ocorrencia.materiaisDetalhados.length > 0) {
-          ocorrencia.materiaisDetalhados.forEach(m => {
-            doc.text(`- ${m.id} (Quantidade: ${m.quantidade})`, 15, y);
-            y += 10;
-          });
-        } else {
-          doc.text("Nenhum material.", 15, y);
-          y += 10;
-        }
+        img.onload = () => {
+          doc.addImage(img, "PNG", 10, 10, 30, 30);
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(16);
+          doc.text(`Auditoria #${ocorrencia.id}`, 50, 20);
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(12);
+          y = 45;
 
-        doc.text("Equipamentos:", 10, y); y += 10;
-        if (ocorrencia.equipamentosDetalhados && ocorrencia.equipamentosDetalhados.length > 0) {
-          ocorrencia.equipamentosDetalhados.forEach(e => {
-            doc.text(`- ${e.id} (Quantidade: ${e.quantidade})`, 15, y);
-            y += 10;
-          });
-        } else {
-          doc.text("Nenhum equipamento.", 15, y);
-          y += 10;
-        }
+          function addSectionTitle(text) {
+            doc.setFont("helvetica", "bold");
+            doc.text(text, 10, y);
+            y += 7;
+            doc.setFont("helvetica", "normal");
+          }
 
-        // Mostrar custo total
-        const totalMateriais = ocorrencia.totalMateriais || 0;
-        const totalEquipamentos = ocorrencia.totalEquipamentos || 0;
-        const totalGeral = totalMateriais + totalEquipamentos;
+          function addField(label, value) {
+            doc.setFont("helvetica", "bold");
+            doc.text(`${label}:`, 10, y);
+            const labelWidth = doc.getTextWidth(`${label}:`);
+            doc.setFont("helvetica", "normal");
+            doc.text(` ${value}`, 10 + labelWidth, y);
+            y += 7;
+          }
 
-        y += 10;
-        doc.text(`Custo total dos Materiais: €${totalMateriais.toFixed(2)}`, 10, y);
-        y += 10;
-        doc.text(`Custo total dos Equipamentos: €${totalEquipamentos.toFixed(2)}`, 10, y);
-        y += 10;
-        doc.text(`Custo total Geral: €${totalGeral.toFixed(2)}`, 10, y);
 
-        // Faz o download automático do PDF
-        doc.save(`relatorio_${ocorrencia.id}.pdf`);
+          addSectionTitle("Relatório de Auditoria");
+          addField("Nome", ocorrencia.nome);
+          addField("Problema", ocorrencia.problema || "Não informado");
+          addField("Origem", ocorrencia.origem);
+          addField("Morada", ocorrencia.morada);
+          addField("Código-Postal", ocorrencia.codigo_postal || "Não informado");
+          addField("Gravidade", ocorrencia.gravidade);
+          addField("Data", ocorrencia.data);
+          addField("Hora Início", ocorrencia.hora_inicio || "Não informado");
+          addField("Tempo Previsto", ocorrencia.tempo_previsto || "Não informado");
+          addField("Tempo Real", ocorrencia.tempoReal || ocorrencia.tempo_previsto || "Não disponível");
+          addField("Estado", ocorrencia.estado);
+
+          y += 5;
+          addSectionTitle("Peritos");
+          if (ocorrencia.peritos?.length > 0) {
+            ocorrencia.peritos.forEach(p => {
+              doc.text(`- ${p.nome} (${p.especialidade})`, 15, y);
+              y += 7;
+            });
+          } else {
+            doc.text("Nenhum perito designado", 15, y);
+            y += 7;
+          }
+
+          y += 5;
+          addSectionTitle("Materiais");
+          if (ocorrencia.materiaisDetalhados?.length > 0) {
+            ocorrencia.materiaisDetalhados.forEach(m => {
+              doc.text(`• ${m.id} — Quantidade: ${m.quantidade}`, 15, y);
+              y += 7;
+            });
+          } else {
+            doc.text("Nenhum material.", 15, y); y += 7;
+          }
+
+          y += 5;
+          addSectionTitle("Equipamentos");
+          if (ocorrencia.equipamentosDetalhados?.length > 0) {
+            ocorrencia.equipamentosDetalhados.forEach(e => {
+              doc.text(`• ${e.id} — Quantidade: ${e.quantidade}`, 15, y);
+              y += 7;
+            });
+          } else {
+            doc.text("Nenhum equipamento.", 15, y); y += 7;
+          }
+
+          y += 5;
+          addSectionTitle("Custos com Peritos");
+          const tempoHoras = parseFloat(ocorrencia.tempoReal || ocorrencia.tempo_previsto || 0);
+          let custoPeritos = 0;
+
+          if (ocorrencia.peritos?.length > 0) {
+            doc.text(`Tempo considerado: ${tempoHoras}h`, 15, y); y += 7;
+            ocorrencia.peritos.forEach(p => {
+              const preco = parseFloat(p.precoHora) || 10;
+              const valor = preco * tempoHoras;
+              custoPeritos += valor;
+              doc.text(`• ${p.nome}: €${preco.toFixed(2)}/h × ${tempoHoras}h = €${valor.toFixed(2)}`, 15, y);
+              y += 7;
+            });
+          } else {
+            doc.text("Nenhum perito designado", 15, y); y += 7;
+          }
+
+          y += 5;
+          addSectionTitle("Resumo de Custos");
+
+          const totalMateriais = ocorrencia.totalMateriais || 0;
+          const totalEquipamentos = ocorrencia.totalEquipamentos || 0;
+          const totalGeral = totalMateriais + totalEquipamentos + custoPeritos;
+
+          addField("Total Materiais", `€${totalMateriais.toFixed(2)}`);
+          addField("Total Equipamentos", `€${totalEquipamentos.toFixed(2)}`);
+          addField("Total com Peritos", `€${custoPeritos.toFixed(2)}`);
+          addField("Custo Total Geral", `€${totalGeral.toFixed(2)}`);
+
+          const blob = doc.output("blob");
+          const blobURL = URL.createObjectURL(blob);
+          const iframe = document.createElement("iframe");
+          iframe.src = blobURL;
+          iframe.width = "100%";
+          iframe.height = "800px";
+          iframe.style.border = "none";
+          document.getElementById("pdf-container").appendChild(iframe);
+        };
       }
 
-      // Pergunta ao usuário se deseja baixar
-      if (confirm("Deseja fazer o download do relatório em PDF?")) {
-        gerarPDF();
-      } else {
-        // Se não quiser, não faz nada, permanece na página
-        console.log("Download cancelado pelo usuário.");
-      }
-    }
+      gerarPDF();
+    };
   </script>
 </body>
 </html>

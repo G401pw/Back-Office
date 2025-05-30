@@ -1,3 +1,4 @@
+
 /* Reset básico */
 * {
     margin: 0;
@@ -12,7 +13,7 @@ body {
     height: 100vh;
 }
 
-/* Sidebar igual à base desejada */
+/* Sidebar */
 .sidebar {
     width: 250px;
     height: 100vh;
@@ -135,7 +136,7 @@ header button {
     cursor: pointer;
 }
 
-/* Tabelas e conteúdo adicional */
+/* Tabelas */
 .table-container {
     margin-top: 20px;
     background: white;
@@ -170,18 +171,47 @@ tbody tr:hover {
     background: #f9f9f9;
 }
 
-tbody td:last-child {
-    text-align: center;
-    cursor: pointer;
+td:nth-child(7), th:nth-child(7) {
+    white-space: nowrap;
+    font-weight: 500;
+    color: #333;
 }
 
+td:last-child {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+}
+
+td:last-child button {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: none;
+    background-color: #2563eb;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+td:last-child button:hover {
+    background-color: #1e40af;
+}
+
+td:last-child button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Feedback */
 .feedback-message {
     display: none;
     position: fixed;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #ff9800; /* Amarelo de aviso */
+    background-color: #ff9800;
     color: white;
     padding: 15px 30px;
     border-radius: 5px;
@@ -193,69 +223,35 @@ tbody td:last-child {
     justify-content: center;
     align-items: center;
     gap: 15px;
-  }
-  
-  .feedback-message button {
+}
+
+.feedback-message button {
     background: white;
-    color: #000000;
+    color: #000;
     border: none;
     padding: 5px 12px;
     border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
-  }
+}
 
-  .feedback-message.success {
-    background-color: #4caf50; /* Verde */
-  }
-  
+.feedback-message.success {
+    background-color: #4caf50;
+}
+
 .feedback-message.warning {
-    background-color: #ff9800; /* amarelo */
-  }
-  
-  .feedback-message.error {
-    background-color: #f44336; /* vermelho */
-  }
-  
-  .feedback-message button:hover {
+    background-color: #ff9800;
+}
+
+.feedback-message.error {
+    background-color: #f44336;
+}
+
+.feedback-message button:hover {
     background: #e6e6e6;
-  }
-  .modal {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000;
 }
 
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 300px;
-}
-
-.modal-content form label {
-  display: block;
-  margin-bottom: 10px;
-}
-
-.modal-content form input {
-  width: 100%;
-  padding: 6px;
-  margin-top: 4px;
-  box-sizing: border-box;
-}
-
-.modal-content form button {
-  margin-top: 10px;
-  margin-right: 10px;
-  padding: 8px 12px;
-  cursor: pointer;
-}
-
+/* Modal */
 .modal {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -264,30 +260,74 @@ tbody td:last-child {
     justify-content: center;
     align-items: center;
     z-index: 10000;
-  }
-  
-  .modal-content {
+}
+
+.modal-content {
     background: white;
     padding: 20px;
     border-radius: 8px;
     width: 300px;
-  }
-  
-  .modal-content form label {
+}
+
+.modal-content form label {
     display: block;
     margin-bottom: 10px;
-  }
-  
-  .modal-content form input {
+}
+
+.modal-content form input {
     width: 100%;
     padding: 6px;
     margin-top: 4px;
     box-sizing: border-box;
-  }
-  
-  .modal-content form button {
+}
+
+.modal-content form input[type="number"],
+.modal-content form input[type="text"],
+.modal-content form input[type="email"],
+.modal-content form input[type="tel"] {
+    -moz-appearance: textfield;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.modal-content form input::-webkit-outer-spin-button,
+.modal-content form input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.modal-content form button[type="submit"] {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 6px;
     margin-top: 10px;
     margin-right: 10px;
     padding: 8px 12px;
     cursor: pointer;
-  }
+}
+
+.modal-content form button[type="submit"]:hover {
+    background-color: #388e3c;
+}
+
+.modal-content form button#cancelEdit {
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.modal-content form button#cancelEdit:hover {
+    background-color: #ccc;
+}
+thead th {
+  font-weight: 600;
+  color: #333;
+}
+
+thead th:last-child {
+  text-align: center;
+}
