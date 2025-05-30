@@ -117,16 +117,19 @@
           <td>${a.localizacao || ""}</td>
           <td class="estado-coluna" data-index="${index}">
             <span class="estado-texto">${a.estado === 'concluido' ? 'Concluído' : 'Em progresso'}</span>
-            ${a.estado === 'concluido' 
-              ? `<button class="btn-estado" disabled title="Já concluído">✔</button>`
-              : `<button class="btn-estado" title="Marcar como concluído">Concluir</button>`}
+            ${
+              a.estado === 'concluido'
+              ? `<button class="btn-verpdf" data-id="${a.id}" title="Ver PDF">📄 Ver PDF</button>`
+              : `<button class="btn-estado" title="Marcar como concluído">Concluir</button>`
+            }
           </td>
         `;
         tbody.appendChild(tr);
       });
 
-      document.querySelectorAll(".btn-estado").forEach(button => {
-        if (!button.disabled) {
+      // Reatribuir eventos depois de gerar a tabela
+      setTimeout(() => {
+        document.querySelectorAll(".btn-estado").forEach(button => {
           button.addEventListener("click", function () {
             const td = this.closest(".estado-coluna");
             const idx = td.getAttribute("data-index");
@@ -137,8 +140,15 @@
             document.getElementById("tempo-editavel").style.display = "none";
             document.getElementById("botoes-decidir").style.display = "block";
           });
-        }
-      });
+        });
+
+        document.querySelectorAll(".btn-verpdf").forEach(button => {
+          button.addEventListener("click", function () {
+            const id = this.getAttribute("data-id");
+            window.location.href = `/Back-Office/Gestor/html/GerarPDF.html?id=${id}`;
+          });
+        });
+      }, 0);
     }
 
     document.getElementById("filtroEstado").addEventListener("change", function() {
