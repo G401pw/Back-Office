@@ -60,10 +60,10 @@
         <span class="prefixo-telefone">
           <img src="/Back-Office/Gestor/Imagens/portugal-flag.png" alt="Portugal" class="flag-icon" /> +351
         </span>
-        <input type="tel" id="telefone" placeholder="Telemóvel" required maxlength="9" />
+        <input type="tel" id="telefone" placeholder="Telemóvel" required maxlength="9" pattern="\d{9}" />
       </div>
       <label for="precoHora">Preço por hora (€)</label>
-        <input type="number" id="precoHora" name="precoHora" placeholder="Ex: 10" min="0" step="0.01" required />
+      <input type="number" id="precoHora" name="precoHora" placeholder="Ex: 10" min="0" step="0.01" required />
 
       <button type="submit">Confirmar</button>
     </form>
@@ -108,6 +108,10 @@
         if (!str) return "";
         return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
       }
+
+      document.getElementById("telefone").addEventListener("input", function (e) {
+        this.value = this.value.replace(/\D/g, '');
+      });
 
       document.getElementById("formPerito").addEventListener("submit", function (e) {
         e.preventDefault();
