@@ -75,14 +75,17 @@
       el: '#app',
       data: {
         visitasHoje: 0,
-        ocorrenciasEmAcao: 5, // Exemplo, podes alterar para buscar dados reais
         peritos: JSON.parse(localStorage.getItem("peritos")) || [],
+        auditorias: JSON.parse(localStorage.getItem("auditorias")) || [],
         userName: localStorage.getItem("userName") || "Utilizador não logado",
         userEmail: localStorage.getItem("userEmail") || "Sem e-mail"
       },
       computed: {
         peritosDisponiveis() {
           return this.peritos.filter(perito => perito.estado === "desocupado").length;
+        },
+        ocorrenciasEmAcao() {
+          return this.auditorias.filter(a => a.estado === "em-progresso").length;
         },
         especialidades() {
           const contador = {};
@@ -119,22 +122,11 @@
               datasets: [{
                 data: data,
                 backgroundColor: [
-                  '#00C49F', // verde água
-                  '#FFBB28', // amarelo quente
-                  '#0088FE', // azul forte
-                  '#FF8042', // laranja forte
-                  '#FF6384', // rosa vivo
-                  '#36A2EB', // azul claro
-                  '#FFCE56', // amarelo claro
-                  '#4BC0C0', // turquesa claro
-                  '#9966FF', // roxo
-                  '#FF9F40', // laranja suave
-                  '#C9CBCF', // cinzento claro
-                  '#7E57C2', // violeta
-                  '#26A69A', // verde-azulado
-                  '#D4E157', // verde-limão claro
+                  '#00C49F', '#FFBB28', '#0088FE', '#FF8042',
+                  '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                  '#9966FF', '#FF9F40', '#C9CBCF', '#7E57C2',
+                  '#26A69A', '#D4E157'
                 ]
-
               }]
             }
           });
@@ -143,32 +135,34 @@
         renderOcorrenciasChart() {
           const ctx = document.getElementById('numOcorrencias').getContext('2d');
 
-          const dadosArmazenados = JSON.parse(localStorage.getItem("ocorrencias_Resolvidas")) || 
-            [0,0,0,0,0,0,0,0,0,0,0,0];
+          // Inicializar um array com 12 posições a 0 (para cada mês)
+          const dadosPorMes = Array(12).fill(0);
 
+          // Obter auditorias do localStorage
+          const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
+
+          // Contar quantas auditorias estão concluídas por mês
+          auditorias.forEach(auditoria => {
+            if (auditoria.estado === "concluido" && auditoria.data) {
+              const mes = new Date(auditoria.data).getMonth(); // 0 (jan) a 11 (dez)
+              dadosPorMes[mes]++;
+            }
+          });
+
+          // Criar gráfico
           new Chart(ctx, {
             type: 'bar',
             data: {
-              labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+              labels: ['JAN', 'FEB', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'],
               datasets: [{
                 label: 'Ocorrências Resolvidas',
-                data: dadosArmazenados,
+                data: dadosPorMes,
                 backgroundColor: '#0088FE'
               }]
             }
           });
         },
-
-        atualizarContadorVisitas() {
-          const hoje = new Date().toLocaleDateString();
-          const dataGuardada = localStorage.getItem("data_visitas_index");
-
-          if (dataGuardada === hoje) {
-            this.visitasHoje = parseInt(localStorage.getItem("visitas_index_hoje")) || 0;
-          } else {
-            this.visitasHoje = 0;
-          }
-        }
+        
       }
     });
   </script>
