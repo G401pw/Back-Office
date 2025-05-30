@@ -127,7 +127,6 @@
         tbody.appendChild(tr);
       });
 
-      // Reatribuir eventos depois de gerar a tabela
       setTimeout(() => {
         document.querySelectorAll(".btn-estado").forEach(button => {
           button.addEventListener("click", function () {
@@ -163,6 +162,16 @@
       const auditoria = auditoriasGlobais[auditoriaAtualIndex];
       auditoria.estado = "concluido";
       auditoria.horaConclusao = new Date().toLocaleTimeString('pt-PT', {hour: '2-digit', minute: '2-digit'});
+
+      const todosPeritos = JSON.parse(localStorage.getItem("peritos")) || [];
+      auditoria.peritos.forEach(p => {
+        const idx = todosPeritos.findIndex(per => per.nome === p.nome && per.email === p.email);
+        if (idx !== -1) {
+          todosPeritos[idx].estado = "desocupado";
+        }
+      });
+      localStorage.setItem("peritos", JSON.stringify(todosPeritos));
+
       localStorage.setItem("auditorias", JSON.stringify(auditoriasGlobais));
       window.location.href = `/Back-Office/Gestor/html/GerarPDF.html?id=${auditoria.id}`;
     });
@@ -179,6 +188,16 @@
         auditoria.estado = "concluido";
         auditoria.horaConclusao = new Date().toLocaleTimeString('pt-PT', {hour: '2-digit', minute: '2-digit'});
         auditoria.tempoReal = tempoReal;
+
+        const todosPeritos = JSON.parse(localStorage.getItem("peritos")) || [];
+        auditoria.peritos.forEach(p => {
+          const idx = todosPeritos.findIndex(per => per.nome === p.nome && per.email === p.email);
+          if (idx !== -1) {
+            todosPeritos[idx].estado = "desocupado";
+          }
+        });
+        localStorage.setItem("peritos", JSON.stringify(todosPeritos));
+
         localStorage.setItem("auditorias", JSON.stringify(auditoriasGlobais));
         window.location.href = `/Back-Office/Gestor/html/GerarPDF.html?id=${auditoria.id}`;
       }
