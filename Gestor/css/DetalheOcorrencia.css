@@ -339,3 +339,26 @@ header h1 {
   background-color: #4caf50; /* Verde para sucesso */
 }
 
+/* Estilo da lista de ficheiros submetidos */
+#ficheiros-ocorrencia {
+  list-style-type: none;     /* Remove a bolinha preta */
+  padding-left: 0;           /* Remove indentação */
+  margin: 0 0 10px 0;        /* Remove espaço extra em cima e ajusta em baixo */
+}
+
+#ficheiros-ocorrencia li {
+  margin: 4px 0;
+}
+
+#ficheiros-ocorrencia li a {
+  text-decoration: none;
+  color: #2563eb;            /* Azul moderno (consistente com botão) */
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+#ficheiros-ocorrencia li a:hover {
+  text-decoration: underline;
+  color: #1e40af;
+}
+
