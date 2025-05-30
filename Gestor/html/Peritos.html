@@ -80,7 +80,7 @@
         <label>Especialidade:<input type="text" id="edit-especialidade" required></label><br>
         <label>Preço por Hora (€):<input type="number" id="edit-precoHora" min="0" step="0.01" required></label><br>
         <label>Email:<input type="email" id="edit-email" required></label><br>
-        <label>Telemóvel:<input type="tel" id="edit-telefone" required></label><br>
+        <label>Telemóvel:<input type="tel" id="edit-telefone" required maxlength="9" pattern="\d{9}"></label><br>
         <button type="submit">Salvar</button>
         <button type="button" id="cancelEdit">Cancelar</button>
       </form>
@@ -221,6 +221,10 @@
       });
     }
 
+    document.getElementById("edit-telefone").addEventListener("input", function (e) {
+      // Remove tudo que não for número
+      this.value = this.value.replace(/\D/g, '');
+    });
     document.getElementById('cancelEdit').addEventListener('click', fecharModal);
     document.getElementById('filtroEspecialidade').addEventListener('change', renderPeritos);
     document.getElementById('ordenarPor').addEventListener('change', renderPeritos);
@@ -232,4 +236,5 @@
     });
   </script>
 </body>
+
 </html>
