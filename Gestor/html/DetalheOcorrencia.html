@@ -46,7 +46,12 @@
         <p><strong>Código Postal:</strong> <span id="codigo-postal-ocorrencia"></span></p>
         <p><strong>Data:</strong> <span id="data-ocorrencia"></span></p>
         <p><strong>Hora:</strong> <span id="hora-ocorrencia"></span></p>
-        <p><strong>Informações Extras:</strong> <span id="informacoes-ocorrencia"></span></p>
+        <div style="margin-bottom: 4px;">
+          <p style="margin-bottom: 4px;"><strong>Ficheiros Submetidos:</strong></p>
+          <ul id="ficheiros-ocorrencia" style="margin: 0; padding-left: 0; list-style: none;"></ul>
+        </div>
+        <p style="margin-top: 0;"><strong>Informações Extras:</strong> <span id="informacoes-ocorrencia"></span></p>
+
       </div>
 
       <div class="user-info">
@@ -102,6 +107,27 @@
         document.getElementById("data-ocorrencia").innerText = ocorrencia.data;
         document.getElementById("hora-ocorrencia").innerText = ocorrencia.hora;
         document.getElementById("informacoes-ocorrencia").innerText = ocorrencia.informacoes;
+
+        const listaFicheiros = document.getElementById("ficheiros-ocorrencia");
+        listaFicheiros.innerHTML = ""; // Limpa a lista
+
+        if (ocorrencia.ficheiros && ocorrencia.ficheiros.length > 0) {
+          ocorrencia.ficheiros.forEach((ficheiro, index) => {
+            const item = document.createElement("li");
+
+            const link = document.createElement("a");
+            link.href = ficheiro.conteudo;         // O conteúdo em base64
+            link.download = ficheiro.nome;         // Nome do ficheiro para guardar
+            link.textContent = `${index + 1}. ${ficheiro.nome}`; // Nome visível
+            link.target = "_blank";                // Abre numa nova aba
+
+            item.appendChild(link);                // Junta o link ao item
+            listaFicheiros.appendChild(item);      // Junta o item à lista
+          });
+        } else {
+          listaFicheiros.innerHTML = "<li>Nenhum ficheiro enviado.</li>";
+        }
+
 
         const userName = localStorage.getItem("userName");
         const userEmail = localStorage.getItem("userEmail");
