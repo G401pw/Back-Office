@@ -272,3 +272,72 @@ tbody td {
 .btn-verpdf:active {
   transform: scale(0.98);
 }
+#botoes-decidir {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#botoes-decidir button {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#resposta-sim {
+  background-color: #4CAF50; /* verde */
+  color: white;
+}
+
+#resposta-nao {
+  background-color: #F44336; /* vermelho */
+  color: white;
+}
+
+#botoes-decidir button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+#botoes-decidir button:active {
+  transform: scale(0.98);
+}
+#confirmar-tempo {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #2196F3; /* Azul */
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+#confirmar-tempo:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+#tempo-real {
+  margin-top: 10px;
+  padding: 8px;
+  font-size: 14px;
+  width: 80%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.estado-texto.concluido {
+  color: #2e7d32; /* Verde escuro, visível */
+  font-weight: bold;
+}
+.estado-texto.em-progresso {
+  color: #d84315; /* Laranja escuro */
+  font-weight: bold;
+}
