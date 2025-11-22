@@ -120,7 +120,6 @@
     }
 
     students.forEach(student => {
-      // Só mostrar alunos que já enviaram mensagem
       if (!student.lastMessage) return;
 
       const li = document.createElement('li');
@@ -139,12 +138,16 @@
           ${
             student.hasUnread
               ? `<span class="message-dot"></span>
-                 <span class="message-text">Nova mensagem ${timeAgoString(student.lastMessage)}</span>`
+                <span class="message-text">Nova mensagem ${timeAgoString(student.lastMessage)}</span>`
               : `<span class="message-text message-text-muted">Última mensagem ${timeAgoString(student.lastMessage)}</span>`
           }
         </div>
       `;
 
+      // 👉 Adiciona este bloco
+      li.addEventListener('click', () => {
+        window.location.href = `Aluno.html?id=${student.id}`;
+      });
       // Mais tarde aqui vais pôr o clique para abrir progresso + chat
       // li.addEventListener('click', () => { ... });
 
