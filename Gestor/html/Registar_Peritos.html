@@ -6,22 +6,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Registar Peritos</title>
   <link rel="stylesheet" href="/Back-Office/Gestor/css/Registar_Peritos.css" />
-  <link rel="icon" href="/Back-Office/Gestor/Imagens/logo.png" type="image/x-icon" />
+  <link rel="icon" href="/Back-Office/Gestor/Imagens/Logo GEE.png" type="image/x-icon" />
 </head>
 
 <body>
   <div class="sidebar">
     <div class="logo">
-      <img src="/Back-Office/Gestor/Imagens/logo.png" alt="EyesEverywhere" />
+      <img src="/Back-Office/Gestor/Imagens/Logo GEE.png" alt="EyesEverywhere" />
     </div>
     <nav>
       <ul>
+        <li><a data-page="Geral.html" href="Geral.html">🔍 Estatísticas</a></li>
         <li><a data-page="Ocorrencias.html" href="Ocorrencias.html">📋 Ocorrências</a></li>
         <li><a data-page="NovasOcorrencias.html" href="NovasOcorrencias.html">➕ Novas Ocorrências</a></li>
         <li><a data-page="Peritos.html" href="Peritos.html">👥 Peritos</a></li>
         <li><a class="active" data-page="Registar_Peritos.html" href="Registar_Peritos.html">📝 Registar Peritos</a>
         </li>
-        <li><a data-page="Geral.html" href="Geral.html">🔍 Estatísticas</a></li>
+        
       </ul>
     </nav>
     <div class="add-auditoria">
@@ -30,7 +31,7 @@
       </a>
     </div>
     <div class="user-info">
-      <p id="user-name">Usuário não logado</p>
+      <p id="user-name">Utilizador não logado</p>
       <p id="user-email">Sem e-mail</p>
     </div>
   </div>
@@ -74,7 +75,7 @@
 
   <script>
     function atualizarUtilizador() {
-      const nome = localStorage.getItem("userName") || "Usuário não logado";
+      const nome = localStorage.getItem("userName") || "Utilizador não logado";
       const email = localStorage.getItem("userEmail") || "Sem e-mail";
       document.getElementById("user-name").innerText = nome;
       document.getElementById("user-email").innerText = email;
