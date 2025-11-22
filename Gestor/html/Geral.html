@@ -3,171 +3,169 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Estatísticas - EyesEverywhere</title>
+  <title>Visão Geral - LABRATS</title>
   <link rel="stylesheet" href="/Back-Office/Gestor/css/Geral.css" />
-  <link rel="icon" href="/Back-Office/Gestor/Imagens/logo.png" />
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="icon" href="/Back-Office/Gestor/Imagens/Logo GEE.png" type="image/x-icon" />
 </head>
 <body>
-  <div id="app">
-    <div class="sidebar">
-      <div class="logo">
-        <img src="/Back-Office/Gestor/Imagens/Logo GEE.png" alt="EyesEverywhere" />
-      </div>
-      <nav>
-        <ul>
-         <li><a class="active" data-page="Geral.html" href="Geral.html">🏠 Visão Geral</a></li>
+  <div class="sidebar">
+    <div class="logo">
+      <img src="/Back-Office/Gestor/Imagens/Logo GEE.png" alt="LABRATS" />
+    </div>
+    <nav>
+      <ul>
+        <li><a class="active" data-page="Geral.html" href="Geral.html">🏠 Visão Geral</a></li>
         <li><a data-page="Horario.html" href="Horario.html">🗓️ Horário</a></li>
         <li><a data-page="Alunos.html" href="Alunos.html">👥 Alunos</a></li>
-        <li><a data-page="Conteudos.html" href="Conteudos.html">📚 Conteúdos</a></li>
-        </ul>
-      </nav>
-      <div class="add-auditoria">
-        <a href="/Back-Office/Gestor/html/PlanoAuditoria.html">
-          <button>+ Adicionar Plano de Auditoria</button>
-        </a>
-      </div>
-      <div class="user-info">
-        <p>{{ userName }}</p>
-        <p>{{ userEmail }}</p>
-      </div>
+        <li><a data-page="Conteudos.html" href="Conteudos.html">📚 Conteúdos</a></li>    
+      </ul>
+    </nav>
+    <div class="add-auditoria"> 
+      <a href="/Back-Office/Gestor/html/PlanoAuditoria.html">
+        <button>+ Adicionar Conteúdo</button>
+      </a>
     </div>
-
-    <div class="content">
-      <header>
-        <h1>Estatísticas</h1>
-      </header>
-
-      <main>
-        <section class="stats-summary">
-          <div class="stat-box visitas">
-            <h3>Visitas ao Site Hoje</h3>
-            <p>{{ visitasHoje }}</p>
-          </div>
-          <div class="stat-box peritos">
-            <h3>Peritos Disponíveis</h3>
-            <p>{{ peritosDisponiveis }}</p>
-          </div>
-          <div class="stat-box ocorrencias">
-            <h3>Ocorrências em Ação</h3>
-            <p>{{ ocorrenciasEmAcao }}</p>
-          </div>
-        </section>
-
-        <section class="charts">
-          <div class="chart-box">
-            <h3>Especialidades dos Peritos</h3>
-            <canvas id="especialidadesChart"></canvas>
-          </div>
-          <div class="chart-box">
-            <h3>Ocorrências Resolvidas por Mês</h3>
-            <canvas id="numOcorrencias"></canvas>
-          </div>
-        </section>
-      </main>
+    <div class="user-info">
+      <p id="user-name">Utilizador não logado</p>
+      <p id="user-email">Sem e-mail</p>
     </div>
   </div>
 
+  <!-- CONTEÚDO PRINCIPAL -->
+  <div class="content">
+    <header class="content-header">
+      <h1>Visão Geral</h1>
+    </header>
+
+    <section class="dashboard-grid">
+      <!-- Card 1: Próximas aulas -->
+      <div class="dashboard-card card-next-classes">
+        <div class="card-header">
+          <h2>Próximas aulas de hoje</h2>
+          <span class="card-subtitle" id="today-label">Hoje</span>
+        </div>
+        <ul class="next-classes-list">
+          <!-- exemplos de dados; depois podes trocar por dados reais -->
+          <li class="next-class-item">
+            <div class="next-class-main">
+              <span class="next-class-time">14:00</span>
+              <div class="next-class-text">
+                <p class="next-class-title">Matemática — 9º ano</p>
+                <p class="next-class-meta">Joana Ferreira · Sala 2</p>
+              </div>
+            </div>
+          </li>
+          <li class="next-class-item">
+            <div class="next-class-main">
+              <span class="next-class-time">15:30</span>
+              <div class="next-class-text">
+                <p class="next-class-title">Físico-Química — 11º ano</p>
+                <p class="next-class-meta">Tiago Santos · Sala 1</p>
+              </div>
+            </div>
+          </li>
+          <li class="next-class-item">
+            <div class="next-class-main">
+              <span class="next-class-time">18:00</span>
+              <div class="next-class-text">
+                <p class="next-class-title">Inglês — 7º ano</p>
+                <p class="next-class-meta">Marta Rocha · Online</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <p class="card-footer-text">
+          A agenda completa está na página de <strong>Horário</strong>.
+        </p>
+      </div>
+
+      <!-- Card 2: Mensagens por responder -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h2>Mensagens por responder</h2>
+          <span class="card-subtitle">Ordenado por quem espera há mais tempo</span>
+        </div>
+        <ul class="dashboard-list">
+          <li class="dashboard-list-item">
+            <div class="dash-left">
+              <span class="message-dot"></span>
+              <span class="dash-text-strong">David Silva</span>
+            </div>
+            <span class="dash-text-muted">há 4 dias</span>
+          </li>
+          <li class="dashboard-list-item">
+            <div class="dash-left">
+              <span class="message-dot"></span>
+              <span class="dash-text-strong">Ana Costa</span>
+            </div>
+            <span class="dash-text-muted">há 3 dias</span>
+          </li>
+          <li class="dashboard-list-item">
+            <div class="dash-left">
+              <span class="message-dot"></span>
+              <span class="dash-text-strong">Marta Rocha</span>
+            </div>
+            <span class="dash-text-muted">há 2 dias</span>
+          </li>
+          <li class="dashboard-list-item">
+            <div class="dash-left">
+              <span class="message-dot message-dot-muted"></span>
+              <span class="dash-text-strong">João Pereira</span>
+            </div>
+            <span class="dash-text-muted">respondido há 3 h</span>
+          </li>
+        </ul>
+        <p class="card-footer-text">
+          Ver detalhes na página de <strong>Alunos</strong>.
+        </p>
+      </div>
+
+      <!-- Card 3: Conteúdos mais usados -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h2>Conteúdos mais usados esta semana</h2>
+          <span class="card-subtitle">Centro de estudos vs aplicação</span>
+        </div>
+        <ul class="dashboard-list">
+          <li class="dashboard-list-item">
+            <div class="dash-left">
+              <span class="content-pill pill-centro">Centro</span>
+              <span class="dash-text-strong">Fichas de revisão de frações</span>
+            </div>
+            <span class="dash-text-muted">12 utilizações</span>
+          </li>
+          <li class="dashboard-list-item">
+            <div class="dash-left">
+              <span class="content-pill pill-app">App</span>
+              <span class="dash-text-strong">Laboratório Interativo de Funções</span>
+            </div>
+            <span class="dash-text-muted">7 utilizações</span>
+          </li>
+          <li class="dashboard-list-item">
+            <div class="dash-left">
+              <span class="content-pill pill-centro">Centro</span>
+              <span class="dash-text-strong">Resumo: Revolução Francesa</span>
+            </div>
+            <span class="dash-text-muted">5 utilizações</span>
+          </li>
+        </ul>
+        <p class="card-footer-text">
+          Gerir conteúdos na página de <strong>Conteúdos</strong>.
+        </p>
+      </div>
+    </section>
+  </div>
+
   <script>
-    new Vue({
-      el: '#app',
-      data: {
-        visitasHoje: 0,
-        peritos: JSON.parse(localStorage.getItem("peritos")) || [],
-        auditorias: JSON.parse(localStorage.getItem("auditorias")) || [],
-        userName: localStorage.getItem("userName") || "Utilizador não logado",
-        userEmail: localStorage.getItem("userEmail") || "Sem e-mail"
-      },
-      computed: {
-        peritosDisponiveis() {
-          return this.peritos.filter(perito => perito.estado === "desocupado").length;
-        },
-        ocorrenciasEmAcao() {
-          return this.auditorias.filter(a => a.estado === "em-progresso").length;
-        },
-        especialidades() {
-          const contador = {};
-          this.peritos.forEach(perito => {
-            if (contador[perito.especialidade]) {
-              contador[perito.especialidade]++;
-            } else {
-              contador[perito.especialidade] = 1;
-            }
-          });
-          return contador;
-        }
-      },
-      mounted() {
-        this.renderCharts();
-        this.atualizarContadorVisitas();
-      },
-      methods: {
-        renderCharts() {
-          this.renderEspecialidadesChart();
-          this.renderOcorrenciasChart();
-        },
-
-        renderEspecialidadesChart() {
-          const especialidadesData = this.especialidades;
-          const labels = Object.keys(especialidadesData);
-          const data = Object.values(especialidadesData);
-
-          const ctx = document.getElementById('especialidadesChart').getContext('2d');
-          new Chart(ctx, {
-            type: 'pie',
-            data: {
-              labels: labels,
-              datasets: [{
-                data: data,
-                backgroundColor: [
-                  '#00C49F', '#FFBB28', '#0088FE', '#FF8042',
-                  '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
-                  '#9966FF', '#FF9F40', '#C9CBCF', '#7E57C2',
-                  '#26A69A', '#D4E157'
-                ]
-              }]
-            }
-          });
-        },
-
-        renderOcorrenciasChart() {
-          const ctx = document.getElementById('numOcorrencias').getContext('2d');
-          const dadosPorMes = Array(12).fill(0);
-          const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
-
-          auditorias.forEach(auditoria => {
-            if (auditoria.estado === "concluido" && auditoria.data) {
-              const mes = new Date(auditoria.data).getMonth();
-              dadosPorMes[mes]++;
-            }
-          });
-
-          new Chart(ctx, {
-            type: 'bar',
-            data: {
-              labels: ['JAN', 'FEB', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'],
-              datasets: [{
-                label: 'Ocorrências Resolvidas',
-                data: dadosPorMes,
-                backgroundColor: '#0088FE'
-              }]
-            }
-          });
-        },
-
-        atualizarContadorVisitas() {
-          const hoje = new Date().toLocaleDateString();
-          const dataGuardada = localStorage.getItem("data_visitas_index");
-
-          if (dataGuardada === hoje) {
-            this.visitasHoje = parseInt(localStorage.getItem("visitas_index_hoje")) || 0;
-          } else {
-            this.visitasHoje = 0;
-          }
-        }
-      }
+    // Pequeno detalhe: mostrar a data de hoje no subtítulo do card de aulas
+    const todayLabel = document.getElementById('today-label');
+    const today = new Date();
+    const formatter = new Intl.DateTimeFormat('pt-PT', {
+      weekday: 'long',
+      day: '2-digit',
+      month: '2-digit'
     });
+    todayLabel.textContent = formatter.format(today); // ex: "quinta-feira, 21/11"
   </script>
 </body>
 </html>

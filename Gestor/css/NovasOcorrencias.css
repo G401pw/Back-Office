@@ -103,140 +103,132 @@ nav ul li a.active {
 
 /* Conteúdo Principal */
 .content {
-    margin-left: 250px;
-    padding: 30px;
-    width: calc(100% - 250px);
-    background-color: #f5f6fa;
+  position: relative;
+  margin-left: 260px;             /* largura da sidebar */
+  padding: 32px 40px;
+  background-color: #f5f7fb;
+  min-height: 100vh;
+  width: calc(100% - 260px);      /* ocupa o resto do ecrã */
+  box-sizing: border-box;
 }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f9f9f9;
-    padding: 20px 30px;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
+.content-header h1 {
+  margin: 0 0 4px;
+  font-size: 28px;
 }
 
-header h1 {
-    margin: 0;
-    font-size: 22px;
-    color: #333;
+.content-header p {
+  margin: 0 0 24px;
+  color: #64748b;
 }
 
-/* Estilo das Ocorrências */
-.ocorrencias {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.ocorrencia {
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* NOVO: centralizar texto e colunas com mesma largura */
-.ocorrencia p {
-    flex: 1;              /* Colunas com mesmo tamanho */
-    text-align: center;   /* Texto centralizado */
-    margin: 0 10px;       /* Espaçamento lateral */
-}
-
-.ocorrencia-status {
-    background-color: #f44336;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.pendente {
-    background-color: #ffeb3b;
-    color: #333;
-}
-
-.detalhes-btn {
-    background-color: #0088fe;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    flex: 0 0 auto;       /* Botão não cresce nem encolhe */
-    margin-left: 10px;    /* Espaço do botão em relação às colunas */
-}
-
-.detalhes-btn:hover {
-    background-color: #0066cc;
-}
-
-/* === Início do CSS para o filtro de estado === */
-
-header {
-  position: relative; /* para permitir posicionamento absoluto */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #f9f9f9;
-  padding: 20px 30px;
+.schedule-container {
+  background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  margin-bottom: 20px;
+  padding: 20px 24px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+  width: 100%;                    /* caixa do horário ocupa toda a largura */
+  box-sizing: border-box;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 22px;
-  color: #333;
+/* Formulário */
+.schedule-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  margin-bottom: 20px;
+  align-items: flex-end;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 140px;
+}
+
+.form-group-wide {
   flex: 1;
 }
 
-/* Estilizar label e select para ficar juntos e alinhados */
-
-header > label[for="filtroEstado"] {
-  margin-right: 10px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
-  white-space: nowrap;
-  /* posiciona para mais à esquerda */
-  margin-left: auto; /* empurra para a direita, mas menos que o select */
+.schedule-form label {
+  font-size: 13px;
+  margin-bottom: 4px;
+  color: #475569;
 }
 
-header > select#filtroEstado {
-  padding: 6px 12px;
+.schedule-form select,
+.schedule-form input {
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  padding: 6px 10px;
   font-size: 14px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: #fff;
+}
+
+.btn-add-slot {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  outline: none;
-  /* fixa no canto direito */
-  margin-left: 5px;
+  background: #2563eb;
+  color: #ffffff;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s;
 }
 
-/* Responsividade - em ecrãs pequenos, o filtro desce para abaixo do título */
-@media (max-width: 600px) {
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding-bottom: 50px;
-  }
-  header > label[for="filtroEstado"],
-  header > select#filtroEstado {
-    margin-left: 0;
-    margin-top: 8px;
-    font-size: 16px;
-  }
+.btn-add-slot:hover {
+  background: #1d4ed8;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
 }
+
+/* Tabela */
+.schedule-table-wrapper {
+  width: 100%;                    /* wrapper também a 100% */
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+
+.schedule-table {
+  width: 100%;                    /* tabela estica pela caixa toda */
+  border-collapse: collapse;
+  font-size: 14px;
+  table-layout: fixed;            /* colunas com largura consistente */
+}
+
+.schedule-table th,
+.schedule-table td {
+  border: 1px solid #e2e8f0;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.schedule-table thead th {
+  background-color: #f1f5f9;
+  font-weight: 600;
+}
+
+.schedule-table tbody th {
+  background-color: #f8fafc;
+  font-weight: 600;
+  width: 70px;
+}
+
+.schedule-table td {
+  min-width: 110px;
+  cursor: pointer;
+}
+
+/* Slot preenchido */
+.busy-slot {
+  background-color: #dbeafe;
+  color: #1e40af;
+  font-weight: 600;
+}
+
+.schedule-hint {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 8px;
+}
+

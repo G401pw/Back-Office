@@ -23,7 +23,7 @@
     </nav>
     <div class="add-auditoria">
       <a href="/Back-Office/Gestor/html/PlanoAuditoria.html">
-        <button>+ Adicionar Plano de Auditoria</button>
+        <button>+ Adicionar Conteúdo</button>
       </a>
     </div>
     <div class="user-info">
@@ -32,190 +32,124 @@
     </div>
   </div>
 
+  <!-- CONTEÚDO PRINCIPAL -->
   <div class="content">
-    <header>
-      <h1>Ocorrências</h1>
-      <div style="display:flex; gap: 20px; align-items: center;">
-        <label for="filtroEstado">Filtrar por estado:</label>
-        <select id="filtroEstado">
-          <option value="todos">Todos</option>
-          <option value="concluido">Concluído</option>
-          <option value="em-progresso">Em progresso</option>
-        </select>
+    <header class="content-header">
+      <h1>Alunos</h1>
 
-        <label for="ordenarPor">Ordenar por:</label>
-        <select id="ordenarPor">
-          <option value="data">Data</option>
-          <option value="gravidade">Gravidade</option>
-        </select>
-      </div>
     </header>
 
-    <main>
-      <table>
-        <thead>
-          <tr>
-            <th>Número</th>
-            <th>Gravidade</th>
-            <th>Problema</th>
-            <th>Localização</th>
-            <th>Estado</th>
-          </tr>
-        </thead>
-        <tbody id="tabela-ocorrencias"></tbody>
-      </table>
-    </main>
-  </div>
+    <section class="students-container">
+      <div class="students-header-row">
+        <h2>Alunos com mensagens</h2>
+        <span class="students-hint">
+          Ordenado pelo aluno que aguarda resposta há mais tempo.
+        </span>
+      </div>
 
-  <div id="modal-tempo" class="modal">
-    <div class="modal-content">
-      <h3>Realizado no tempo esperado?</h3>
-      <p>Tempo esperado: <span id="tempo-esperado"></span></p>
-      <div id="tempo-editavel" style="display:none;">
-        <label for="tempo-real">Introduza o tempo real:</label>
-        <input type="text" id="tempo-real" placeholder="Ex: 100 (horas)" />
-        <button id="confirmar-tempo">Confirmar</button>
-      </div>
-      <div id="botoes-decidir">
-        <button id="resposta-sim">Sim</button>
-        <button id="resposta-nao">Não</button>
-      </div>
-    </div>
+      <ul id="students-list" class="students-list">
+        <!-- Os alunos são inseridos via JavaScript -->
+      </ul>
+    </section>
   </div>
 
   <script>
-    let auditoriasGlobais = [];
-    let auditoriaAtualIndex = null;
-
-    function atualizarUtilizador() {
-      const nome = localStorage.getItem("userName") || "Utilizador não logado";
-      const email = localStorage.getItem("userEmail") || "Sem e-mail";
-      document.getElementById("user-name").innerText = nome;
-      document.getElementById("user-email").innerText = email;
-    }
-
-    function carregarOcorrencias(filtro = "todos", ordenarPor = "data") {
-      const tbody = document.getElementById("tabela-ocorrencias");
-      tbody.innerHTML = "";
-      const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
-      auditoriasGlobais = auditorias;
-
-      let filtradas = auditorias.filter(a => filtro === "todos" || a.estado === filtro);
-
-      if (ordenarPor === "data") {
-        filtradas.sort((a, b) => new Date(a.data) - new Date(b.data));
-      } else if (ordenarPor === "gravidade") {
-        filtradas.sort((a, b) => (Number(b.gravidade) || 0) - (Number(a.gravidade) || 0));
-    }
-
-    filtradas.forEach((a, index) => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${index + 1}</td>
-        <td>${a.gravidade || "N/A"}</td>
-        <td>${a.problema || ""}</td>
-        <td>${a.localizacao || ""}</td>
-        <td class="estado-coluna" data-index="${index}">
-          <span class="estado-texto ${a.estado === 'concluido' ? 'concluido' : ''}">
-          ${a.estado === 'concluido' ? 'Concluído' : 'Em progresso'}
-            </span>
-          ${
-          a.estado === 'concluido'
-          ? `<button class="btn-verpdf" data-id="${a.id}" title="Ver PDF">📄 Ver PDF</button>`
-          : `<button class="btn-estado" title="Marcar como concluído">Concluir</button>`
-        }
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-
-  setTimeout(() => {
-    document.querySelectorAll(".btn-estado").forEach(button => {
-      button.addEventListener("click", function () {
-        const td = this.closest(".estado-coluna");
-        const idx = td.getAttribute("data-index");
-        auditoriaAtualIndex = idx;
-        const auditoria = auditoriasGlobais[idx];
-        document.getElementById("tempo-esperado").innerText = auditoria.tempo_previsto || "Não definido";
-        document.getElementById("modal-tempo").style.display = "flex";
-        document.getElementById("tempo-editavel").style.display = "none";
-        document.getElementById("botoes-decidir").style.display = "block";
-      });
-    });
-
-    document.querySelectorAll(".btn-verpdf").forEach(button => {
-      button.addEventListener("click", function () {
-        const id = this.getAttribute("data-id");
-        window.location.href = `/Back-Office/Gestor/html/GerarPDF.html?id=${id}`;
-      });
-    });
-  }, 0);
-}
-
-    document.getElementById("filtroEstado").addEventListener("change", function() {
-      carregarOcorrencias(this.value, document.getElementById("ordenarPor").value);
-    });
-
-    document.getElementById("ordenarPor").addEventListener("change", function() {
-      carregarOcorrencias(document.getElementById("filtroEstado").value, this.value);
-    });
-
-    document.getElementById("resposta-sim").addEventListener("click", function() {
-      const auditoria = auditoriasGlobais[auditoriaAtualIndex];
-      auditoria.estado = "concluido";
-      auditoria.horaConclusao = new Date().toLocaleTimeString('pt-PT', {hour: '2-digit', minute: '2-digit'});
-
-      const todosPeritos = JSON.parse(localStorage.getItem("peritos")) || [];
-      auditoria.peritos.forEach(p => {
-        const idx = todosPeritos.findIndex(per => per.nome === p.nome && per.email === p.email);
-        if (idx !== -1) {
-          todosPeritos[idx].estado = "desocupado";
-        }
-      });
-      localStorage.setItem("peritos", JSON.stringify(todosPeritos));
-
-      localStorage.setItem("auditorias", JSON.stringify(auditoriasGlobais));
-      window.location.href = `/Back-Office/Gestor/html/GerarPDF.html?id=${auditoria.id}`;
-    });
-
-    document.getElementById("resposta-nao").addEventListener("click", function() {
-      document.getElementById("tempo-editavel").style.display = "block";
-      document.getElementById("botoes-decidir").style.display = "none";
-    });
-
-    document.getElementById("confirmar-tempo").addEventListener("click", function() {
-      const tempoReal = document.getElementById("tempo-real").value.trim();
-      if (tempoReal && auditoriaAtualIndex !== null) {
-        const auditoria = auditoriasGlobais[auditoriaAtualIndex];
-        auditoria.estado = "concluido";
-        auditoria.horaConclusao = new Date().toLocaleTimeString('pt-PT', {hour: '2-digit', minute: '2-digit'});
-        auditoria.tempoReal = tempoReal;
-
-        const todosPeritos = JSON.parse(localStorage.getItem("peritos")) || [];
-        auditoria.peritos.forEach(p => {
-          const idx = todosPeritos.findIndex(per => per.nome === p.nome && per.email === p.email);
-          if (idx !== -1) {
-            todosPeritos[idx].estado = "desocupado";
-          }
-        });
-        localStorage.setItem("peritos", JSON.stringify(todosPeritos));
-
-        localStorage.setItem("auditorias", JSON.stringify(auditoriasGlobais));
-        window.location.href = `/Back-Office/Gestor/html/GerarPDF.html?id=${auditoria.id}`;
+    // Dados fictícios só para exemplo.
+    // Depois podes substituir por dados vindos do backend.
+    const students = [
+      {
+        id: 1,
+        name: 'David Silva',
+        exercisesDone: '2/4',
+        lastMessage: '2025-11-20T17:30:00', // ISO
+        hasUnread: true
+      },
+      {
+        id: 2,
+        name: 'Ana Costa',
+        exercisesDone: '0/4',
+        lastMessage: '2025-11-19T10:15:00',
+        hasUnread: true
+      },
+      {
+        id: 3,
+        name: 'João Pereira',
+        exercisesDone: '4/6',
+        lastMessage: '2025-11-22T15:00:00',
+        hasUnread: false
+      },
+      {
+        id: 4,
+        name: 'Marta Rocha',
+        exercisesDone: '5/5',
+        lastMessage: '2025-11-18T09:00:00',
+        hasUnread: true
       }
+    ];
+
+    // Ordena pelo aluno que está há mais tempo sem resposta (mensagem mais antiga primeiro)
+    students.sort((a, b) => {
+      return new Date(a.lastMessage) - new Date(b.lastMessage);
     });
 
-    document.addEventListener("DOMContentLoaded", function() {
-      atualizarUtilizador();
-      carregarOcorrencias();
+    const listEl = document.getElementById('students-list');
+
+    function timeAgoString(dateStr) {
+      const now = new Date();
+      const date = new Date(dateStr);
+      const diffMs = now - date; // milissegundos
+
+      const diffMinutes = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMinutes / 60);
+      const diffDays = Math.floor(diffHours / 24);
+
+      if (diffMinutes < 1) return 'há instantes';
+      if (diffMinutes < 60) return `há ${diffMinutes} min`;
+      if (diffHours < 24) return `há ${diffHours} h`;
+      if (diffDays === 1) return 'há 1 dia';
+      return `há ${diffDays} dias`;
+    }
+
+    function getInitials(name) {
+      return name
+        .split(' ')
+        .filter(Boolean)
+        .map(part => part[0].toUpperCase())
+        .slice(0, 2)
+        .join('');
+    }
+
+    students.forEach(student => {
+      // Só mostrar alunos que já enviaram mensagem
+      if (!student.lastMessage) return;
+
+      const li = document.createElement('li');
+      li.className = 'student-item';
+      li.dataset.id = student.id;
+
+      li.innerHTML = `
+        <div class="student-main">
+          <div class="student-avatar">${getInitials(student.name)}</div>
+          <div class="student-text">
+            <h3 class="student-name">${student.name}</h3>
+            <p class="student-meta">Exercícios realizados: <strong>${student.exercisesDone}</strong></p>
+          </div>
+        </div>
+        <div class="student-alert">
+          ${
+            student.hasUnread
+              ? `<span class="message-dot"></span>
+                 <span class="message-text">Nova mensagem ${timeAgoString(student.lastMessage)}</span>`
+              : `<span class="message-text message-text-muted">Última mensagem ${timeAgoString(student.lastMessage)}</span>`
+          }
+        </div>
+      `;
+
+      // Mais tarde aqui vais pôr o clique para abrir progresso + chat
+      // li.addEventListener('click', () => { ... });
+
+      listEl.appendChild(li);
     });
-    
-    document.getElementById("modal-tempo").addEventListener("click", function (event) {
-  if (event.target === this) {
-    this.style.display = "none";
-    auditoriaAtualIndex = null; // Limpar referência, se necessário
-  }
-});
   </script>
 </body>
 </html>
